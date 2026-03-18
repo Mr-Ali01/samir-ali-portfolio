@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-dark: #07090d;
+    --accent-cyan: #00d2ff;
+    --accent-blue: #3a7bd5;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-dark);
+    color: #e5e7eb;
+    overflow-x: hidden;
+}
+
+/* Custom Gradients */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism */
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 210, 255, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px -10px rgba(0, 210, 255, 0.2);
+}
+
+/* Background Glows */
+.glow-sphere {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0) 70%);
+    filter: blur(60px);
+    z-index: -1;
+}
+
+/* Progress Bar Animation */
+.progress-bar-inner {
+    width: 0;
+    transition: width 1.5s cubic-bezier(0.1, 0.5, 0.5, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #07090d;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
+}
+
+/* Timeline styles */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -14px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+/* Slider Controls */
+.slider-dot.active {
+    background: var(--accent-cyan);
+    width: 24px;
+}
+
+/* Image Overlays */
+.project-overlay {
+    opacity: 0;
+    background: linear-gradient(to top, rgba(7, 9, 13, 0.9), transparent);
+    transition: opacity 0.3s ease;
+}
+
+.project-card:hover .project-overlay {
+    opacity: 1;
+}
+
+/* Animations added for GSAP & Interactive Effects */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulse-slow {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+.float-animation {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Glass Card improvements for hover */
+.glass-card {
+    will-change: transform, opacity;
+}
+.glass-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(0, 210, 255, 0.6);
+    box-shadow: 0 15px 40px -10px rgba(0, 210, 255, 0.3);
+}
+
+/* Blog Hover Improvement */
+#blog .glass-card:hover img {
+    transform: scale(1.1) rotate(2deg);
+}
+
+/* Light Theme Overrides */
+body.light-theme {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+body.light-theme .text-white {
+    color: #0f172a !important;
+}
+
+body.light-theme .text-gray-300 {
+    color: #475569 !important;
+}
+
+body.light-theme .text-gray-400,
+body.light-theme .text-gray-500 {
+    color: #64748b !important;
+}
+
+/* Force some elements to keep white text (buttons, gradients) */
+body.light-theme .bg-gradient-primary,
+body.light-theme .bg-gradient-primary .text-white,
+body.light-theme .bg-cyan-500.text-white,
+body.light-theme .project-overlay .text-white,
+body.light-theme #navbar .text-white {
+    color: #ffffff !important;
+}
+body.light-theme .project-overlay .text-gray-300 {
+    color: #cbd5e1 !important;
+}
+
+/* Cards & Backgrounds */
+body.light-theme .glass-card {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .glass-card:hover {
+    border-color: rgba(2, 132, 199, 0.4) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 10px 30px -10px rgba(2, 132, 199, 0.2) !important;
+}
+
+/* Specific Background overrides from Tailwinds inline classes */
+body.light-theme .bg-\[\#0a0c10\]\/50 {
+    background-color: #ffffff !important;
+}
+
+body.light-theme .bg-dark-900 {
+    background-color: #f1f5f9 !important;
+}
+
+/* Navbar */
+body.light-theme #navbar.bg-\[\#07090d\]\/80 {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+body.light-theme #mobile-menu-btn {
+    color: #0f172a !important;
+}
+
+/* Borders */
+body.light-theme .border-white\/5,
+body.light-theme .border-white\/10,
+body.light-theme .border-white\/20,
+body.light-theme .border-y {
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Background Opacity modifiers */
+body.light-theme .bg-white\/5,
+body.light-theme .bg-white\/20 {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+}
+body.light-theme .bg-white {
+    background-color: #0f172a !important;
+}
+body.light-theme .bg-white .text-black {
+    color: #ffffff !important;
+}
+
+/* Buttons */
+body.light-theme .filter-btn {
+    color: #0f172a !important;
+}
+body.light-theme .filter-btn.active {
+    color: #ffffff !important;
+}
+
+/* Icons */
+body.light-theme .timeline-dot {
+    background: #0284c7 !important;
+    box-shadow: 0 0 10px rgba(2, 132, 199, 0.4) !important;
+}
+body.light-theme .timeline-item::before {
+    background: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Project overlays in light theme */
+body.light-theme .project-overlay {
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent) !important;
+}
+
+/* Progress bar backgrounds */
+body.light-theme .progress-bar-inner {
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
+}
+
+/* Form inputs */
+body.light-theme input {
+    color: #0f172a !important;
+}
+body.light-theme input::placeholder {
+    color: #64748b !important;
+}
