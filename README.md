@@ -107,7 +107,118 @@ Main tables:
 * `contacts` → Messages
 * `sections` → Dynamic homepage content
 
+
+### admins
+
+```sql
+CREATE TABLE admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  google_id VARCHAR(255) UNIQUE,
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE,
+  profile_pic TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
 ---
+
+### projects
+
+```sql
+CREATE TABLE projects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  short_description TEXT,
+  full_description TEXT,
+  preview_image TEXT,
+  animation_type VARCHAR(100),
+  tech_stack VARCHAR(255),
+  github_link VARCHAR(255),
+  live_link VARCHAR(255),
+  is_featured BOOLEAN DEFAULT FALSE,
+  display_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+### blogs
+
+```sql
+CREATE TABLE blogs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255),
+  content TEXT,
+  author_id INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (author_id) REFERENCES admins(id)
+);
+```
+
+---
+
+### reviews
+
+```sql
+CREATE TABLE reviews (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  role VARCHAR(100),
+  message TEXT,
+  rating INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+### contacts
+
+```sql
+CREATE TABLE contacts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100),
+  message TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+### sections
+
+```sql
+CREATE TABLE sections (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  section_name VARCHAR(100),
+  title VARCHAR(255),
+  content TEXT,
+  image_url TEXT,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+### Relationships
+
+admins (1) → blogs (many)
+
+---
+
+### Key Points
+
+* Fully normalized schema
+* Supports dynamic content
+* Designed for CRUD operations
+* Easily extendable
+
+---
+
 
 ## 🔗 API Endpoints (Custom Implementation)
 

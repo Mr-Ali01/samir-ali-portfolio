@@ -109,37 +109,47 @@ Transition from manual `http` module handling to Express.js. Routes are strictly
 **1. `admins`** (Admin Authentication Table)
 * `id` (INT, PK, Auto Increment)
 * `google_id` (VARCHAR, Unique)
-* `email` (VARCHAR, Unique)
 * `name` (VARCHAR)
+* `email` (VARCHAR, Unique)
+* `profile_pic` (TEXT)
 * `created_at` (TIMESTAMP)
 
 **2. `sections`** (Dynamic Homepage Layout Control)
 * `id` (INT, PK, Auto Increment)
-* `section_name` (VARCHAR, Unique)
+* `section_name` (VARCHAR)
+* `title` (VARCHAR)
+* `content` (TEXT)
+* `image_url` (TEXT)
 * `is_active` (BOOLEAN)
-* `content_json` (JSON) - Stores dynamic generic content configuration
+* `created_at` (TIMESTAMP)
 
 **3. `projects`**
 * `id` (INT, PK, Auto Increment)
-* `title` (VARCHAR)
-* `description` (TEXT)
-* `image_url` (VARCHAR)
-* `github_url` (VARCHAR)
-* `live_url` (VARCHAR)
+* `name` (VARCHAR)
+* `short_description` (TEXT)
+* `full_description` (TEXT)
+* `preview_image` (TEXT)
+* `animation_type` (VARCHAR)
+* `tech_stack` (VARCHAR)
+* `github_link` (VARCHAR)
+* `live_link` (VARCHAR)
+* `is_featured` (BOOLEAN)
+* `display_order` (INT)
 * `created_at` (TIMESTAMP)
 
 **4. `blogs`**
 * `id` (INT, PK, Auto Increment)
 * `title` (VARCHAR)
-* `content` (LONGTEXT)
+* `content` (TEXT)
 * `author_id` (INT, FK -> admins.id)
-* `published_at` (TIMESTAMP)
+* `created_at` (TIMESTAMP)
 
 **5. `reviews`**
 * `id` (INT, PK, Auto Increment)
-* `reviewer_name` (VARCHAR)
+* `name` (VARCHAR)
+* `role` (VARCHAR)
+* `message` (TEXT)
 * `rating` (INT)
-* `review_text` (TEXT)
 * `created_at` (TIMESTAMP)
 
 **6. `contacts`**
@@ -147,7 +157,6 @@ Transition from manual `http` module handling to Express.js. Routes are strictly
 * `name` (VARCHAR)
 * `email` (VARCHAR)
 * `message` (TEXT)
-* `status` (ENUM: 'unread', 'read')
 * `created_at` (TIMESTAMP)
 
 ### Indexing & Optimization Considerations
