@@ -33,7 +33,10 @@ $(document).ready(function () {
         });
     }, { threshold: 0.5 });
 
-    counterObserver.observe(document.querySelector('.counter').parentNode.parentNode);
+    const counterElement = document.querySelector('.counter');
+    if (counterElement) {
+        counterObserver.observe(counterElement.parentNode.parentNode);
+    }
 
     // Simple Testimonial Slider
     let currentSlide = 0;
@@ -66,11 +69,32 @@ $(document).ready(function () {
 
     // Filter Projects
     $('.filter-btn').click(function () {
-        $('.filter-btn').removeClass('active bg-cyan-500 text-white').addClass('border border-white/10');
-        $(this).addClass('active bg-cyan-500 text-white').removeClass('border border-white/10');
+        // Reset all buttons to inactive Style
+        $('.filter-btn').removeClass('active bg-theme-primary hover:opacity-90 text-white neon-glow')
+            .addClass('bg-white text-slate-600 shadow-sm hover:text-theme-primary hover:shadow-md');
+        
+        // Set clicked button to Active Style
+        $(this).addClass('active bg-theme-primary hover:opacity-90 text-white neon-glow')
+            .removeClass('bg-white text-slate-600 shadow-sm hover:text-theme-primary hover:shadow-md');
 
-        // For demo purpose, we just flicker the grid
-        $('.project-card').fadeOut(200).fadeIn(200);
+        const filterValue = $(this).attr('data-filter');
+        let visibleCount = 0;
+
+        $('.project-item').each(function() {
+            if (filterValue === 'all' || $(this).attr('data-category') === filterValue) {
+                $(this).fadeIn(300);
+                visibleCount++;
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // Toggle Empty Case Message
+        if (visibleCount === 0) {
+            $('#no-projects-msg').removeClass('hidden').hide().fadeIn(400);
+        } else {
+            $('#no-projects-msg').addClass('hidden');
+        }
     });
 
     // Mobile Menu
@@ -92,7 +116,10 @@ $(document).ready(function () {
         });
     }, { threshold: 0.2 });
 
-    skillsObserver.observe(document.getElementById('about'));
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+        skillsObserver.observe(aboutSection);
+    }
 
     // Theme Toggle Logic
     const themeToggleBtn = $('#theme-toggle');
@@ -178,7 +205,7 @@ $(document).ready(function () {
         );
 
         // 5. Portfolio/Latest Projects Section
-        gsap.fromTo("#portfolio .project-card", 
+        gsap.fromTo("#portfolio .project-item", 
             { y: 50, opacity: 0 },
             {
                 scrollTrigger: { trigger: "#portfolio", start: "top 80%" },

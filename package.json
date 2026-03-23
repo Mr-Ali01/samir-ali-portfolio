@@ -1,0 +1,17 @@
+{
+  "name": "samir-ali-portfolio",
+  "version": "1.0.0",
+  "description": "Full-stack portfolio built on Node, Express, and MySQL.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.9.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
