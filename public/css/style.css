@@ -1,6 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
+    /* Light Theme (Default - Glassmorphism) */
+    --theme-bg-start: #f8fafc;
+    --theme-bg-mid: #e0f2fe;
+    --theme-bg-end: #bae6fd;
+    
+    --theme-accent-primary: #60A5FA;   /* Soft Blue */
+    --theme-accent-secondary: #818cf8; /* Light Purple tint */
+    --theme-glow: #38BDF8;
+    
+    --theme-card-bg: rgba(255, 255, 255, 0.7);
+    --theme-card-hover: rgba(255, 255, 255, 0.9);
+    --theme-card-border: rgba(255, 255, 255, 0.4);
+    --theme-card-blur: blur(15px);
+    
+    --theme-text-primary: #0F172A;
+    --theme-text-secondary: #475569;
+}
+
+html.dark {
     /* Dark Theme (Neon Gradient + Glow UI) */
     --theme-bg-start: #0F172A;
     --theme-bg-mid: #1E1B4B;
@@ -13,28 +32,9 @@
     --theme-card-bg: rgba(255, 255, 255, 0.05);
     --theme-card-hover: rgba(255, 255, 255, 0.09);
     --theme-card-border: rgba(255, 255, 255, 0.1);
-    --theme-card-blur: blur(15px);
     
     --theme-text-primary: #FFFFFF;
     --theme-text-secondary: #CBD5F5;
-}
-
-body.light-theme {
-    /* Light Theme (Glassmorphism Inspired) */
-    --theme-bg-start: #f8fafc;
-    --theme-bg-mid: #e0f2fe;
-    --theme-bg-end: #bae6fd;
-    
-    --theme-accent-primary: #60A5FA;   /* Soft Blue */
-    --theme-accent-secondary: #818cf8; /* Light Purple tint */
-    --theme-glow: #38BDF8;
-    
-    --theme-card-bg: rgba(255, 255, 255, 0.7);
-    --theme-card-hover: rgba(255, 255, 255, 0.9);
-    --theme-card-border: rgba(255, 255, 255, 0.4);
-    
-    --theme-text-primary: #0F172A;
-    --theme-text-secondary: #475569;
 }
 
 body {
@@ -85,6 +85,14 @@ p, span, .text-gray-500, .text-gray-400 {
     background: var(--theme-accent-primary) !important;
 }
 
+/* Text Gradient utility */
+.text-gradient {
+    background: linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
 /* Neon Glow utilities */
 .neon-glow {
     box-shadow: 0 0 15px var(--theme-glow);
@@ -92,11 +100,19 @@ p, span, .text-gray-500, .text-gray-400 {
 .neon-glow:hover {
     box-shadow: 0 0 25px var(--theme-glow);
 }
+/* Scroll state for Navbar */
+#navbar.scrolled {
+    background: var(--theme-card-bg) !important;
+    backdrop-filter: var(--theme-card-blur) !important;
+    -webkit-backdrop-filter: var(--theme-card-blur) !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 1px solid var(--theme-card-border) !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1) !important;
+}
 
-/* Text Gradient utility */
-.text-gradient {
-    background: linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
+html.dark #navbar.scrolled {
+    /* Slightly darker for better readability in dark mode */
+    background: rgba(7, 9, 13, 0.8) !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
 }

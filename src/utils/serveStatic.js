@@ -25,6 +25,7 @@ const serveStaticFile = (res, urlPath) => {
     '.gif':  'image/gif',
     '.svg':  'image/svg+xml',
     '.ico':  'image/x-icon',
+    '.pdf':  'application/pdf',
     '.woff2': 'font/woff2',
     '.woff': 'font/woff',
     '.ttf':  'font/ttf'

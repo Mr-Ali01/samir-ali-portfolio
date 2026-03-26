@@ -1,0 +1,177 @@
+/* Project Page Styling */
+
+:root {
+    --theme-card-bg-light: rgba(255, 255, 255, 0.7);
+    --theme-card-bg-dark: rgba(255, 255, 255, 0.05);
+    --theme-card-border-light: rgba(255, 255, 255, 0.4);
+    --theme-card-border-dark: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    scroll-behavior: smooth;
+    transition: background-color 0.5s ease-in-out;
+}
+
+/* Glassmorphism Project Card */
+.project-card {
+    background: var(--theme-card-bg-light);
+    border: 1px solid var(--theme-card-border-light);
+    backdrop-filter: blur(20px);
+    border-radius: 2.5rem;
+    overflow: hidden;
+    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.05);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .project-card {
+    background: var(--theme-card-bg-dark);
+    border-color: var(--theme-card-border-dark);
+    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.4);
+}
+
+.project-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    border-color: #38BDF8;
+    box-shadow: 0 25px 80px -20px rgba(56, 189, 248, 0.25);
+}
+
+/* Project Image Container */
+.project-image-container {
+    height: 240px;
+    overflow: hidden;
+    position: relative;
+    background: #e2e8f0;
+}
+
+.dark .project-image-container {
+    background: #1e293b;
+}
+
+.project-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.project-card:hover .project-image-container img {
+    transform: scale(1.15) rotate(-2deg);
+}
+
+/* Tech Tags */
+.tech-tag {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #475569;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.dark .tech-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #CBD5F5;
+}
+
+.project-card:hover .tech-tag {
+    background: rgba(56, 189, 248, 0.1);
+    border-color: rgba(56, 189, 248, 0.3);
+    color: #38BDF8;
+}
+
+/* Primary Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #38BDF8 0%, #8B5CF6 100%);
+    color: white;
+    border-radius: 1.25rem;
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.5);
+}
+
+/* Secondary Button Styling */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 1);
+    color: #475569;
+    border-radius: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.dark .btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+.btn-secondary:hover {
+    background: white;
+    color: #38BDF8;
+    border-color: #38BDF8;
+}
+
+.dark .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: white;
+}
+
+/* Utility Tools Card */
+.utility-card {
+    background: var(--theme-card-bg-light);
+    border: 1px solid var(--theme-card-border-light);
+    border-radius: 2rem;
+    transition: all 0.4s ease;
+}
+
+.dark .utility-card {
+    background: var(--theme-card-bg-dark);
+    border-color: var(--theme-card-border-dark);
+}
+
+.utility-card:hover {
+    transform: translateX(10px);
+    border-color: #38BDF8;
+    box-shadow: 0 15px 40px -10px rgba(56, 189, 248, 0.1);
+}
+
+/* Animations */
+@keyframes pulse-slow {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.2); }
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* Navbar Scrolled Logic */
+#navbar.scrolled {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark #navbar.scrolled {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Custom Selection */
+::selection {
+    background: #38BDF8;
+    color: white;
+}

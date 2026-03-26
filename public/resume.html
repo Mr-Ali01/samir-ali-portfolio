@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Samir Ali</title>
+    
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Apply theme early on load to prevent flash
+        if (localStorage.getItem('portfolio-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            primary: 'var(--theme-accent-primary)',
+                            secondary: 'var(--theme-accent-secondary)',
+                            glow: 'var(--theme-glow)',
+                            textPrimary: 'var(--theme-text-primary)',
+                            textSecondary: 'var(--theme-text-secondary)',
+                            bgStart: 'var(--theme-bg-start)',
+                            bgMid: 'var(--theme-bg-mid)',
+                            bgEnd: 'var(--theme-bg-end)',
+                        }
+                    },
+                    fontFamily: {
+                        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- External Resources -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/resume.css">
+</head>
+<body class="antialiased font-jakarta overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-6 px-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
+                    S</div>
+                <span class="text-xl font-bold tracking-tight text-theme-textPrimary group-hover:text-theme-primary transition-colors">Samir.</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="about.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-primary transition-all relative py-2">Resume</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden">
+                    <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="sun" class="w-5 h-5"></i></span>
+                    <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="moon" class="w-5 h-5"></i></span>
+                </button>
+                <div class="hidden md:block">
+                    <a href="contact.html" class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
+                </div>
+                <button class="md:hidden text-theme-textPrimary" id="mobile-menu-btn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-32 pb-20 px-4 md:px-12 max-w-7xl mx-auto">
+        <!-- Header Section -->
+        <section class="flex flex-col md:flex-row items-center justify-between mb-16 gap-8" data-aos="fade-down">
+            <div class="space-y-2">
+                <a href="index.html" class="inline-flex items-center text-theme-textSecondary hover:text-theme-primary font-bold text-sm transition-colors mb-2">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Return to Portfolio
+                </a>
+                <h1 class="text-4xl md:text-5xl font-black text-theme-textPrimary leading-tight">
+                    Curriculum <span class="text-gradient-primary">Vitae</span>
+                </h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="Samir_Ali_Java.pdf" download class="bg-gradient-primary flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-white shadow-[0_0_30px_rgba(56,189,248,0.3)] hover:scale-105 active:scale-95 transition-all">
+                    Download Resume <i data-lucide="download" class="w-5 h-5"></i>
+                </a>
+                <button class="w-14 h-14 rounded-2xl glass-panel flex items-center justify-center text-theme-textPrimary hover:text-theme-primary hover:border-theme-primary transition-all">
+                    <i data-lucide="share-2" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Two Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            
+            <!-- Left: Resume Document Preview (Embedded PDF) -->
+            <div class="lg:col-span-8" data-aos="fade-right">
+                <div class="resume-document-container glass-panel rounded-[2rem] shadow-2xl relative overflow-hidden transition-all bg-white dark:bg-white border border-slate-200" style="height: 1100px;">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-primary z-20"></div>
+                    
+                    <!-- PDF Viewer (Most Reliable Way) -->
+                    <iframe src="Samir_Ali_Java.pdf#navpanes=0&toolbar=0&view=FitH" class="w-full h-full border-none rounded-[2rem] bg-white overflow-hidden" title="Samir Ali Resume Viewer"></iframe>
+                </div>
+                
+                <p class="text-center mt-8 text-xs font-black text-theme-textSecondary uppercase tracking-widest opacity-40">
+                    ✨ Browser native controls active for zoom & interaction ✨
+                </p>
+            </div>
+
+            <!-- Right Sidebar -->
+            <aside class="lg:col-span-4 space-y-8" data-aos="fade-left">
+                <!-- Resume Details Card -->
+                <div class="glass-panel p-8 rounded-[2rem] space-y-6">
+                    <div class="flex items-center gap-3 text-orange-500">
+                        <i data-lucide="file-text" class="w-6 h-6"></i>
+                        <h4 class="font-black">Resume Details</h4>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[10px] uppercase font-black text-theme-textSecondary block mb-1">Latest Update</span>
+                            <span class="font-bold text-theme-textPrimary">March 2026</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-black text-theme-textSecondary block mb-1">Format</span>
+                            <span class="font-bold text-theme-textPrimary">PDF Document (High Res)</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-black text-theme-textSecondary block mb-1">Size</span>
+                            <span class="font-bold text-theme-textPrimary">58 KB</span>
+                        </div>
+                    </div>
+                    
+                    <a href="Samir_Ali_Java.pdf" target="_blank" class="w-full py-4 border border-theme-primary/30 rounded-xl text-theme-primary font-black text-center hover:bg-theme-primary hover:text-white transition-all inline-block">
+                        Open in New Tab <i data-lucide="external-link" class="w-4 h-4 inline-block ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Quick Links Card -->
+                <div class="glass-panel p-8 rounded-[2rem] space-y-6">
+                    <h4 class="font-black text-theme-textPrimary">Quick Links</h4>
+                    <div class="space-y-2">
+                        <a href="project.html" class="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 group transition-all">
+                            <span class="text-theme-textSecondary group-hover:text-theme-textPrimary font-bold transition-colors">View Projects</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-theme-textSecondary group-hover:text-theme-primary transition-all"></i>
+                        </a>
+                        <a href="skill.html" class="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 group transition-all">
+                            <span class="text-theme-textSecondary group-hover:text-theme-textPrimary font-bold transition-colors">Tech Stack</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-theme-textSecondary group-hover:text-theme-primary transition-all"></i>
+                        </a>
+                        <a href="experience.html" class="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 group transition-all">
+                            <span class="text-theme-textSecondary group-hover:text-theme-textPrimary font-bold transition-colors">Experience</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-theme-textSecondary group-hover:text-theme-primary transition-all"></i>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="py-12 border-t border-white/5 text-center mt-20 opacity-50">
+        <p class="text-theme-textPrimary text-sm">© 2026 Samir Ali. All rights reserved.</p>
+        <div class="flex justify-center gap-6 mt-4">
+            <a href="#" class="text-theme-textSecondary hover:text-theme-primary transition-colors font-bold text-sm">GitHub</a>
+            <a href="#" class="text-theme-textSecondary hover:text-theme-primary transition-colors font-bold text-sm">LinkedIn</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/resume.js"></script>
+</body>
+</html>

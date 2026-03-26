@@ -8,10 +8,37 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-  tailwind.config = {
-    darkMode: "class"
-  }
-</script>
+        // Apply theme early on load to prevent flash
+        if (localStorage.getItem('portfolio-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            primary: 'var(--theme-accent-primary)',
+                            secondary: 'var(--theme-accent-secondary)',
+                            glow: 'var(--theme-glow)',
+                            textPrimary: 'var(--theme-text-primary)',
+                            textSecondary: 'var(--theme-text-secondary)',
+                            bgStart: 'var(--theme-bg-start)',
+                            bgMid: 'var(--theme-bg-mid)',
+                            bgEnd: 'var(--theme-bg-end)',
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%)',
+                    }
+                }
+            }
+        }
+    </script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Lucide Icons -->
@@ -23,6 +50,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <!-- EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- AOS Animation -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel='stylesheet' href='css/style.css'>
 </head>
 
@@ -31,36 +60,40 @@
     <!-- Navbar -->
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-6 px-4 lg:px-12">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <div
-                    class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    W</div>
-                <span class="text-xl font-bold tracking-tight">Samir</span>
-            </div>
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
+                    S</div>
+                <span class="text-xl font-bold tracking-tight text-white group-hover:text-theme-primary transition-colors">Samir.</span>
+            </a>
 
             <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#portfolio" class="text-sm font-medium hover:text-theme-primary transition-colors">Portfolio</a>
-                <a href="#about" class="text-sm font-medium hover:text-theme-primary transition-colors">About me</a>
-                <a href="#blog" class="text-sm font-medium hover:text-theme-primary transition-colors">My Blog</a>
-                <a href="#reviews" class="text-sm font-medium hover:text-theme-primary transition-colors">Reviews</a>
-                <a href="#contact" class="text-sm font-medium hover:text-theme-primary transition-colors">Contact me</a>
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="about.html"
+                    class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html"
+                    class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html"
+                    class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html"
+                    class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html"
+                    class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
             </div>
 
             <div class="flex items-center space-x-4 md:space-x-4">
                 <button id="theme-toggle"
                     class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 focus:ring-2 focus:ring-theme-primary/50 overflow-hidden">
                     <span id="theme-icon-sun"
-                        class="absolute transition-all duration-500 ease-in-out transform rotate-0 scale-100 opacity-100"><i
+                        class="absolute transition-all duration-500 ease-in-out transform rotate-0 scale-100 opacity-100 pointer-events-none"><i
                             data-lucide="sun" class="w-5 h-5"></i></span>
                     <span id="theme-icon-moon"
-                        class="absolute transition-all duration-500 ease-in-out transform rotate-90 scale-0 opacity-0"><i
+                        class="absolute transition-all duration-500 ease-in-out transform rotate-90 scale-0 opacity-0 pointer-events-none"><i
                             data-lucide="moon" class="w-5 h-5"></i></span>
                 </button>
 
                 <div class="hidden md:block">
-                    <a href="#contact"
-                        class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
+                    <a href="contact.html" class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
                 </div>
 
                 <!-- Mobile Toggle -->
@@ -72,8 +105,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section
-        class="relative h-[90vh] min-h-[600px] flex items-center px-6 lg:px-16 overflow-hidden bg-transparent">
+    <section class="relative h-[90vh] min-h-[600px] flex items-center px-6 lg:px-16 overflow-hidden bg-transparent">
         <!-- Soft radial glow behind image -->
         <div
             class="absolute right-[5%] bottom-[10%] w-[500px] h-[500px] bg-theme-glow/20 rounded-full blur-[100px] pointer-events-none z-0">
@@ -138,92 +170,127 @@
         </div>
     </section>
 
-            <!-- My Services Section -->
-    <section id="services" class="py-20 px-6 relative z-10 break-words">
+    <!-- About Me & Services Section -->
+    <section id="about" class="py-5 px-6 relative z-10 break-words">
         <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-12 gap-10 lg:gap-16 items-start">
-                
-                <!-- Left Side: Content Area -->
-                <div class="xl:col-span-4 flex flex-col justify-center lg:mb-12 xl:mb-0">
-                    <div class="inline-flex items-center space-x-2 mb-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-stretch">
+
+                <!-- Left Side: About Me Content -->
+                <div class="w-full flex flex-col justify-center">
+                    <!-- <div class="inline-flex items-center space-x-2 mb-4">
                         <span class="w-8 h-[2px] bg-theme-primary"></span>
-                        <span class="text-theme-primary font-bold uppercase tracking-wider text-sm">Services</span>
-                    </div>
+                        <span class="text-theme-primary font-bold uppercase tracking-wider text-sm">About Me</span>
+                    </div> -->
                     <h2 class="text-4xl lg:text-5xl font-extrabold mb-6 text-theme-textPrimary leading-tight">
-                        My <span class="text-gradient">Services</span>
+                        <span class="text-gradient">About Me</span>
                     </h2>
-                    <p class="text-theme-textSecondary leading-relaxed text-lg mb-8">
-                        I provide modern web development solutions focused on performance, scalability, and user experience. From simple static sites to full-stack applications, I help bring ideas to life with clean and efficient code.
+                    <p class="text-theme-textSecondary leading-relaxed text-lg mb-4">
+                        I am a passionate and innovative developer dedicated to crafting immersive digital experiences.
+                        With a strong foundation in core web technologies, I continually strive to deliver seamless,
+                        scalable, and beautifully designed user interfaces.
                     </p>
+                    <p class="text-theme-textSecondary leading-relaxed text-lg mb-8">
+                        I provide modern web development solutions focused on performance, scalability, and precise user
+                        experience. From simple static landing sites to complex full-stack web applications, I help
+                        bring ideas to life with clean and efficient code.
+                    </p>
+                    <div>
+                        <a href="#contact"
+                            class="bg-gradient-primary px-8 py-3 rounded-full font-bold text-white text-sm inline-flex items-center neon-glow hover:scale-105 transition-all">
+                            Hire Me <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Right Side: 2x2 Service Cards -->
-                <div class="xl:col-span-8 w-full">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+                <div class="w-full flex flex-col justify-center h-full">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative h-full">
                         <!-- Decorative glow -->
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-theme-primary/10 blur-[100px] rounded-full pointer-events-none z-[-1]"></div>
+                        <div
+                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-theme-primary/10 blur-[100px] rounded-full pointer-events-none z-[-1]">
+                        </div>
 
                         <!-- Card 1 -->
-                        <div class="glass-panel p-6 lg:p-8 rounded-3xl w-full group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
-                            <div class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            
-                            <div class="w-14 h-14 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-6 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="layers" class="w-7 h-7"></i>
+                        <div
+                            class="glass-panel p-6 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
-                            
-                            <h3 class="text-xl font-bold mb-3 text-theme-textPrimary group-hover:text-theme-primary transition-colors">
-                                Custom Theme Website Development
+
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="database" class="w-6 h-6"></i>
+                            </div>
+
+                            <h3
+                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-primary transition-colors line-clamp-2">
+                                Full-Stack Development
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed">
-                                Fully responsive and functional websites built using custom-designed themes.
+                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                                Custom scalable web applications.
                             </p>
                         </div>
 
                         <!-- Card 2 -->
-                        <div class="glass-panel p-6 lg:p-8 rounded-3xl w-full group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl md:translate-y-6">
-                            <div class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            
-                            <div class="w-14 h-14 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-6 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="database" class="w-7 h-7"></i>
+                        <div
+                            class="glass-panel p-6 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
-                            
-                            <h3 class="text-xl font-bold mb-3 text-theme-textPrimary group-hover:text-theme-secondary transition-colors">
-                                Full-Stack Web Development
+
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="layers" class="w-6 h-6"></i>
+                            </div>
+
+                            <h3
+                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-secondary transition-colors line-clamp-2">
+                                Custom Theme Websites
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed">
-                                Complete web applications with frontend, backend, and database integration.
+                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                                Bespoke personalized website themes.
                             </p>
                         </div>
 
                         <!-- Card 3 -->
-                        <div class="glass-panel p-6 lg:p-8 rounded-3xl w-full group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
-                            <div class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            
-                            <div class="w-14 h-14 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-6 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="file-code-2" class="w-7 h-7"></i>
+                        <div
+                            class="glass-panel p-6 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
-                            
-                            <h3 class="text-xl font-bold mb-3 text-theme-textPrimary group-hover:text-theme-primary transition-colors">
+
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="file-code-2" class="w-6 h-6"></i>
+                            </div>
+
+                            <h3
+                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-primary transition-colors line-clamp-2">
                                 Static Website Development
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed">
-                                Fast, lightweight websites using modern HTML, CSS, and JavaScript.
+                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                                Fast, lightweight HTML sites.
                             </p>
                         </div>
 
                         <!-- Card 4 -->
-                        <div class="glass-panel p-6 lg:p-8 rounded-3xl w-full group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl md:translate-y-6">
-                            <div class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            
-                            <div class="w-14 h-14 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-6 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="smartphone" class="w-7 h-7"></i>
+                        <div
+                            class="glass-panel p-6 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
-                            
-                            <h3 class="text-xl font-bold mb-3 text-theme-textPrimary group-hover:text-theme-secondary transition-colors">
+
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="smartphone" class="w-6 h-6"></i>
+                            </div>
+
+                            <h3
+                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-secondary transition-colors line-clamp-2">
                                 Responsive Web Design
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed">
-                                Mobile-friendly designs that work seamlessly across all devices.
+                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                                Flawless cross-device responsive performance.
                             </p>
                         </div>
 
@@ -231,25 +298,180 @@
                 </div>
             </div>
         </div>
-    </section>    <!-- My Portfolio Projects Section -->
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section id="skills" class="py-12 px-6 relative z-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header Area -->
+            <div class="flex items-center mb-10 gap-4" data-aos="fade-right">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-theme-primary shadow-lg neon-glow flex items-center justify-center shrink-0">
+                    <i data-lucide="award" class="text-white w-6 h-6"></i>
+                </div>
+                <div>
+                    <!-- <span class="text-theme-primary font-bold text-xs tracking-[2px] uppercase mb-1 block">SKILLS</span> -->
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-theme-textPrimary">Technical <span
+                            class="text-gradient">Skills</span></h2>
+                </div>
+                <div class="h-[2px] bg-gradient-to-r from-theme-primary/50 to-transparent flex-1 ml-4 hidden sm:block">
+                </div>
+            </div>
+
+            <!-- Skills Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Category 1: Development -->
+                <div class="glass-panel p-6 rounded-3xl group hover:scale-[1.03] transition-all duration-300 border border-white/10 relative overflow-hidden flex flex-col h-full"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <div class="flex items-center gap-4 mb-2 relative">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary group-hover:neon-glow transition-all duration-300">
+                            <i data-lucide="code" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-theme-textPrimary">Development</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2 relative">
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">JavaScript</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">Node.js</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">Java</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">JDBC</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">Hibernate</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">Spring
+                            Core</span>
+                    </div>
+                </div>
+
+                <!-- Category 2: Databases -->
+                <div class="glass-panel p-6 rounded-3xl group hover:scale-[1.03] transition-all duration-300 border border-white/10 relative overflow-hidden flex flex-col h-full"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <div class="flex items-center gap-4 mb-2 relative">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary group-hover:neon-glow transition-all duration-300">
+                            <i data-lucide="database" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-theme-textPrimary">Databases</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2 relative">
+                        <span
+                            class="px-4 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-secondary transition-colors">MySQL</span>
+                    </div>
+                </div>
+
+                <!-- Category 3: Styling -->
+                <div class="glass-panel p-6 rounded-3xl group hover:scale-[1.03] transition-all duration-300 border border-white/10 relative overflow-hidden flex flex-col h-full"
+                    data-aos="fade-up" data-aos-delay="300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <div class="flex items-center gap-4 mb-2 relative">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary group-hover:neon-glow transition-all duration-300">
+                            <i data-lucide="brush" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-theme-textPrimary">Styling</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2 relative">
+                        <span
+                            class="px-4 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">Tailwind
+                            CSS</span>
+                        <span
+                            class="px-4 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">CSS</span>
+                    </div>
+                </div>
+
+                <!-- Category 4: Tools -->
+                <div class="glass-panel p-6 rounded-3xl group hover:scale-[1.03] transition-all duration-300 border border-white/10 relative overflow-hidden flex flex-col h-full"
+                    data-aos="fade-up" data-aos-delay="400">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <div class="flex items-center gap-4 mb-2 relative">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary group-hover:neon-glow transition-all duration-300">
+                            <i data-lucide="wrench" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-theme-textPrimary">Tools</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2 relative">
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-secondary transition-colors">Git</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-secondary transition-colors">GitHub</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-secondary transition-colors">Antigravity</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-secondary transition-colors">Vs
+                            Code</span>
+                        <span
+                            class="px-3 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-secondary transition-colors">Eclipse</span>
+                    </div>
+                </div>
+
+                <!-- Category 5: Design -->
+                <div class="glass-panel p-6 rounded-3xl group hover:scale-[1.03] transition-all duration-300 border border-white/10 relative overflow-hidden flex flex-col h-full"
+                    data-aos="fade-up" data-aos-delay="500">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <div class="flex items-center gap-4 mb-2 relative">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary group-hover:neon-glow transition-all duration-300">
+                            <i data-lucide="layout" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-theme-textPrimary">Design</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2 relative">
+                        <span
+                            class="px-5 py-1.5 text-xs font-semibold rounded-full bg-white/5 dark:bg-[#0f172a] border border-white/10 text-theme-textSecondary hover:border-theme-primary transition-colors">Canva</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- My Portfolio Projects Section -->
     <section id="portfolio" class="py-16 px-6 relative z-10">
         <div class="max-w-7xl mx-auto">
             <!-- Header area -->
             <div class="flex items-center mb-8 gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-theme-primary shadow-lg neon-glow flex items-center justify-center shrink-0">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-theme-primary shadow-lg neon-glow flex items-center justify-center shrink-0">
                     <i data-lucide="layers" class="text-white w-6 h-6"></i>
                 </div>
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white shrink-0">Projects</h2>
-                <div class="h-[2px] bg-gradient-to-r from-theme-primary/50 to-transparent dark:from-white/10 flex-1 ml-4 hidden sm:block"></div>
+                <div
+                    class="h-[2px] bg-gradient-to-r from-theme-primary/50 to-transparent dark:from-white/10 flex-1 ml-4 hidden sm:block">
+                </div>
             </div>
 
             <!-- Filters -->
             <div class="flex flex-wrap gap-3 mb-10 filter-group">
-                <button data-filter="all" class="filter-btn active px-6 py-2.5 rounded-full bg-theme-primary hover:brightness-110 text-white text-sm font-bold tracking-wide neon-glow transition-all">Top rated</button>
-                <button data-filter="website" class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">Website</button>
-                <button data-filter="tools" class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">Tools</button>
-                <button data-filter="seo" class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">SEO Pages</button>
-                <button data-filter="mobile" class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">Mobile</button>
+                <button data-filter="all"
+                    class="filter-btn active px-6 py-2.5 rounded-full bg-theme-primary hover:brightness-110 text-white text-sm font-bold tracking-wide neon-glow transition-all">Top
+                    rated</button>
+                <button data-filter="website"
+                    class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">Website</button>
+                <button data-filter="tools"
+                    class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">Tools</button>
+                <button data-filter="seo"
+                    class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">SEO
+                    Pages</button>
+                <button data-filter="mobile"
+                    class="filter-btn px-6 py-2.5 rounded-full bg-white text-slate-600 text-sm font-bold tracking-wide shadow-sm hover:text-theme-primary hover:shadow-md transition-all">Mobile</button>
             </div>
 
             <!-- Empty State -->
@@ -263,77 +485,119 @@
 
             <!-- Projects Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10" id="projects-grid">
-                
+
                 <!-- Project 1 -->
-                <div class="project-item group glass-panel rounded-[2rem] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col pb-4" data-category="tools">
-                    <div class="p-3 bg-gray-50/50 dark:bg-white/5 relative mx-3 mt-3 rounded-xl border-b-[3px] border-yellow-400 overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
+                <div class="project-item group glass-panel rounded-[2rem] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col pb-4"
+                    data-category="tools">
+                    <div
+                        class="p-3 bg-gray-50/50 dark:bg-white/5 relative mx-3 mt-3 rounded-xl border-b-[3px] border-yellow-400 overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
                         <div class="aspect-video w-full relative overflow-hidden rounded-lg">
-                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700">
+                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700">
                             <!-- Overlay -->
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300">
-                                <a href="#" class="px-4 py-2 bg-theme-primary hover:brightness-110 text-white text-sm font-bold rounded-full transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 flex items-center"><i data-lucide="external-link" class="w-4 h-4 mr-1"></i>Live</a>
-                                <a href="#" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-full border border-white/20 transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 flex items-center"><i data-lucide="github" class="w-4 h-4 mr-1"></i>Source</a>
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300">
+                                <a href="#"
+                                    class="px-4 py-2 bg-theme-primary hover:brightness-110 text-white text-sm font-bold rounded-full transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 flex items-center"><i
+                                        data-lucide="external-link" class="w-4 h-4 mr-1"></i>Live</a>
+                                <a href="#"
+                                    class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-full border border-white/20 transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 flex items-center"><i
+                                        data-lucide="github" class="w-4 h-4 mr-1"></i>Source</a>
                             </div>
                         </div>
                     </div>
                     <div class="px-5 pt-4 flex-1 flex flex-col">
-                        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">Bank Management System</h4>
+                        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">Bank Management
+                            System</h4>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
-                            A robust console-based application featuring real-time database connectivity, account creation algorithms, and secure transactional tracking through strict exception handling.
+                            A robust console-based application featuring real-time database connectivity, account
+                            creation algorithms, and secure transactional tracking through strict exception handling.
                         </p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Core Java</span>
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">JDBC</span>
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">MySQL</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Core
+                                Java</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">JDBC</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">MySQL</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Project 2 -->
-                <div class="project-item group glass-panel rounded-[2rem] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col pb-4" data-category="tools">
-                    <div class="p-3 bg-gray-50/50 dark:bg-white/5 relative mx-3 mt-3 rounded-xl border-b-[3px] border-cyan-400 overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
+                <div class="project-item group glass-panel rounded-[2rem] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col pb-4"
+                    data-category="tools">
+                    <div
+                        class="p-3 bg-gray-50/50 dark:bg-white/5 relative mx-3 mt-3 rounded-xl border-b-[3px] border-cyan-400 overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
                         <div class="aspect-video w-full relative overflow-hidden rounded-lg">
-                            <img src="https://images.unsplash.com/photo-1522881451255-f59c4bafb1a5?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700">
+                            <img src="https://images.unsplash.com/photo-1522881451255-f59c4bafb1a5?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700">
                             <!-- Overlay -->
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300">
-                                <a href="#" class="px-4 py-2 bg-theme-primary hover:brightness-110 text-white text-sm font-bold rounded-full transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 flex items-center"><i data-lucide="external-link" class="w-4 h-4 mr-1"></i>Live</a>
-                                <a href="#" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-full border border-white/20 transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 flex items-center"><i data-lucide="github" class="w-4 h-4 mr-1"></i>Source</a>
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300">
+                                <a href="#"
+                                    class="px-4 py-2 bg-theme-primary hover:brightness-110 text-white text-sm font-bold rounded-full transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 flex items-center"><i
+                                        data-lucide="external-link" class="w-4 h-4 mr-1"></i>Live</a>
+                                <a href="#"
+                                    class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-full border border-white/20 transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 flex items-center"><i
+                                        data-lucide="github" class="w-4 h-4 mr-1"></i>Source</a>
                             </div>
                         </div>
                     </div>
                     <div class="px-5 pt-4 flex-1 flex flex-col">
-                        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">Ticket Management System</h4>
+                        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">Ticket Management
+                            System</h4>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
-                            An efficient system tailored around advanced collection frameworks to store user and ticket information in memory alongside dynamic update and cancellation mechanisms.
+                            An efficient system tailored around advanced collection frameworks to store user and ticket
+                            information in memory alongside dynamic update and cancellation mechanisms.
                         </p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Core Java</span>
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Data Structures</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Core
+                                Java</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Data
+                                Structures</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Project 3 -->
-                <div class="project-item group glass-panel rounded-[2rem] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col pb-4" data-category="website">
-                    <div class="p-3 bg-gray-50/50 dark:bg-white/5 relative mx-3 mt-3 rounded-xl border-b-[3px] border-purple-500 overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
+                <div class="project-item group glass-panel rounded-[2rem] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col pb-4"
+                    data-category="website">
+                    <div
+                        class="p-3 bg-gray-50/50 dark:bg-white/5 relative mx-3 mt-3 rounded-xl border-b-[3px] border-purple-500 overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
                         <div class="aspect-video w-full relative overflow-hidden rounded-lg">
-                            <img src="https://images.unsplash.com/photo-1592210454359-9043f067919b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700">
+                            <img src="https://images.unsplash.com/photo-1592210454359-9043f067919b?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-full object-cover mix-blend-multiply dark:mix-blend-normal group-hover:scale-110 transition-transform duration-700">
                             <!-- Overlay -->
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300">
-                                <a href="#" class="px-4 py-2 bg-theme-primary hover:brightness-110 text-white text-sm font-bold rounded-full transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 flex items-center"><i data-lucide="external-link" class="w-4 h-4 mr-1"></i>Live</a>
-                                <a href="#" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-full border border-white/20 transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 flex items-center"><i data-lucide="github" class="w-4 h-4 mr-1"></i>Source</a>
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300">
+                                <a href="#"
+                                    class="px-4 py-2 bg-theme-primary hover:brightness-110 text-white text-sm font-bold rounded-full transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 flex items-center"><i
+                                        data-lucide="external-link" class="w-4 h-4 mr-1"></i>Live</a>
+                                <a href="#"
+                                    class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-full border border-white/20 transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 flex items-center"><i
+                                        data-lucide="github" class="w-4 h-4 mr-1"></i>Source</a>
                             </div>
                         </div>
                     </div>
                     <div class="px-5 pt-4 flex-1 flex flex-col">
-                        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">Dynamic Weather App</h4>
+                        <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">Dynamic Weather
+                            App</h4>
                         <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
-                            A modern web-based interface querying real-time forecasting data dynamically triggered by user input, structured with an inherently responsive UI design template.
+                            A modern web-based interface querying real-time forecasting data dynamically triggered by
+                            user input, structured with an inherently responsive UI design template.
                         </p>
                         <div class="flex flex-wrap gap-2 mt-auto">
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">HTML/CSS</span>
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">JS</span>
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Web APIs</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">HTML/CSS</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">JS</span>
+                            <span
+                                class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 flex items-center justify-center text-[11px] uppercase tracking-wider font-bold rounded-md">Web
+                                APIs</span>
                         </div>
                     </div>
                 </div>
@@ -342,101 +606,274 @@
         </div>
     </section>
 
-    <!-- More About Me Section -->
-    <section id="about" class="py-5 px-6 relative">
+    <!-- Experience Section -->
+    <section id="experience" class="py-12 px-6 relative z-10 overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">More <span class="text-theme-primary">About Me</span></h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">Greetings, fellow digital explorers! I am [Your Name], a
-                    passionate and innovative developer dedicated to crafting.</p>
+
+            <!-- Section Header -->
+            <div class="flex items-center mb-12 gap-4" data-aos="fade-down">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-theme-primary shadow-lg neon-glow flex items-center justify-center shrink-0">
+                    <i data-lucide="briefcase" class="text-white w-6 h-6"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-theme-textPrimary uppercase tracking-tight">
+                    Experience</h2>
+                <div class="h-[1px] bg-gradient-to-r from-theme-primary/50 to-transparent flex-1 ml-4"></div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <!-- Education Timeline -->
-                <div>
-                    <h3 class="text-2xl font-bold mb-10 flex items-center">
-                        <i data-lucide="graduation-cap" class="mr-3 text-theme-primary"></i> My Education
-                    </h3>
-                    <div class="space-y-12 pl-6">
-                        <div class="relative timeline-item">
-                            <div class="timeline-dot"></div>
-                            <span
-                                class="text-xs text-theme-primary font-bold bg-cyan-500/10 px-3 py-1 rounded-full mb-3 inline-block">OCT
-                                2022 - JUN 2025</span>
-                            <h4 class="text-xl font-bold mb-2">Bachelor of Computer Applications (BCA)</h4>
-                            <p class="text-gray-500 leading-relaxed">Osmania University, Hyderabad Telangana</p>
-                        </div>
-                        <div class="relative timeline-item">
-                            <div class="timeline-dot"></div>
-                            <span
-                                class="text-xs text-theme-primary font-bold bg-cyan-500/10 px-3 py-1 rounded-full mb-3 inline-block">JUN
-                                2020 - JUN 2022</span>
-                            <h4 class="text-xl font-bold mb-2">Intermediate (12th)</h4>
-                            <p class="text-gray-500 leading-relaxed">S.L.J Intermediate College, Uttar Pradesh</p>
-                        </div>
-                        <div class="relative timeline-item">
-                            <div class="timeline-dot"></div>
-                            <span
-                                class="text-xs text-theme-primary font-bold bg-cyan-500/10 px-3 py-1 rounded-full mb-3 inline-block">JUN
-                                2019 - JUN 2020</span>
-                            <h4 class="text-xl font-bold mb-2">High School (10th)</h4>
-                            <p class="text-gray-500 leading-relaxed">S.L.J Intermediate College, Uttar Pradesh</p>
-                        </div>
+            <!-- Timeline & Card Container -->
+            <div class="flex flex-col md:flex-row gap-8 lg:gap-12">
+
+                <!-- Left: Timeline Line -->
+                <div class="relative w-full md:w-auto md:min-w-[40px] flex md:block items-center" data-aos="fade-right">
+                    <!-- Vertical Line (Desktop) -->
+                    <div
+                        class="hidden md:block absolute left-1/2 -translate-x-1/2 top-4 bottom-0 w-[2px] bg-gradient-to-b from-theme-primary via-theme-secondary to-theme-primary/10 rounded-full">
                     </div>
+
+                    <!-- Glow Node -->
+                    <div
+                        class="relative z-20 w-8 h-8 rounded-full bg-theme-primary shadow-[0_0_20px_rgba(6,182,212,0.6)] border-4 border-white dark:border-[#0f172a] md:mx-auto">
+                    </div>
+
+                    <!-- Connection Line for Horizontal spacing (Desktop) -->
+                    <div class="hidden md:block absolute top-[15px] left-1/2 w-12 h-[2px] bg-theme-primary/50"></div>
                 </div>
 
-                <!-- Skills -->
-                <div>
-                    <h3 class="text-2xl font-bold mb-8 flex items-center">
-                        <i data-lucide="code-2" class="mr-3 text-theme-primary"></i> My Web & Tech Skills
-                    </h3>
+                <!-- Right: Experience Card -->
+                <div class="flex-1" data-aos="fade-up">
+                    <div
+                        class="glass-panel p-8 rounded-[2rem] border border-white/10 hover:scale-[1.02] transition-all duration-300 relative overflow-hidden group shadow-xl">
+                        <!-- Content Header -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                            <div>
+                                <h3 class="text-2xl md:text-3xl font-extrabold text-theme-textPrimary mb-1">Application
+                                    Development Training</h3>
+                                <p class="text-theme-primary font-bold text-lg tracking-wide uppercase">3 Month Training
+                                    Program</p>
+                            </div>
+                            <span
+                                class="text-theme-textSecondary font-bold text-sm bg-white/5 dark:bg-white/5 px-4 py-2 rounded-full border border-white/10 shrink-0 self-start sm:self-center">3
+                                Months</span>
+                        </div>
 
-                    <div class="space-y-4">
-                        <h4 class="font-bold text-gray-300">Programming Languages & Tools</h4>
-                        <div class="flex flex-wrap gap-2 text-sm text-theme-primary">
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">Core Java</span>
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">C / C++</span>
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">HTML, CSS, JS</span>
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">Eclipse / VS Code</span>
+                        <!-- Description -->
+                        <p class="text-theme-textSecondary text-lg leading-relaxed mb-8 italic opacity-90">
+                            Completed an application development training program focused on designing and building
+                            applications using modern development.
+                        </p>
+
+                        <!-- Highlights Section -->
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-black tracking-[3px] text-theme-textPrimary/50 uppercase mb-4">
+                                Highlights</h4>
+                            <ul class="flex flex-col gap-4">
+                                <li class="flex items-start gap-3 group/item">
+                                    <div
+                                        class="w-2 h-2 rounded-full bg-theme-primary mt-2 group-hover/item:scale-125 transition-transform">
+                                    </div>
+                                    <span class="text-theme-textSecondary text-sm leading-snug">Learned application
+                                        design and development processes</span>
+                                </li>
+                                <li class="flex items-start gap-3 group/item">
+                                    <div
+                                        class="w-2 h-2 rounded-full bg-theme-primary mt-2 group-hover/item:scale-125 transition-transform">
+                                    </div>
+                                    <span class="text-theme-textSecondary text-sm leading-snug">Built applications using
+                                        a visual development platform</span>
+                                </li>
+                                <li class="flex items-start gap-3 group/item">
+                                    <div
+                                        class="w-2 h-2 rounded-full bg-theme-primary mt-2 group-hover/item:scale-125 transition-transform">
+                                    </div>
+                                    <span class="text-theme-textSecondary text-sm leading-snug">Focused on UI design,
+                                        workflow logic, and application structure</span>
+                                </li>
+                                <li class="flex items-start gap-3 group/item">
+                                    <div
+                                        class="w-2 h-2 rounded-full bg-theme-primary mt-2 group-hover/item:scale-125 transition-transform">
+                                    </div>
+                                    <span class="text-theme-textSecondary text-sm leading-snug">Gained understanding of
+                                        how applications are developed and deployed</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Subtle background glow -->
+                        <div
+                            class="absolute -bottom-20 -right-20 w-64 h-64 bg-theme-primary/5 blur-[100px] rounded-full pointer-events-none group-hover:bg-theme-primary/10 transition-colors">
                         </div>
                     </div>
-
-                    <div class="space-y-4 mt-6">
-                        <h4 class="font-bold text-gray-300">Frameworks & Database</h4>
-                        <div class="flex flex-wrap gap-2 text-sm text-theme-primary">
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">MySQL</span>
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">JDBC</span>
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">Hibernate</span>
-                            <span class="bg-cyan-500/10 px-3 py-1 rounded-full">Spring Core</span>
-                        </div>
-                    </div>
-
-                    <h3 class="text-2xl font-bold mt-12 mb-6 flex items-center">
-                        <i data-lucide="award" class="mr-3 text-theme-primary"></i> Certifications
-                    </h3>
-                    <ul class="space-y-4 text-gray-400 text-sm">
-                        <li class="flex items-center"><i data-lucide="check-circle"
-                                class="min-w-5 w-5 h-5 mr-3 text-cyan-500"></i> Generative AI | Microsoft & LinkedIn
-                        </li>
-                        <li class="flex items-center"><i data-lucide="check-circle"
-                                class="min-w-5 w-5 h-5 mr-3 text-cyan-500"></i> HTML, CSS & JavaScript | Infosys</li>
-                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Blog Section -->
+    <!-- Education & Certifications Section -->
+    <section id="education" class="py-12 px-6 relative z-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- Section Header -->
+            <div class="flex items-center mb-12 gap-4" data-aos="fade-down">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-theme-primary shadow-lg neon-glow flex items-center justify-center shrink-0">
+                    <i data-lucide="graduation-cap" class="text-white w-6 h-6"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-theme-textPrimary uppercase tracking-tight">
+                    Education</h2>
+                <div class="h-[2px] bg-gradient-to-r from-theme-primary/50 to-transparent flex-1 ml-4 hidden sm:block">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+
+                <!-- Left Side: Academic Journey -->
+                <div class="relative" data-aos="fade-right">
+                    <div class="flex items-center gap-4 mb-8">
+                        <i data-lucide="book-open" class="text-theme-primary w-6 h-6"></i>
+                        <h3 class="text-2xl font-bold text-theme-textPrimary">Academic Journey</h3>
+                    </div>
+
+                    <!-- Timeline Column -->
+                    <div class="relative pl-8">
+                        <!-- Vertical Line -->
+                        <div
+                            class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-theme-primary via-theme-secondary to-theme-primary/20 rounded-full">
+                        </div>
+
+                        <!-- Timeline Item 1 -->
+                        <div class="relative mb-12 last:mb-0">
+                            <!-- Dot -->
+                            <div
+                                class="absolute -left-[32px] top-6 w-10 h-10 rounded-full glass-panel flex items-center justify-center z-20 border border-theme-primary/30 shadow-lg neon-glow">
+                                <i data-lucide="graduation-cap" class="w-5 h-5 text-theme-primary"></i>
+                            </div>
+
+                            <!-- Card -->
+                            <div
+                                class="glass-panel p-6 rounded-2xl border border-white/10 hover:scale-[1.03] transition-all duration-300 ml-4 group">
+                                <span class="text-theme-primary font-bold text-sm mb-2 block tracking-wide">2018 —
+                                    2022</span>
+                                <h4 class="text-xl font-bold text-theme-textPrimary mb-1">Bachelor of Science in
+                                    Computer Science</h4>
+                                <p class="text-theme-textSecondary font-medium text-sm mb-3">Example State University
+                                </p>
+                                <p class="text-theme-textSecondary text-xs leading-relaxed opacity-80">Specialized in
+                                    Software Engineering and Artificial Intelligence. Graduated with honors.</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 2 -->
+                        <div class="relative">
+                            <!-- Dot -->
+                            <div
+                                class="absolute -left-[32px] top-6 w-10 h-10 rounded-full glass-panel flex items-center justify-center z-20 border border-theme-primary/30 shadow-lg">
+                                <i data-lucide="school" class="w-5 h-5 text-theme-primary"></i>
+                            </div>
+
+                            <!-- Card -->
+                            <div
+                                class="glass-panel p-6 rounded-2xl border border-white/10 hover:scale-[1.03] transition-all duration-300 ml-4 group">
+                                <span class="text-theme-primary font-bold text-sm mb-2 block tracking-wide">2016 —
+                                    2018</span>
+                                <h4 class="text-xl font-bold text-theme-textPrimary mb-1">High School Diploma</h4>
+                                <p class="text-theme-textSecondary font-medium text-sm">Central High School</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Technical Certifications -->
+                <div class="relative" data-aos="fade-left">
+                    <div class="flex items-center gap-4 mb-8">
+                        <i data-lucide="award" class="text-theme-secondary w-6 h-6"></i>
+                        <h3 class="text-2xl font-bold text-theme-textPrimary">Technical Certifications</h3>
+                    </div>
+
+                    <!-- Timeline Column -->
+                    <div class="relative pl-8">
+                        <!-- Vertical Line -->
+                        <div
+                            class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-theme-secondary via-theme-primary to-theme-secondary/20 rounded-full">
+                        </div>
+
+                        <!-- Cert Item 1 -->
+                        <div class="relative mb-10 last:mb-0">
+                            <!-- Dot -->
+                            <div
+                                class="absolute -left-[32px] top-6 w-10 h-10 rounded-full glass-panel flex items-center justify-center z-20 border border-theme-secondary/30 shadow-lg neon-glow">
+                                <i data-lucide="badge-check" class="w-5 h-5 text-theme-secondary"></i>
+                            </div>
+
+                            <!-- Card -->
+                            <div
+                                class="glass-panel p-5 rounded-2xl border border-white/10 hover:scale-[1.03] transition-all duration-300 ml-4">
+                                <h4 class="text-lg font-bold text-theme-textPrimary mb-1">AWS Certified Solutions
+                                    Architect – Associate</h4>
+                                <p class="text-theme-textSecondary font-medium text-sm mb-2">Amazon Web Services (AWS)
+                                </p>
+                                <span
+                                    class="text-xs font-bold text-theme-secondary bg-theme-secondary/10 px-3 py-1 rounded-full">Issued:
+                                    2023</span>
+                            </div>
+                        </div>
+
+                        <!-- Cert Item 2 -->
+                        <div class="relative mb-10 last:mb-0">
+                            <!-- Dot -->
+                            <div
+                                class="absolute -left-[32px] top-6 w-10 h-10 rounded-full glass-panel flex items-center justify-center z-20 border border-theme-secondary/30 shadow-lg neon-glow">
+                                <i data-lucide="badge-check" class="w-5 h-5 text-theme-secondary"></i>
+                            </div>
+
+                            <!-- Card -->
+                            <div
+                                class="glass-panel p-5 rounded-2xl border border-white/10 hover:scale-[1.03] transition-all duration-300 ml-4">
+                                <h4 class="text-lg font-bold text-theme-textPrimary mb-1">React Developer Nanodegree
+                                </h4>
+                                <p class="text-theme-textSecondary font-medium text-sm mb-2">Udacity</p>
+                                <span
+                                    class="text-xs font-bold text-theme-secondary bg-theme-secondary/10 px-3 py-1 rounded-full">Issued:
+                                    2022</span>
+                            </div>
+                        </div>
+
+                        <!-- Cert Item 3 -->
+                        <div class="relative">
+                            <!-- Dot -->
+                            <div
+                                class="absolute -left-[32px] top-6 w-10 h-10 rounded-full glass-panel flex items-center justify-center z-20 border border-theme-secondary/30 shadow-lg neon-glow">
+                                <i data-lucide="badge-check" class="w-5 h-5 text-theme-secondary"></i>
+                            </div>
+
+                            <!-- Card -->
+                            <div
+                                class="glass-panel p-5 rounded-2xl border border-white/10 hover:scale-[1.03] transition-all duration-300 ml-4">
+                                <h4 class="text-lg font-bold text-theme-textPrimary mb-1">Google UX Design Professional
+                                    Certificate</h4>
+                                <p class="text-theme-textSecondary font-medium text-sm mb-2">Coursera</p>
+                                <span
+                                    class="text-xs font-bold text-theme-secondary bg-theme-secondary/10 px-3 py-1 rounded-full">Issued:
+                                    2021</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section Commented Out 
     <section id="blog" class="py-5 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Know More With My <span class="text-theme-primary">Article</span></h2>
+                <h2 class="text-4xl font-bold mb-4">Know More With My <span class="text-theme-primary">Article</span>
+                </h2>
                 <p class="text-gray-400 max-w-2xl mx-auto">Greetings, fellow digital explorers! I am [Your Name], a
                     passionate and innovative developer dedicated to crafting immersive.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Blog 1 -->
                 <div class="glass-panel rounded-2xl overflow-hidden group">
                     <div class="overflow-hidden h-48">
                         <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800"
@@ -450,7 +887,6 @@
                             More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i></a>
                     </div>
                 </div>
-                <!-- Blog 2 -->
                 <div class="glass-panel rounded-2xl overflow-hidden group border-cyan-500/30">
                     <div class="overflow-hidden h-48">
                         <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800"
@@ -464,7 +900,6 @@
                             More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i></a>
                     </div>
                 </div>
-                <!-- Blog 3 -->
                 <div class="glass-panel rounded-2xl overflow-hidden group">
                     <div class="overflow-hidden h-48">
                         <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800"
@@ -486,97 +921,149 @@
             </div>
         </div>
     </section>
-
-    <!-- Reviews Section -->
-    <section id="reviews" class="py-5 px-6 relative overflow-hidden">
+    -->
+    <!-- Contact Section -->
+    <section id="contact" class="py-12 px-6 relative z-10 overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">What My <span class="text-theme-primary">Clients</span> Says</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">Greetings, fellow digital explorers! I am [Your Name], a
-                    passionate and innovative developer dedicated to crafting.</p>
+
+            <!-- Section Header -->
+            <div class="flex items-center mb-12 gap-4" data-aos="fade-down">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-theme-primary shadow-lg neon-glow flex items-center justify-center shrink-0">
+                    <i data-lucide="mail" class="text-white w-6 h-6"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-theme-textPrimary uppercase tracking-tight">Contact
+                </h2>
+                <div class="h-[1px] bg-gradient-to-r from-theme-primary/50 to-transparent flex-1 ml-4"></div>
             </div>
 
-            <div class="relative max-w-4xl mx-auto">
-                <!-- Testimonial Slider -->
-                <div id="testimonial-slider" class="overflow-hidden relative h-[350px]">
-                    <div class="testimonial-track flex transition-transform duration-500 ease-in-out">
-                        <!-- Slide 1 -->
-                        <div class="min-w-full px-4">
-                            <div class="glass-panel p-10 rounded-2xl relative">
-                                <div class="flex items-center space-x-4 mb-8">
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200"
-                                        class="w-16 h-16 rounded-full object-cover border-2 border-cyan-400/30">
-                                    <div>
-                                        <h4 class="text-xl font-bold">Lara Johnson</h4>
-                                        <div class="flex text-yellow-400">
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-gray-400 italic text-lg leading-relaxed mb-8">"Greetings, fellow digital
-                                    explorers! I am [Your Name], a passionate and innovative developer dedicated to
-                                    crafting immersive digital experiences. Welcome to my online abode."</p>
-                                <div>
-                                    <div class="font-bold">Johnson and Brothers</div>
-                                    <div class="text-theme-primary text-sm">CEO</div>
-                                </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+                <!-- Left: Contact Info Card -->
+                <div class="glass-panel p-8 md:p-10 rounded-[2rem] border border-white/10 shadow-xl flex flex-col h-full"
+                    data-aos="fade-right">
+                    <h3 class="text-3xl font-extrabold text-theme-textPrimary mb-6">Let's Work <span
+                            class="text-theme-primary">Together</span></h3>
+
+                    <div class="border-l-4 border-theme-primary pl-6 mb-8 py-2 bg-theme-primary/5 rounded-r-xl">
+                        <p class="text-theme-textSecondary text-lg leading-relaxed">
+                            Have a project in mind or want to collaborate? I'd love to hear from you.
+                        </p>
+                    </div>
+
+                    <div class="h-[1px] bg-white/10 w-full mb-10"></div>
+
+                    <!-- Contact Details -->
+                    <div class="space-y-8 flex-1">
+                        <!-- Email -->
+                        <div class="flex items-center gap-5 group">
+                            <div
+                                class="w-14 h-14 rounded-full glass-panel border border-theme-primary/20 flex items-center justify-center text-theme-primary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="mail" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-black text-theme-textPrimary/40 uppercase tracking-widest mb-1">
+                                    Email</p>
+                                <p class="text-theme-textSecondary font-bold text-lg">your@email.com</p>
                             </div>
                         </div>
-                        <!-- Slide 2 -->
-                        <div class="min-w-full px-4">
-                            <div class="glass-panel p-10 rounded-2xl relative">
-                                <div class="flex items-center space-x-4 mb-8">
-                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200"
-                                        class="w-16 h-16 rounded-full object-cover border-2 border-cyan-400/30">
-                                    <div>
-                                        <h4 class="text-xl font-bold">Mark Stevenson</h4>
-                                        <div class="flex text-yellow-400">
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-gray-400 italic text-lg leading-relaxed mb-8">"Wilkerson delivered a
-                                    stunning platform for our brand. The attention to detail and technical proficiency
-                                    surpassed our expectations significantly."</p>
-                                <div>
-                                    <div class="font-bold">Creative Studios</div>
-                                    <div class="text-theme-primary text-sm">Design Director</div>
-                                </div>
+
+                        <!-- Phone -->
+                        <div class="flex items-center gap-5 group">
+                            <div
+                                class="w-14 h-14 rounded-full glass-panel border border-theme-primary/20 flex items-center justify-center text-theme-primary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="phone" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-black text-theme-textPrimary/40 uppercase tracking-widest mb-1">
+                                    Phone</p>
+                                <p class="text-theme-textSecondary font-bold text-lg">+1 (123) 456-7890</p>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="flex items-center gap-5 group">
+                            <div
+                                class="w-14 h-14 rounded-full glass-panel border border-theme-primary/20 flex items-center justify-center text-theme-primary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="map-pin" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-black text-theme-textPrimary/40 uppercase tracking-widest mb-1">
+                                    Location</p>
+                                <p class="text-theme-textSecondary font-bold text-lg">Your City, Country</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Decorative wave -->
+                    <div
+                        class="absolute bottom-0 right-0 w-48 h-48 bg-theme-primary/5 blur-[80px] rounded-full -mb-10 -mr-10">
+                    </div>
                 </div>
 
-                <!-- Navigation -->
-                <button id="prev-btn"
-                    class="absolute left-[-20px] lg:left-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:border-cyan-400 text-white transition-all group">
-                    <i data-lucide="chevron-left" class="group-hover:text-theme-primary"></i>
-                </button>
-                <button id="next-btn"
-                    class="absolute right-[-20px] lg:right-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:border-cyan-400 text-white transition-all group">
-                    <i data-lucide="chevron-right" class="group-hover:text-theme-primary"></i>
-                </button>
+                <!-- Right: Contact Form Card -->
+                <div class="glass-panel p-8 md:p-10 rounded-[2rem] border border-white/10 shadow-xl relative overflow-hidden h-full"
+                    data-aos="fade-left">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary shadow-sm border border-theme-primary/20">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-theme-textPrimary">Send a Message</h3>
+                    </div>
 
-                <!-- Dots -->
-                <div class="flex justify-center space-x-2 mt-8">
-                    <div class="slider-dot w-2 h-2 rounded-full bg-white/20 transition-all active" data-index="0"></div>
-                    <div class="slider-dot w-2 h-2 rounded-full bg-white/20 transition-all" data-index="1"></div>
-                    <div class="slider-dot w-2 h-2 rounded-full bg-white/20 transition-all" data-index="2"></div>
+                    <form id="main-contact-form" class="space-y-6 relative z-10">
+                        <!-- Name Input -->
+                        <div class="relative group">
+                            <div
+                                class="absolute left-5 top-1/2 -translate-y-1/2 text-theme-textSecondary opacity-50 flex items-center pointer-events-none group-focus-within:text-theme-primary group-focus-within:opacity-100 transition-all">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                            <input type="text" placeholder="Your name" required
+                                class="w-full glass-panel !bg-black/5 dark:!bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-theme-textPrimary placeholder:text-theme-textSecondary/40 focus:outline-none focus:border-theme-primary/50 focus:ring-1 focus:ring-theme-primary/30 transition-all">
+                        </div>
+
+                        <!-- Email Input -->
+                        <div class="relative group">
+                            <div
+                                class="absolute left-5 top-1/2 -translate-y-1/2 text-theme-textSecondary opacity-50 flex items-center pointer-events-none group-focus-within:text-theme-primary group-focus-within:opacity-100 transition-all">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <input type="email" placeholder="your@email.com" required
+                                class="w-full glass-panel !bg-black/5 dark:!bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-theme-textPrimary placeholder:text-theme-textSecondary/40 focus:outline-none focus:border-theme-primary/50 focus:ring-1 focus:ring-theme-primary/30 transition-all">
+                        </div>
+
+                        <!-- Message Input -->
+                        <div class="relative group">
+                            <div
+                                class="absolute left-5 top-6 text-theme-textSecondary opacity-50 flex items-center pointer-events-none group-focus-within:text-theme-primary group-focus-within:opacity-100 transition-all">
+                                <i data-lucide="message-square" class="w-5 h-5"></i>
+                            </div>
+                            <textarea placeholder="Tell me about your project or idea..." rows="4" required
+                                class="w-full glass-panel !bg-black/5 dark:!bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-theme-textPrimary placeholder:text-theme-textSecondary/40 focus:outline-none focus:border-theme-primary/50 focus:ring-1 focus:ring-theme-primary/30 transition-all resize-none"></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit"
+                            class="w-full bg-gradient-primary px-8 py-5 rounded-2xl text-white font-black flex items-center justify-center gap-3 group/btn hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all transform hover:-translate-y-1 active:scale-[0.98]">
+                            Continue to Contact
+                            <i data-lucide="arrow-up-right"
+                                class="w-5 h-5 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1"></i>
+                        </button>
+                    </form>
+
+                    <!-- Background decorations -->
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-theme-primary/10 blur-3xl rounded-full"></div>
+                    <div class="absolute top-10 right-10 opacity-20 pointer-events-none">
+                        <i data-lucide="sparkle" class="w-12 h-12 text-theme-primary animate-pulse"></i>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="py-10 px-6 border-t border-white/5">
+    <footer id="site-footer" class="py-10 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm">
             <p>&copy; 2025 Samir Ali. All rights reserved.</p>
             <div class="flex space-x-8 mt-4 md:mt-0">
@@ -587,7 +1074,6 @@
     </footer>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script src='js/script.js'></script>
 
     <!-- Floating Contact Button -->
     <div class="fixed bottom-6 right-6 z-50">
@@ -645,6 +1131,15 @@
         </div>
     </div>
     <script src="js/script.js"></script>
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
 </body>
 
 </html>

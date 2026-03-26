@@ -1,0 +1,111 @@
+/* Custom styles for Contact page */
+
+/* Shared Gradients */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%);
+}
+
+.text-gradient-primary {
+    background: linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(135deg, #F97316 0%, #D946EF 100%);
+}
+
+/* Glassmorphism Refinements */
+.glass-panel {
+    background: var(--theme-card-bg);
+    backdrop-filter: var(--theme-card-blur);
+    -webkit-backdrop-filter: var(--theme-card-blur);
+    border: 1px solid var(--theme-card-border);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .glass-panel {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Step 1 Cards */
+.inquiry-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--theme-accent-primary);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+}
+
+.dark .inquiry-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.inquiry-card.active {
+    border-color: var(--theme-accent-primary);
+    background: rgba(56, 189, 248, 0.05);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+    transform: scale(1.05);
+}
+
+.inquiry-card.active .check-icon {
+    opacity: 1 !important;
+    scale: 1 !important;
+}
+
+.inquiry-card.active .icon-box {
+    transform: scale(1.1);
+    background: var(--theme-accent-primary) !important;
+}
+
+.inquiry-card.active .icon-box i {
+    color: white !important;
+}
+
+/* Form Styling */
+.form-input {
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.2);
+}
+
+/* Chips UI */
+.chip {
+    padding: 12px 24px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--theme-text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--theme-accent-primary);
+    color: var(--theme-text-primary);
+}
+
+.chip.active {
+    background: var(--theme-accent-primary);
+    color: #FFFFFF;
+    border-color: transparent;
+    box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.4);
+    transform: scale(1.05);
+}
+
+.dark .chip {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .glass-panel {
+        border-radius: 2rem !important;
+        padding: 1.5rem !important;
+    }
+}

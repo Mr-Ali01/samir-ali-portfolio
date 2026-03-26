@@ -1,0 +1,128 @@
+/* Skill Page Styling */
+
+:root {
+    --theme-card-bg-light: rgba(255, 255, 255, 0.7);
+    --theme-card-bg-dark: rgba(255, 255, 255, 0.05);
+    --theme-card-border-light: rgba(255, 255, 255, 0.4);
+    --theme-card-border-dark: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    scroll-behavior: smooth;
+    transition: background-color 0.5s ease-in-out;
+}
+
+/* Glassmorphism Skill Pill Utility */
+.skill-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    background: var(--theme-card-bg-light);
+    border: 1px solid var(--theme-card-border-light);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #475569; /* slate-600 */
+    cursor: default;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .skill-pill {
+    background: var(--theme-card-bg-dark);
+    border-color: var(--theme-card-border-dark);
+    color: #CBD5F5; /* textSecondary */
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.skill-pill:hover {
+    transform: translateY(-5px);
+    border-color: #38BDF8; /* theme-primary */
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+    color: #38BDF8;
+}
+
+.dark .skill-pill:hover {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    color: #38BDF8;
+}
+
+/* Learning Card Style */
+.learning-card {
+    background: var(--theme-card-bg-light);
+    border: 1px solid var(--theme-card-border-light);
+    backdrop-filter: blur(20px);
+    padding: 2.5rem;
+    border-radius: 2.5rem;
+    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dark .learning-card {
+    background: var(--theme-card-bg-dark);
+    border-color: var(--theme-card-border-dark);
+    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.4);
+}
+
+.learning-card:hover {
+    transform: scale(1.05);
+    border-color: #38BDF8;
+    box-shadow: 0 20px 60px -20px rgba(56, 189, 248, 0.2);
+}
+
+/* Navbar Scrolled state for consistency */
+#navbar.scrolled {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark #navbar.scrolled {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Custom Selection */
+::selection {
+    background: #38BDF8;
+    color: white;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Neon Glow Utility */
+.neon-glow {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+}
+
+/* Scrollbar Style */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+.dark ::-webkit-scrollbar-track {
+    background: #0F172A;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 5px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}

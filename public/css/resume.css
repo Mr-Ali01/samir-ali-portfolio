@@ -1,0 +1,61 @@
+/* Custom styles for Resume page */
+
+/* Document Container Styling */
+.resume-document {
+    background: #FFFFFF;
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1);
+    transform-origin: center top;
+}
+
+.dark .resume-document {
+    background: #F8FAFC; /* Slightly off-white for better eye comfort in dark mode */
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.4), 0 0 50px rgba(56, 189, 248, 0.1);
+}
+
+.resume-document section {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.resume-document h3 {
+    letter-spacing: 0.15em;
+}
+
+/* Sidebar Glassmorphism */
+.glass-panel {
+    background: var(--theme-card-bg);
+    backdrop-filter: var(--theme-card-blur);
+    -webkit-backdrop-filter: var(--theme-card-blur);
+    border: 1px solid var(--theme-card-border);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .glass-panel {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient text utility */
+.text-gradient-primary {
+    background: linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Animations and hover */
+.resume-document:hover {
+    box-shadow: 0 50px 120px -20px rgba(0, 0, 0, 0.15);
+}
+
+.dark .resume-document:hover {
+    box-shadow: 0 50px 120px -20px rgba(0, 0, 0, 0.5), 0 0 60px rgba(56, 189, 248, 0.15);
+}
+
+/* Responsive Scaling */
+@media (max-width: 768px) {
+    .resume-document {
+        padding: 2rem !important;
+        border-radius: 1.5rem !important;
+    }
+}

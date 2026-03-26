@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Samir Ali</title>
+    
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Apply theme early on load to prevent flash
+        if (localStorage.getItem('portfolio-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            primary: 'var(--theme-accent-primary)',
+                            secondary: 'var(--theme-accent-secondary)',
+                            glow: 'var(--theme-glow)',
+                            textPrimary: 'var(--theme-text-primary)',
+                            textSecondary: 'var(--theme-text-secondary)',
+                            bgStart: 'var(--theme-bg-start)',
+                            bgMid: 'var(--theme-bg-mid)',
+                            bgEnd: 'var(--theme-bg-end)',
+                        }
+                    },
+                    fontFamily: {
+                        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- External Resources -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contact.css">
+</head>
+<body class="antialiased font-jakarta overflow-x-hidden">
+
+    <!-- Global Background Elements (Dark Mode Glows) -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-0 dark:opacity-100 transition-opacity duration-1000">
+        <div class="absolute top-0 right-0 w-[50%] h-[50%] bg-theme-primary/10 blur-[150px] rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-[50%] h-[50%] bg-theme-secondary/10 blur-[150px] rounded-full"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-6 px-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
+                    S</div>
+                <span class="text-xl font-bold tracking-tight text-theme-textPrimary group-hover:text-theme-primary transition-colors">Samir.</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="about.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden">
+                    <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="sun" class="w-5 h-5"></i></span>
+                    <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="moon" class="w-5 h-5"></i></span>
+                </button>
+                <div class="hidden md:block">
+                    <a href="contact.html" class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
+                </div>
+                <button class="md:hidden text-theme-textPrimary" id="mobile-menu-btn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-32 pb-20 px-4">
+        <!-- Hero Section -->
+        <section class="max-w-4xl mx-auto text-center mb-16" data-aos="fade-up">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-theme-primary/10 border border-theme-primary/20 backdrop-blur-sm mb-6 shadow-sm">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span class="text-theme-primary text-[10px] font-black tracking-widest uppercase">Open to opportunities</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black text-theme-textPrimary leading-tight mb-8">
+                Let's <span class="text-gradient-primary">Work Together</span>
+            </h1>
+            <p class="text-lg text-theme-textSecondary max-w-2xl mx-auto leading-relaxed">
+                Select your inquiry type below — I respond to every message personally within 24–48 hours.
+            </p>
+        </section>
+
+        <!-- Step 1: Inquiry Type -->
+        <section id="step-1" class="max-w-5xl mx-auto mb-20" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-center mb-10">
+                <span class="text-[10px] font-black text-theme-primary uppercase tracking-[0.3em]">Step 1 — Choose Inquiry Type</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="inquiry-card glass-panel p-8 rounded-3xl cursor-pointer transition-all duration-500 relative overflow-hidden" data-type="freelance">
+                    <div class="absolute top-4 right-4 check-icon opacity-0 scale-50 transition-all duration-300">
+                        <div class="w-6 h-6 rounded-full bg-theme-primary flex items-center justify-center">
+                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="icon-box w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                        <i data-lucide="code" class="w-6 h-6 text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-2">Freelance Project</h3>
+                    <p class="text-theme-textSecondary text-sm">Turn your idea into a digital product</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="inquiry-card glass-panel p-8 rounded-3xl cursor-pointer transition-all duration-500 relative overflow-hidden" data-type="job">
+                    <div class="absolute top-4 right-4 check-icon opacity-0 scale-50 transition-all duration-300">
+                        <div class="w-6 h-6 rounded-full bg-theme-primary flex items-center justify-center">
+                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="icon-box w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                        <i data-lucide="briefcase" class="w-6 h-6 text-purple-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-2">Job Opportunity</h3>
+                    <p class="text-theme-textSecondary text-sm">Full-time, contract, or part-time position</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="inquiry-card glass-panel p-8 rounded-3xl cursor-pointer transition-all duration-500 relative overflow-hidden" data-type="collaboration">
+                    <div class="absolute top-4 right-4 check-icon opacity-0 scale-50 transition-all duration-300">
+                        <div class="w-6 h-6 rounded-full bg-theme-primary flex items-center justify-center">
+                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="icon-box w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                        <i data-lucide="users" class="w-6 h-6 text-emerald-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-2">Collaboration</h3>
+                    <p class="text-theme-textSecondary text-sm">Build something great together</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="inquiry-card glass-panel p-8 rounded-3xl cursor-pointer transition-all duration-500 relative overflow-hidden" data-type="internship">
+                    <div class="absolute top-4 right-4 check-icon opacity-0 scale-50 transition-all duration-300">
+                        <div class="w-6 h-6 rounded-full bg-theme-primary flex items-center justify-center">
+                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="icon-box w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                        <i data-lucide="book-open" class="w-6 h-6 text-orange-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-2">Internship</h3>
+                    <p class="text-theme-textSecondary text-sm">Learning and growth opportunity</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="inquiry-card glass-panel p-8 rounded-3xl cursor-pointer transition-all duration-500 relative overflow-hidden" data-type="technical">
+                    <div class="absolute top-4 right-4 check-icon opacity-0 scale-50 transition-all duration-300">
+                        <div class="w-6 h-6 rounded-full bg-theme-primary flex items-center justify-center">
+                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="icon-box w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                        <i data-lucide="terminal" class="w-6 h-6 text-red-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-2">Technical Consultation</h3>
+                    <p class="text-theme-textSecondary text-sm">Architecture, code review, tech strategy</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="inquiry-card glass-panel p-8 rounded-3xl cursor-pointer transition-all duration-500 relative overflow-hidden" data-type="general">
+                    <div class="absolute top-4 right-4 check-icon opacity-0 scale-50 transition-all duration-300">
+                        <div class="w-6 h-6 rounded-full bg-theme-primary flex items-center justify-center">
+                            <i data-lucide="check" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="icon-box w-12 h-12 rounded-xl bg-slate-500/10 flex items-center justify-center mb-6 transition-transform group-hover:scale-110">
+                        <i data-lucide="message-square" class="w-6 h-6 text-slate-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-2">General Inquiry</h3>
+                    <p class="text-theme-textSecondary text-sm">Something else on your mind?</p>
+                </div>
+            </div>
+            <div id="select-hint" class="text-center mt-12 transition-all duration-500">
+                <div class="w-12 h-12 rounded-full border border-theme-primary/20 mx-auto flex items-center justify-center text-theme-textSecondary animate-bounce">
+                    <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                </div>
+                <p class="text-theme-textSecondary text-xs font-bold uppercase tracking-widest mt-4">Select an inquiry type above to get started</p>
+            </div>
+        </section>
+
+        <!-- Step 2: Form -->
+        <section id="step-2" class="max-w-4xl mx-auto hidden" data-aos="fade-up">
+            <div class="flex items-center gap-4 mb-10 pb-6 border-b border-theme-textPrimary/5">
+                <button id="back-to-step-1" class="w-10 h-10 rounded-full border border-theme-textPrimary/10 flex items-center justify-center hover:bg-theme-primary/10 transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div>
+                     <span class="text-[10px] font-black text-theme-primary uppercase tracking-[0.3em]">Step 2 — Fill in Details</span>
+                     <h2 id="form-title" class="text-2xl font-black text-theme-textPrimary">Freelance Project</h2>
+                </div>
+            </div>
+
+            <form id="contact-form" class="space-y-8">
+                <!-- Section 1: Details -->
+                <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center">
+                            <i data-lucide="user" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-theme-textPrimary font-bold leading-tight">Your Details</h4>
+                            <p class="text-theme-textSecondary text-xs">Tell me who you are</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Full Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="name" required placeholder="Alex Johnson" class="form-input w-full p-4 rounded-2xl bg-white/5 border border-white/10 focus:border-theme-primary/50 focus:bg-white/10 transition-all outline-none">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Email Address <span class="text-red-500">*</span></label>
+                            <input type="email" name="email" required placeholder="alex@company.com" class="form-input w-full p-4 rounded-2xl bg-white/5 border border-white/10 focus:border-theme-primary/50 focus:bg-white/10 transition-all outline-none">
+                        </div>
+                        <div class="md:col-span-2 space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Company / Organisation (Optional)</label>
+                            <input type="text" name="company" placeholder="Acme Corp" class="form-input w-full p-4 rounded-2xl bg-white/5 border border-white/10 focus:border-theme-primary/50 focus:bg-white/10 transition-all outline-none">
+                        </div>
+                        <div class="md:col-span-2 space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Your Role</label>
+                            <select name="role" class="form-input w-full p-4 rounded-2xl bg-white/5 border border-white/10 focus:border-theme-primary/50 focus:bg-white/10 transition-all outline-none appearance-none">
+                                <option value="" disabled selected>Select your role</option>
+                                <option value="founder">Founder / CEO</option>
+                                <option value="manager">Hiring Manager</option>
+                                <option value="developer">Developer</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Inquiry Details -->
+                <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-theme-primary flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-theme-textPrimary font-bold leading-tight">Inquiry Details</h4>
+                            <p class="text-theme-textSecondary text-xs">Tell me about what you need</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Dynamic Field: Project Type -->
+                        <div id="project-type-container" class="space-y-2 hidden">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Project Type</label>
+                            <select name="project_type" class="form-input w-full p-4 rounded-2xl bg-white/5 border border-white/10 focus:border-theme-primary/50 focus:bg-white/10 transition-all outline-none appearance-none">
+                                <option value="" disabled selected>What are you building?</option>
+                                <option value="web">Web Application</option>
+                                <option value="mobile">Mobile App</option>
+                                <option value="consulting">Core Consulting</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Message <span class="text-red-500">*</span></label>
+                            <textarea name="message" required rows="5" placeholder="Describe your project..." class="form-input w-full p-4 rounded-2xl bg-white/5 border border-white/10 focus:border-theme-primary/50 focus:bg-white/10 transition-all outline-none resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Project Context (Conditional) -->
+                <div id="project-context-section" class="glass-panel p-8 md:p-10 rounded-[2.5rem] space-y-6 hidden">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-theme-secondary flex items-center justify-center">
+                            <i data-lucide="layers" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-theme-textPrimary font-bold leading-tight">Project Context</h4>
+                            <p class="text-theme-textSecondary text-xs">Help me understand your situation</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- Budget -->
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Budget Range</label>
+                            <div class="flex flex-wrap gap-3" id="budget-chips">
+                                <button type="button" class="chip" data-value="not-decided">Not decided</button>
+                                <button type="button" class="chip" data-value="below-500">< $500</button>
+                                <button type="button" class="chip" data-value="500-2000">$500 – $2,000</button>
+                                <button type="button" class="chip" data-value="2000-10000">$2,000 – $10,000</button>
+                                <button type="button" class="chip" data-value="above-10000">$10,000+</button>
+                            </div>
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-theme-textSecondary">Timeline</label>
+                            <div class="flex flex-wrap gap-3" id="timeline-chips">
+                                <button type="button" class="chip" data-value="urgent">Urgent (< 1 week)</button>
+                                <button type="button" class="chip" data-value="1-2-weeks">1-2 weeks</button>
+                                <button type="button" class="chip" data-value="1-2-months">1-2 months</button>
+                                <button type="button" class="chip" data-value="3-months">3+ months</button>
+                                <button type="button" class="chip" data-value="flexible">Flexible</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Preferred Communication -->
+                <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-green-500 flex items-center justify-center">
+                            <i data-lucide="phone-call" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-theme-textPrimary font-bold leading-tight">Preferred Communication</h4>
+                            <p class="text-theme-textSecondary text-xs">How should I get back to you?</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-3" id="comm-chips">
+                        <button type="button" class="chip" data-value="email">Email</button>
+                        <button type="button" class="chip" data-value="whatsapp">WhatsApp</button>
+                        <button type="button" class="chip" data-value="call">Call</button>
+                        <button type="button" class="chip" data-value="any">Any works</button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-6">
+                    <button type="submit" id="submit-btn" class="w-full bg-gradient-primary p-6 rounded-[2rem] text-white font-black text-xl shadow-[0_0_30px_rgba(56,189,248,0.3)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3">
+                        <span>Send Message</span>
+                        <i data-lucide="send" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Success State -->
+        <section id="success-state" class="max-w-3xl mx-auto hidden py-20" data-aos="zoom-in">
+             <div class="glass-panel p-16 md:p-24 rounded-[4rem] text-center space-y-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-primary"></div>
+                <div class="w-24 h-24 rounded-[2.5rem] bg-gradient-primary mx-auto flex items-center justify-center shadow-2xl shadow-theme-primary/40 animate-bounce">
+                    <i data-lucide="check-circle" class="w-12 h-12 text-white"></i>
+                </div>
+                <div class="space-y-4">
+                    <h2 class="text-4xl md:text-5xl font-black text-theme-textPrimary">Message Sent!</h2>
+                    <p id="success-message" class="text-lg text-theme-textSecondary max-w-sm mx-auto">Thanks for your inquiry. I'll review it and get back to you within 24-48 hours.</p>
+                </div>
+                <button id="reset-form-btn" class="px-10 py-5 rounded-2xl border border-theme-primary/30 text-theme-primary font-black hover:bg-theme-primary hover:text-white transition-all">
+                    Send Another Message
+                </button>
+             </div>
+        </section>
+    </main>
+
+    <footer class="py-12 border-t border-white/5 text-center mt-20 opacity-50">
+        <p class="text-theme-textPrimary text-sm">© 2026 Samir Ali. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/contact.js"></script>
+</body>
+</html>

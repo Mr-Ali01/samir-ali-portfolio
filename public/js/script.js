@@ -4,12 +4,86 @@ $(document).ready(function () {
 
     // Navbar scroll effect
     $(window).scroll(function () {
-        if ($(this).scrollTop() > 50) {
-            $('#navbar').addClass('bg-[#07090d]/80 backdrop-blur-md py-4 shadow-xl border-b border-white/5');
+        const scrollPos = $(this).scrollTop();
+        
+        // 1. Transition navbar background on scroll
+        if (scrollPos > 50) {
+            $('#navbar').addClass('scrolled');
         } else {
-            $('#navbar').removeClass('bg-[#07090d]/80 backdrop-blur-md py-4 shadow-xl border-b border-white/5');
+            $('#navbar').removeClass('scrolled');
+        }
+
+        // 2. ScrollSpy & Current Page logic
+        const sections = ['about', 'skills', 'experience', 'portfolio', 'contact'];
+        let currentSection = "";
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+
+        sections.forEach(function(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+                const sectionTop = el.offsetTop - 120;
+                const sectionHeight = el.offsetHeight;
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    currentSection = sectionId;
+                }
+            }
+        });
+
+        $('.nav-link').each(function() {
+            const href = $(this).attr('href');
+            
+            // 1. Reset to default state
+            $(this).removeClass('text-theme-primary opacity-100 font-bold').addClass('text-theme-textSecondary opacity-70');
+
+            // 2. Highlighting logic
+            if (href) {
+                // Case A: Exact path match for dedicated pages
+                if (href === currentPath) {
+                    $(this).addClass('text-theme-primary opacity-100 font-bold').removeClass('text-theme-textSecondary opacity-70');
+                }
+                // Case B: ScrollSpy match for section anchors
+                else if (href.startsWith('#')) {
+                    const id = href.substring(1);
+                    if (id === currentSection) {
+                        $(this).addClass('text-theme-primary opacity-100 font-bold').removeClass('text-theme-textSecondary opacity-70');
+                    }
+                }
+            }
+        });
+    });
+
+    // Interaction Overhaul: Scroll on HOVER, focal scroll on CLICK
+    let hoverScrollTimeout;
+    $('.nav-link').on('mouseenter', function() {
+        const targetId = $(this).attr('href');
+        if (targetId && targetId.startsWith('#')) {
+            clearTimeout(hoverScrollTimeout);
+            hoverScrollTimeout = setTimeout(() => {
+                const target = $(targetId);
+                if (target.length) {
+                    $('html, body').stop().animate({
+                        scrollTop: target.offset().top - 80
+                    }, 1200, 'swing'); // Slightly slower for smooth hover feel
+                }
+            }, 300); // 300ms delay to prevent accidental scrolls
         }
     });
+
+    // Clicking will still work as a focal action
+    $(document).on('click', 'a[href^="#"]', function (event) {
+        event.preventDefault();
+        const targetId = $.attr(this, 'href');
+        if (targetId === '#') return;
+        const target = $(targetId);
+        if (target.length) {
+            $('html, body').stop().animate({
+                scrollTop: target.offset().top - 80
+            }, 600);
+        }
+    });
+
+    // Initial Trigger for ScrollSpy on page load
+    $(window).trigger('scroll');
 
     // Counter Animation
     const counterObserver = new IntersectionObserver((entries) => {
@@ -35,7 +109,7 @@ $(document).ready(function () {
 
     const counterElement = document.querySelector('.counter');
     if (counterElement) {
-        counterObserver.observe(counterElement.parentNode.parentNode);
+        if(counterElement.parentNode && counterElement.parentNode.parentNode) { counterObserver.observe(counterElement.parentNode.parentNode); } else { counterObserver.observe(counterElement); }
     }
 
     // Simple Testimonial Slider
@@ -126,29 +200,50 @@ $(document).ready(function () {
     const themeIconSun = $('#theme-icon-sun');
     const themeIconMoon = $('#theme-icon-moon');
 
-    // Check for saved theme
-    const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
-    if (savedTheme === 'light') {
-        $('body').addClass('light-theme');
+    // 1. Initial State Check (Default to Light, switch to Dark if saved)
+    let savedTheme = localStorage.getItem('portfolio-theme');
+    
+    // If absolutely no theme is saved, assume 'light' as default requirement
+    if (!savedTheme) {
+        savedTheme = 'light';
+        localStorage.setItem('portfolio-theme', 'light');
+    }
+
+    // Apply the saved theme immediately inside Document Ready (and sync icons)
+    if (savedTheme === 'dark') {
+        $('html').addClass('dark');
         themeIconSun.removeClass('rotate-0 scale-100 opacity-100').addClass('-rotate-90 scale-0 opacity-0');
         themeIconMoon.removeClass('rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
     } else {
+        $('html').removeClass('dark');
         themeIconSun.removeClass('-rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
         themeIconMoon.removeClass('rotate-0 scale-100 opacity-100').addClass('rotate-90 scale-0 opacity-0');
     }
 
-    themeToggleBtn.click(function() {
-        $('body').toggleClass('light-theme');
-        const isLight = $('body').hasClass('light-theme');
+    // 2. Toggling logic via user click
+    $(document).on("click", "#theme-toggle", function(e) {
+        e.preventDefault();
         
-        if (isLight) {
-            localStorage.setItem('portfolio-theme', 'light');
-            themeIconSun.removeClass('rotate-0 scale-100 opacity-100').addClass('-rotate-90 scale-0 opacity-0');
-            themeIconMoon.removeClass('rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
-        } else {
+        // Ensure class changes globally
+        const isCurrentlyDark = $('html').hasClass('dark');
+        
+        if (!isCurrentlyDark) {
+            $('html').addClass('dark');
             localStorage.setItem('portfolio-theme', 'dark');
-            themeIconSun.removeClass('-rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
-            themeIconMoon.removeClass('rotate-0 scale-100 opacity-100').addClass('rotate-90 scale-0 opacity-0');
+            // Hard swap icons
+            $('#theme-icon-sun').removeClass('rotate-0 scale-100 opacity-100').addClass('-rotate-90 scale-0 opacity-0');
+            $('#theme-icon-moon').removeClass('rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
+        } else {
+            $('html').removeClass('dark');
+            localStorage.setItem('portfolio-theme', 'light');
+            // Hard swap icons
+            $('#theme-icon-sun').removeClass('-rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
+            $('#theme-icon-moon').removeClass('rotate-0 scale-100 opacity-100').addClass('rotate-90 scale-0 opacity-0');
+        }
+        
+        // Prevent GSAP scroll trigger issues from stopping UI loop
+        if (typeof ScrollTrigger !== 'undefined') {
+            setTimeout(() => ScrollTrigger.refresh(), 50);
         }
     });
 
@@ -169,8 +264,7 @@ $(document).ready(function () {
             { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.6"
         );
 
-        // 2. Services Section
-        gsap.fromTo("#services .glass-card", 
+        gsap.fromTo("#services .glass-panel", 
             { y: 50, opacity: 0 },
             {
                 scrollTrigger: { trigger: "#services", start: "top 80%" },
@@ -178,14 +272,17 @@ $(document).ready(function () {
             }
         );
 
-        // 3. Stats Section
-        gsap.fromTo(".counter-box", 
-            { scale: 0.8, opacity: 0 },
+        // 3. Projects Section
+        gsap.fromTo(".project-item", 
+            { y: 50, opacity: 0 },
             {
-                scrollTrigger: { trigger: ".counter-box", start: "top 85%" },
-                scale: 1, opacity: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.7)", clearProps: "all"
+                scrollTrigger: { trigger: "#portfolio", start: "top 80%" },
+                y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out", clearProps: "all"
             }
         );
+
+        // 3. Stats Section
+        // Removed missing .counter-box trigger
 
         // 4. About Section
         gsap.fromTo("#about .grid > div:first-child", 
@@ -205,22 +302,10 @@ $(document).ready(function () {
         );
 
         // 5. Portfolio/Latest Projects Section
-        gsap.fromTo("#portfolio .project-item", 
-            { y: 50, opacity: 0 },
-            {
-                scrollTrigger: { trigger: "#portfolio", start: "top 80%" },
-                y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", clearProps: "all"
-            }
-        );
+        // Removed dup portfolio triggers
 
         // 6. Blog Articles
-        gsap.fromTo("#blog .glass-card", 
-            { y: 50, opacity: 0 },
-            {
-                scrollTrigger: { trigger: "#blog", start: "top 80%" },
-                y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", clearProps: "all"
-            }
-        );
+        // Removed missing #blog trigger
 
         // 7. Reviews/Testimonials
         gsap.fromTo("#reviews .max-w-4xl", 

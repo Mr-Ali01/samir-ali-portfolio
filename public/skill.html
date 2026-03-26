@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills & Tools - Samir Ali</title>
+    
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Apply theme early on load to prevent flash
+        if (localStorage.getItem('portfolio-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            primary: 'var(--theme-accent-primary)',
+                            secondary: 'var(--theme-accent-secondary)',
+                            glow: 'var(--theme-glow)',
+                            textPrimary: 'var(--theme-text-primary)',
+                            textSecondary: 'var(--theme-text-secondary)',
+                            bgStart: 'var(--theme-bg-start)',
+                            bgMid: 'var(--theme-bg-mid)',
+                            bgEnd: 'var(--theme-bg-end)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- External Resources -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/skill.css">
+</head>
+<body class="antialiased">
+    
+    <!-- Subtle Background Glows (Dark Mode) -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-[10%] -left-[10%] w-[40%] h-[40%] bg-theme-primary/10 blur-[120px] rounded-full dark:opacity-40 opacity-0"></div>
+        <div class="absolute bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-theme-secondary/10 blur-[120px] rounded-full dark:opacity-40 opacity-0"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-6 px-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
+                    S</div>
+                <span class="text-xl font-bold tracking-tight text-theme-textPrimary group-hover:text-theme-primary transition-colors">Samir.</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="about.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+            </div>
+
+            <div class="flex items-center space-x-4 md:space-x-4">
+                <button id="theme-toggle"
+                    class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 focus:ring-2 focus:ring-theme-primary/50 overflow-hidden">
+                    <span id="theme-icon-sun"
+                        class="absolute transition-all duration-500 ease-in-out transform"><i
+                            data-lucide="sun" class="w-5 h-5"></i></span>
+                    <span id="theme-icon-moon"
+                        class="absolute transition-all duration-500 ease-in-out transform"><i
+                            data-lucide="moon" class="w-5 h-5"></i></span>
+                </button>
+
+                <div class="hidden md:block">
+                    <a href="index.html#contact"
+                        class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
+                </div>
+
+                <!-- Mobile Toggle -->
+                <button class="md:hidden text-theme-textPrimary" id="mobile-menu-btn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-32 pb-20 px-6">
+        <!-- Hero Section -->
+        <section class="max-w-5xl mx-auto text-center mb-20" data-aos="fade-up">
+            <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-theme-primary/10 border border-theme-primary/20 backdrop-blur-sm mb-6 shadow-sm">
+                <span class="text-theme-primary text-[10px] font-black tracking-[3px] uppercase">SKILLS & TOOLS</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white leading-tight mb-8">
+                The tech stack I use to <span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary">build.</span>
+            </h1>
+            <div class="w-24 h-1.5 bg-gradient-to-r from-theme-primary to-theme-secondary rounded-full mx-auto opacity-50"></div>
+        </section>
+
+        <!-- Main Skills Section -->
+        <section class="max-w-7xl mx-auto space-y-16">
+            
+            <!-- Skill Category: Development -->
+            <div class="space-y-8" data-aos="fade-right">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary shadow-sm border border-theme-primary/20">
+                        <i data-lucide="code-2" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        Development
+                    </h2>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <div class="skill-pill group">
+                        <i data-lucide="coffee" class="w-4 h-4 text-orange-400"></i>
+                        <span>Java</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="leaf" class="w-4 h-4 text-green-500"></i>
+                        <span>Spring Core</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="database" class="w-4 h-4 text-theme-secondary"></i>
+                        <span>JDBC</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="layers" class="w-4 h-4 text-theme-primary"></i>
+                        <span>Hibernate</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="braces" class="w-4 h-4 text-yellow-400"></i>
+                        <span>JavaScript</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="server" class="w-4 h-4 text-green-400"></i>
+                        <span>Node.js</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="file-code" class="w-4 h-4 text-orange-500"></i>
+                        <span>HTML</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Category: Databases -->
+            <div class="space-y-8" data-aos="fade-right" data-aos-delay="100">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary shadow-sm border border-theme-secondary/20">
+                        <i data-lucide="database" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        Databases
+                    </h2>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <div class="skill-pill group">
+                        <i data-lucide="table" class="w-4 h-4 text-theme-secondary"></i>
+                        <span>MySQL</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Category: Tools -->
+            <div class="space-y-8" data-aos="fade-right" data-aos-delay="200">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-orange-400/10 flex items-center justify-center text-orange-400 shadow-sm border border-orange-400/20">
+                        <i data-lucide="wrench" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        Tools
+                    </h2>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <div class="skill-pill group">
+                        <i data-lucide="git-branch" class="w-4 h-4 text-orange-500"></i>
+                        <span>Git</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="github" class="w-4 h-4 dark:text-white text-black"></i>
+                        <span>GitHub</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="box" class="w-4 h-4 text-theme-primary"></i>
+                        <span>Antigravity</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="monitor" class="w-4 h-4 text-theme-primary"></i>
+                        <span>Vs Code</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="terminal" class="w-4 h-4 text-theme-primary"></i>
+                        <span>Eclipse</span>
+                    </div>
+                    <div class="skill-pill group">
+                        <i data-lucide="command" class="w-4 h-4 text-slate-400"></i>
+                        <span>CLI</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Currently Learning Section -->
+        <section class="max-w-7xl mx-auto mt-32 mb-32">
+            <h2 class="text-4xl font-black text-slate-900 dark:text-white text-center mb-16" data-aos="zoom-in">Currently <span class="text-theme-primary">Learning</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Learning Card 1 -->
+                <div class="learning-card group" data-aos="fade-up">
+                    <div class="w-14 h-14 rounded-2xl bg-[#61DAFB]/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="react" class="w-8 h-8 text-[#61DAFB]"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 dark:text-white mb-2">React</h4>
+                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm">Deep diving into Hooks, Context API, and modern frontend architecture.</p>
+                </div>
+
+                <!-- Learning Card 2 -->
+                <div class="learning-card group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 rounded-2xl bg-theme-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="brain-circuit" class="w-8 h-8 text-theme-primary"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 dark:text-white mb-2">OpenAI API</h4>
+                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm">Integrating advanced AI models into real-world applications.</p>
+                </div>
+
+                <!-- Learning Card 3 -->
+                <div class="learning-card group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 rounded-2xl bg-green-400/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="leaf" class="w-8 h-8 text-green-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Spring Boot</h4>
+                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm">Mastering microservices and automated enterprise development.</p>
+                </div>
+
+                <!-- Learning Card 4 -->
+                <div class="learning-card group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-14 h-14 rounded-2xl bg-theme-secondary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="link" class="w-8 h-8 text-theme-secondary"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 dark:text-white mb-2">REST API</h4>
+                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm">Designing robust, secure, and developer-friendly API endpoints.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="max-w-7xl mx-auto rounded-[3.5rem] bg-gradient-to-br from-theme-primary/20 via-slate-100 to-theme-secondary/20 dark:from-theme-primary/10 dark:via-transparent dark:to-theme-secondary/10 p-16 text-center shadow-2xl border border-white/20 relative overflow-hidden" data-aos="fade-up">
+            <h3 class="text-3xl font-bold text-slate-800 dark:text-white mb-8 relative z-10">Interested in how I apply these?</h3>
+            <div class="relative z-10">
+                <a href="index.html#portfolio" class="bg-gradient-to-r from-theme-primary to-theme-secondary px-10 py-5 rounded-2xl text-white font-black text-lg shadow-xl hover:scale-105 active:scale-95 transition-all inline-flex items-center gap-3 neon-glow">
+                    View Projects <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </a>
+            </div>
+            
+            <!-- Decorative background blur -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-theme-glow/30 blur-[100px] rounded-full"></div>
+        </section>
+    </main>
+
+    <footer class="py-12 border-t border-slate-200 dark:border-white/5 text-center mt-20 opacity-50">
+        <p class="text-slate-600 dark:text-white text-sm">© 2026 Samir Ali. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/skill.js"></script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Samir Ali</title>
+    
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Apply theme early on load to prevent flash
+        if (localStorage.getItem('portfolio-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            primary: 'var(--theme-accent-primary)',
+                            secondary: 'var(--theme-accent-secondary)',
+                            glow: 'var(--theme-glow)',
+                            textPrimary: 'var(--theme-text-primary)',
+                            textSecondary: 'var(--theme-text-secondary)',
+                            bgStart: 'var(--theme-bg-start)',
+                            bgMid: 'var(--theme-bg-mid)',
+                            bgEnd: 'var(--theme-bg-end)',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- External Resources -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/about.css">
+</head>
+<body class="bg-theme-bg overflow-x-hidden">
+    
+    <!-- Stars Background -->
+    <canvas id="starsCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-6 px-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
+                    S</div>
+                <span class="text-xl font-bold tracking-tight text-theme-textPrimary group-hover:text-theme-primary transition-colors">Samir.</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="about.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+            </div>
+
+            <div class="flex items-center space-x-4 md:space-x-4">
+                <button id="theme-toggle"
+                    class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 focus:ring-2 focus:ring-theme-primary/50 overflow-hidden">
+                    <span id="theme-icon-sun"
+                        class="absolute transition-all duration-500 ease-in-out transform"><i
+                            data-lucide="sun" class="w-5 h-5"></i></span>
+                    <span id="theme-icon-moon"
+                        class="absolute transition-all duration-500 ease-in-out transform"><i
+                            data-lucide="moon" class="w-5 h-5"></i></span>
+                </button>
+
+                <div class="hidden md:block">
+                    <a href="index.html#contact"
+                        class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
+                </div>
+
+                <!-- Mobile Toggle -->
+                <button class="md:hidden text-theme-textPrimary hover:text-theme-primary" id="mobile-menu-btn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-32 pb-20">
+        <!-- Hero / About Section -->
+        <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[70vh]">
+            
+            <!-- Left Side -->
+            <div class="space-y-8" data-aos="fade-right">
+                <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-theme-primary/10 border border-theme-primary/20 backdrop-blur-sm shadow-sm transition-all hover:bg-theme-primary/20">
+                    <span class="text-theme-primary text-xs font-black tracking-widest uppercase">🚀 WHO AM I?</span>
+                </div>
+                
+                <h1 class="text-5xl lg:text-7xl font-black text-white leading-tight">
+                    About <span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary drop-shadow-sm">Me</span>
+                </h1>
+
+                <div class="space-y-6 text-xl text-theme-textSecondary leading-relaxed font-medium">
+                    <p>
+                        I am a passionate <span class="text-white border-b-2 border-theme-primary/30">Full-Stack Developer</span> dedicated to crafting immersive and scalable digital experiences. With a deep understanding of modern web technologies, I focus on performance, accessibility, and high-impact design.
+                    </p>
+                    <p>
+                        My journey in tech is driven by an insatiable curiosity and a commitment to excellence. I thrive on solving complex problems and turning ambitious ideas into polished, user-centric applications using a visual-first development approach.
+                    </p>
+                </div>
+
+                <div class="pt-4">
+                    <a href="index.html#portfolio" class="inline-flex items-center space-x-3 bg-gradient-to-r from-theme-primary to-theme-secondary px-8 py-4 rounded-2xl text-white font-bold text-lg shadow-xl shadow-theme-primary/20 hover:scale-105 active:scale-95 transition-all group">
+                        <span>Check Out My Work</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Side (Illustration Card) -->
+            <div class="relative flex justify-center items-center" data-aos="fade-left">
+                <!-- Main Illustration Card -->
+                <div class="glass-card w-[80%] lg:w-[90%] aspect-square rounded-[3rem] relative z-10 flex items-center justify-center p-8 overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-theme-primary/10 to-transparent opacity-50"></div>
+                    
+                    <!-- Placeholder for Image or Abstract Illustration -->
+                    <div class="relative z-20 w-full h-full rounded-[2.5rem] bg-theme-bg/50 border border-white/5 flex items-center justify-center shadow-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000" alt="Code Scene" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                             <div class="w-24 h-24 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center shadow-inner">
+                                <i data-lucide="code" class="w-12 h-12 text-theme-primary animate-pulse"></i>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Tech Icons -->
+                <div class="absolute -top-10 -left-10 w-20 h-20 glass-card rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0s;">
+                    <i data-lucide="react" class="w-10 h-10 text-[#61DAFB]"></i>
+                </div>
+                <div class="absolute top-1/2 -right-12 w-16 h-16 glass-card rounded-3xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 1.5s;">
+                    <i data-lucide="database" class="w-8 h-8 text-theme-secondary"></i>
+                </div>
+                <div class="absolute bottom-4 -left-16 w-18 h-18 glass-card rounded-full flex items-center justify-center shadow-lg animate-float" style="animation-delay: 2.5s;">
+                    <i data-lucide="zap" class="w-9 h-9 text-orange-400"></i>
+                </div>
+                <div class="absolute -bottom-12 right-20 w-20 h-20 glass-card rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.8s;">
+                    <i data-lucide="cpu" class="w-10 h-10 text-theme-primary"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section class="max-w-7xl mx-auto px-6 mt-32">
+            <div class="flex items-center gap-6 mb-16" data-aos="fade-right">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-theme-primary to-theme-secondary flex items-center justify-center shadow-xl shadow-theme-primary/20">
+                    <i data-lucide="award" class="text-white w-8 h-8"></i>
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-extrabold text-white">Technical <span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary">Skills</span></h2>
+            </div>
+
+            <!-- Skills Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
+                
+                <!-- Card 1: Development -->
+                <div class="glass-card p-8 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="0">
+                     <div class="w-12 h-12 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary group-hover:bg-theme-primary/20 transition-colors">
+                        <i data-lucide="code-2" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Development</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">JavaScript</span>
+                        <span class="skill-badge">Node.js</span>
+                        <span class="skill-badge">Java</span>
+                        <span class="skill-badge">JDBC</span>
+                        <span class="skill-badge">Hibernate</span>
+                        <span class="skill-badge">Spring Core</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Databases -->
+                <div class="glass-card p-8 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="100">
+                     <div class="w-12 h-12 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary group-hover:bg-theme-secondary/20 transition-colors">
+                        <i data-lucide="hard-drive" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Databases</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">MySQL</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Styling -->
+                <div class="glass-card p-8 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="200">
+                     <div class="w-12 h-12 rounded-xl bg-orange-400/10 flex items-center justify-center text-orange-400 group-hover:bg-orange-400/20 transition-colors">
+                        <i data-lucide="palette" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Styling</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">Tailwind CSS</span>
+                        <span class="skill-badge">CSS</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: Tools -->
+                <div class="glass-card p-8 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="300">
+                     <div class="w-12 h-12 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary group-hover:bg-theme-primary/20 transition-colors">
+                        <i data-lucide="tool" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Tools</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">Git</span>
+                        <span class="skill-badge">GitHub</span>
+                        <span class="skill-badge">VS Code</span>
+                        <span class="skill-badge">Eclipse</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Design -->
+                <div class="glass-card p-8 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="400">
+                     <div class="w-12 h-12 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary group-hover:bg-theme-secondary/20 transition-colors">
+                        <i data-lucide="layout" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Design</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">Canva</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Space -->
+    <footer class="py-10 text-center opacity-30 mt-20">
+        <p class="text-white text-sm">© 2026 Samir Ali. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/about.js"></script>
+</body>
+</html>

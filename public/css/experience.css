@@ -1,0 +1,97 @@
+/* Custom styles for Experience page */
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%);
+}
+
+.text-gradient-primary {
+    background: linear-gradient(135deg, var(--theme-accent-primary) 0%, var(--theme-accent-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Panel Integration */
+.glass-panel {
+    background: var(--theme-card-bg);
+    backdrop-filter: var(--theme-card-blur);
+    -webkit-backdrop-filter: var(--theme-card-blur);
+    border: 1px solid var(--theme-card-border);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .glass-panel {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--theme-accent-primary);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-panel:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
+}
+
+/* Timeline Customizations */
+.experience-item {
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.experience-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--theme-accent-primary);
+  opacity: 0.2;
+}
+
+/* Skill Tags */
+.skill-tag {
+    padding: 10px 24px;
+    border-radius: 9999px;
+    background: var(--theme-card-bg);
+    border: 1px solid var(--theme-card-border);
+    color: var(--theme-text-secondary);
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    cursor: default;
+    backdrop-filter: blur(8px);
+}
+
+.skill-tag:hover {
+    transform: scale(1.1);
+    background: var(--theme-accent-primary);
+    color: #FFFFFF;
+    border-color: transparent;
+    box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.4);
+}
+
+.dark .skill-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .skill-tag:hover {
+    background: var(--theme-accent-secondary);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .glass-panel {
+        border-radius: 1.5rem !important;
+        padding: 1.5rem !important;
+    }
+    
+    .timeline-card {
+        padding-left: 0 !important;
+    }
+}
