@@ -1,4 +1,25 @@
 $(document).ready(function () {
+    // 1. Dual-Mode Navigation Logic
+    const initModeNavigation = () => {
+        const mode = localStorage.getItem('experienceMode') || 'professional';
+        const isPersonal = mode === 'personal';
+        const brandingLink = $('.group[href="index.html"], .group[href="personal.html"]');
+        const backToHubLink = $('a:contains("Back to Hub")');
+
+        if (isPersonal) {
+            $('.nav-link-pro').addClass('hidden');
+            $('.nav-link-per').removeClass('hidden');
+            brandingLink.attr('href', 'personal.html');
+            backToHubLink.attr('href', 'personal.html');
+        } else {
+            $('.nav-link-pro').removeClass('hidden');
+            $('.nav-link-per').addClass('hidden');
+            brandingLink.attr('href', 'index.html');
+            backToHubLink.attr('href', 'index.html');
+        }
+    };
+    initModeNavigation();
+
     // Initialize Lucide Icons
     lucide.createIcons();
 

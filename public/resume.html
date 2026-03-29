@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume - Samir Ali</title>
     
-    <!-- Scripts & Styles -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Scripts & Styles (Local Build) -->
+    <link rel="stylesheet" href="css/tailwind.css">
     <script>
         // Apply theme early on load to prevent flash
         if (localStorage.getItem('portfolio-theme') === 'dark') {
@@ -15,36 +15,11 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        theme: {
-                            primary: 'var(--theme-accent-primary)',
-                            secondary: 'var(--theme-accent-secondary)',
-                            glow: 'var(--theme-glow)',
-                            textPrimary: 'var(--theme-text-primary)',
-                            textSecondary: 'var(--theme-text-secondary)',
-                            bgStart: 'var(--theme-bg-start)',
-                            bgMid: 'var(--theme-bg-mid)',
-                            bgEnd: 'var(--theme-bg-end)',
-                        }
-                    },
-                    fontFamily: {
-                        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        serif: ['"Playfair Display"', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
     
-    <!-- External Resources -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Local Libraries -->
+    <script src="libs/jquery.min.js"></script>
+    <script src="libs/lucide.min.js"></script>
+    <link rel="stylesheet" href="libs/aos.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/resume.css">
 </head>
@@ -61,12 +36,16 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                <a href="about.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
-                <a href="skill.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
-                <a href="project.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
-                <a href="experience.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
-                <a href="contact.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
-                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-primary transition-all relative py-2">Resume</a>
+                <!-- Pro links -->
+                <a href="about.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+                <!-- Per links -->
+                <a href="personal.html#values" class="nav-link-per hidden text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Values</a>
+                <a href="personal.html#insights" class="nav-link-per hidden text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Insights</a>
             </div>
 
             <div class="flex items-center space-x-4">
@@ -74,6 +53,9 @@
                     <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="sun" class="w-5 h-5"></i></span>
                     <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="moon" class="w-5 h-5"></i></span>
                 </button>
+                <a href="settings.html" class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden" title="Settings">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                </a>
                 <div class="hidden md:block">
                     <a href="contact.html" class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
                 </div>
@@ -182,8 +164,7 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="libs/aos.js"></script>
     <script src="js/script.js"></script>
     <script src="js/resume.js"></script>
 </body>

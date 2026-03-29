@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Management - Samir Ali Admin</title>
+    
+    <!-- Unified Theme Manager (Must be first) -->
+    <script src="theme-manager.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dash: {
+                            bg: 'var(--dash-bg)',
+                            accent: 'var(--dash-accent)',
+                            secondary: 'var(--dash-secondary)',
+                            border: 'var(--dash-border)',
+                            text: 'var(--dash-text)',
+                            muted: 'var(--dash-muted)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .tab-btn {
+            position: relative;
+            color: var(--dash-muted);
+            opacity: 0.7;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tab-btn:hover {
+            opacity: 1;
+            color: var(--dash-text);
+        }
+        .tab-btn.active {
+            opacity: 1;
+            color: var(--dash-accent);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: linear-gradient(to right, var(--dash-accent), var(--dash-secondary));
+            border-radius: 99px;
+            box-shadow: 0 0 10px var(--dash-accent);
+        }
+        .section-pane { display: none; }
+        .section-pane.active { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-dash-bg text-dash-text antialiased">
+    <div class="flex relative z-10 min-h-screen">
+        <!-- Shared Sidebar Container (Injected via admin-ui.js) -->
+        <div id="admin-sidebar-container"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 ml-72 flex flex-col min-h-screen overflow-x-hidden">
+            <!-- Shared Header Container (Injected via admin-ui.js) -->
+            <div id="admin-header-container" class="sticky top-0 z-40"></div>
+
+            <div id="admin-view-content" class="fade-in">
+            <div class="p-10">
+                <div class="flex items-center justify-between mb-12">
+                    <div>
+                        <h1 class="text-4xl font-black mb-2">Home Page Management</h1>
+                        <p class="text-dash-muted">Control your portfolio sections dynamically.</p>
+                    </div>
+                    <button class="bg-dash-accent text-white px-6 py-3 rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-lg shadow-dash-accent/20">
+                        Publish Changes
+                    </button>
+                </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex items-center gap-8 border-b border-dash-border mb-10 overflow-x-auto pb-1">
+                <button class="tab-btn active px-4 py-3 font-black text-xs uppercase tracking-widest whitespace-nowrap transition-all" data-tab="hero">Hero Section</button>
+                <button class="tab-btn px-4 py-3 font-black text-xs uppercase tracking-widest whitespace-nowrap transition-all" data-tab="about">About</button>
+                <button class="tab-btn px-4 py-3 font-black text-xs uppercase tracking-widest whitespace-nowrap transition-all" data-tab="skills">Skills</button>
+                <button class="tab-btn px-4 py-3 font-black text-xs uppercase tracking-widest whitespace-nowrap transition-all" data-tab="education">Education</button>
+                <button class="tab-btn px-4 py-3 font-black text-xs uppercase tracking-widest whitespace-nowrap transition-all" data-tab="experience">Experience</button>
+            </div>
+
+            <!-- Tab Panes -->
+            <div id="tab-panes">
+                <!-- 1. Hero Content -->
+                <div class="section-pane active" id="pane-hero">
+                    <div class="glass-panel p-10 rounded-[2.5rem] max-w-4xl">
+                        <h3 class="text-xl font-black mb-8 flex items-center gap-3">
+                            <i data-lucide="zap" class="text-dash-accent"></i> Hero Configuration
+                        </h3>
+                        <form id="form-hero" class="space-y-6" onsubmit="return false;" method="POST">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Main Name</label>
+                                    <input type="text" name="name" class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none" placeholder="e.g. SAMIR ALY">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Status Badge</label>
+                                    <input type="text" name="status" class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none" placeholder="e.g. Available now">
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Headline Description</label>
+                                <textarea name="description" rows="3" class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none resize-none"></textarea>
+                            </div>
+
+                            <!-- New Buttons Section -->
+                            <div class="space-y-4 pt-4 border-t border-dash-border/10">
+                                <h4 class="text-[10px] font-black uppercase tracking-widest text-dash-accent">Button Labels</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="space-y-2">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Primary Button</label>
+                                        <input type="text" name="btn_1" class="w-full bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Secondary Button</label>
+                                        <input type="text" name="btn_2" class="w-full bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Tertiary Button (Resume)</label>
+                                        <input type="text" name="btn_3" class="w-full bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- New Stats Section -->
+                            <div class="space-y-4 pt-4 border-t border-dash-border/10">
+                                <h4 class="text-[10px] font-black uppercase tracking-widest text-dash-accent">Portfolio Statistics</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="flex gap-2">
+                                        <input type="text" name="stat_val_1" class="w-1/3 bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none" placeholder="Val">
+                                        <input type="text" name="stat_lab_1" class="w-2/3 bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none" placeholder="Label">
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <input type="text" name="stat_val_2" class="w-1/3 bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none" placeholder="Val">
+                                        <input type="text" name="stat_lab_2" class="w-2/3 bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none" placeholder="Label">
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <input type="text" name="stat_val_3" class="w-1/3 bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none" placeholder="Val">
+                                        <input type="text" name="stat_lab_3" class="w-2/3 bg-black/40 border border-dash-border rounded-xl p-3 text-xs focus:border-dash-accent outline-none" placeholder="Label">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 pt-4 border-t border-dash-border/10">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Hero Image Profile</label>
+                                <div class="flex items-center gap-4">
+                                    <input type="file" id="hero-image-file" class="hidden" accept="image/*">
+                                    <label for="hero-image-file" class="flex-1 bg-black/40 border border-dash-border border-dashed rounded-xl p-4 text-xs text-dash-muted cursor-pointer hover:border-dash-accent transition-all text-center">
+                                        Click to choose a new profile photo
+                                    </label>
+                                    <div id="hero-img-preview" class="w-12 h-12 rounded-lg bg-white/5 border border-white/10 overflow-hidden hidden">
+                                        <img src="" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="image_url">
+                            </div>
+
+                            <div class="flex justify-end pt-4">
+                                <button type="submit" class="bg-gradient-primary text-white px-10 py-3 rounded-xl font-black text-xs uppercase shadow-lg shadow-theme-primary/20 hover:scale-105 active:scale-95 transition-all">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 2. About Content -->
+                <div class="section-pane" id="pane-about">
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-xl font-black">About Section Manager</h1>
+                        <button class="add-btn bg-dash-accent/10 text-dash-accent border border-dash-accent/20 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-dash-accent hover:text-white transition-all">
+                             Add Section
+                        </button>
+                    </div>
+                    <div class="space-y-4" id="about-list"></div>
+                </div>
+
+                <!-- 3. Skills Content (Preview & Link) -->
+                <div class="section-pane" id="pane-skills">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-xl font-black mb-1">Portfolio Preview</h3>
+                            <p class="text-dash-muted text-[10px] font-black uppercase tracking-widest">How it looks on your Home Page</p>
+                        </div>
+                        <a href="skills.html" class="flex items-center gap-3 bg-dash-accent/10 text-dash-accent border border-dash-accent/20 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-dash-accent hover:text-white transition-all shadow-lg shadow-dash-accent/5">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            Edit Skills Table
+                        </a>
+                    </div>
+                    
+                    <!-- Dynamic Preview (Mirrors index.html style) -->
+                    <div id="skills-home-preview" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Preview loaded via JS -->
+                    </div>
+                </div>
+
+                <!-- 4. Education Content -->
+                <div class="section-pane" id="pane-education">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-xl font-black">Manage Education Items</h3>
+                        <button class="add-btn bg-dash-accent/10 text-dash-accent border border-dash-accent/20 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-dash-accent hover:text-white transition-all">
+                            + Add Entry
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4" id="education-list">
+                        <!-- Entries will be loaded here via JS -->
+                        <div class="text-dash-muted text-center py-20 bg-white/5 rounded-[2rem] border border-dashed border-white/10">
+                            No entries found. Click "Add Entry" to begin.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Experience Content -->
+                <div class="section-pane" id="pane-experience">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-xl font-black">Manage Experience</h3>
+                        <button class="add-btn bg-dash-secondary/10 text-dash-secondary border border-dash-secondary/20 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-dash-secondary hover:text-white transition-all">
+                            + Add Job
+                        </button>
+                    </div>
+                    <div class="space-y-4" id="experience-list">
+                        <!-- Loaded via JS -->
+                    </div>
+                </div>
+                
+                <!-- More panes as needed -->
+            </div>
+            </div> <!-- End p-10 -->
+        </div> <!-- End SPA View Content -->
+        </main>
+    </div>
+
+
+    <!-- Modals -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-6">
+        <div class="glass-panel p-10 rounded-[2.5rem] w-full max-w-xl border border-white/10 shadow-2xl scale-95 transition-all" id="modal-container">
+            <h2 class="text-2xl font-black mb-6" id="modal-title">Edit Entry</h2>
+            <form id="crud-form" class="space-y-6">
+                <!-- Dynamic form fields based on entity -->
+                <div id="form-fields" class="space-y-4"></div>
+                
+                <div class="flex items-center gap-4 justify-end mt-10">
+                    <button type="button" class="close-modal text-dash-muted font-bold text-xs uppercase">Cancel</button>
+                    <button type="submit" class="bg-dash-accent text-white px-8 py-3 rounded-xl font-black text-xs uppercase shadow-lg shadow-dash-accent/20">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
+    <script src="admin-ui.js"></script>
+    <script src="homepage.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Only init if not already inside another layout shell
+            if ($('#admin-sidebar-container').is(':empty')) {
+                AdminUI.init('homepage');
+            } else {
+                // If injected, just init the page logic specifically
+                if (typeof initHomePageEditor === 'function') initHomePageEditor();
+            }
+        });
+        lucide.createIcons();
+    </script>
+</body>
+</html>

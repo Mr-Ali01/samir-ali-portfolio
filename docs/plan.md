@@ -159,6 +159,29 @@ Transition from manual `http` module handling to Express.js. Routes are strictly
 * `message` (TEXT)
 * `created_at` (TIMESTAMP)
 
+
+## 📦 Dynamic Home Page Management System
+
+The portfolio now features a fully decoupled, dynamic content management system (CMS) that allows total control over the Home Page from the Admin Dashboard.
+
+### 🏗️ Architecture Flow
+1. **Admin Dashboard (`admin/homepage.html`)**: Provides a multi-tab interface for managing Hero, About, Skills, Projects, Education, and Experience.
+2. **Standardized API (`server.js`)**: A unified CRUD endpoint handles all data mutations (`POST`, `PUT`, `DELETE`) and retrieval (`GET`).
+   - Endpoint: `/api/v1/manage/:entity` (where entity can be `education`, `experience`, `projects`, etc.)
+3. **Database Layer (MySQL)**: Persistent storage for all dynamic entries with proper indexing for sort orders.
+4. **Frontend Rendering (`js/dynamic-content.js`)**: Automatically fetches and injects content into `index.html` on load, maintaining all AOS animations and Lucide icons without hardcoded HTML.
+
+### 📁 Technical Details
+- **Tables**: `sections`, `projects`, `education`, `experience`, `site_stats`, `daily_visits`.
+- **Logic**: All section management is handled via the "Home Page" tab in the Admin Dashboard.
+- **Security**: Mutation routes require a valid JWT token stored in a `portfolio_auth_token` cookie.
+
+### 🔧 How to Manage Content
+1. Navigate to `/admin/dashboard.html` and click **Home Page**.
+2. Select the section you wish to edit (e.g., Education).
+3. Use **Add Entry** to create new items or the **Edit/Delete** icons on existing cards.
+4. Click **Publish Changes** (optional/placeholder) or simply refresh the homepage to see live updates.
+
 ### Indexing & Optimization Considerations
 * Add Indexes on highly queried identification fields: `email` and `google_id` in the `admins` table to accelerate authentication sequences.
 * Keep indexing light to prioritize read operations: index `published_at` on `blogs` for efficient chronological querying.

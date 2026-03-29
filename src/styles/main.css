@@ -1,0 +1,5 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme-specific custom variables and components can reside here or in tailwind.config.js */

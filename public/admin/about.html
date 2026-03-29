@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Management - Samir Ali Admin</title>
+    
+    <!-- Unified Theme Manager (Must be first) -->
+    <script src="theme-manager.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dash: {
+                            bg: 'var(--dash-bg)',
+                            accent: 'var(--dash-accent)',
+                            secondary: 'var(--dash-secondary)',
+                            border: 'var(--dash-border)',
+                            text: 'var(--dash-text)',
+                            muted: 'var(--dash-muted)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .section-pane { display: none; }
+        .section-pane.active { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-dash-bg text-dash-text antialiased">
+    <div class="flex relative z-10 min-h-screen">
+        <!-- Shared Sidebar Container (Injected via admin-ui.js) -->
+        <div id="admin-sidebar-container"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 ml-72 flex flex-col min-h-screen overflow-x-hidden">
+            <!-- Shared Header Container (Injected via admin-ui.js) -->
+            <div id="admin-header-container" class="sticky top-0 z-40"></div>
+
+            <div id="admin-view-content" class="fade-in">
+            <div class="p-10">
+                <div class="flex items-center justify-between mb-12">
+                    <div>
+                        <h1 class="text-4xl font-black mb-2">About Page Management</h1>
+                        <p class="text-dash-muted">Control your professional identity and biography.</p>
+                    </div>
+                    <button class="bg-dash-accent text-white px-6 py-3 rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-lg shadow-dash-accent/20">
+                        Publish Changes
+                    </button>
+                </div>
+
+                <div id="tab-panes">
+                    <!-- About Content Pane -->
+                    <div id="pane-about" class="section-pane active">
+                        <form id="form-about_page" class="space-y-10">
+                            <!-- Hidden ID Field -->
+                            <input type="hidden" name="id" id="about-id">
+                            
+                            <div class="glass-panel p-10 rounded-[2.5rem] border border-dash-border">
+                                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                                    <!-- Left Column: Form Fields -->
+                                    <div class="lg:col-span-7 space-y-8">
+                                        <div>
+                                            <label class="dash-label">Main Heading (H1)</label>
+                                            <input type="text" name="title" class="dash-input" placeholder="e.g. About Me">
+                                        </div>
+                                        <div>
+                                            <label class="dash-label">Badge Text</label>
+                                            <input type="text" name="badge_text" class="dash-input" placeholder="e.g. 🚀 WHO AM I?">
+                                        </div>
+                                        <div>
+                                            <label class="dash-label">Full Biography</label>
+                                            <textarea name="description" rows="10" class="dash-input resize-none" placeholder="Write your professional bio here..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right Column: Media -->
+                                    <div class="lg:col-span-5 space-y-8">
+                                        <div>
+                                            <label class="dash-label">Profile / Media Scene</label>
+                                            <div class="relative group">
+                                                <div id="about-img-preview" class="aspect-[4/5] rounded-[2rem] bg-black/40 border border-dash-border overflow-hidden relative flex items-center justify-center transition-all group-hover:border-dash-accent/50">
+                                                    <div class="placeholder flex flex-col items-center gap-4 text-dash-muted transition-all">
+                                                        <i data-lucide="image" class="w-12 h-12 stroke-[1.5]"></i>
+                                                        <span class="text-[10px] font-black tracking-widest uppercase">No Image Selected</span>
+                                                    </div>
+                                                    <img src="" class="w-full h-full object-cover relative z-10 hidden">
+                                                    
+                                                    <!-- Upload Overlay -->
+                                                    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-20">
+                                                        <label for="about-upload" class="cursor-pointer bg-dash-accent text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-dash-accent/20 hover:scale-105 active:scale-95 transition-all">
+                                                            Change Photo
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <input type="file" id="about-upload" class="hidden" accept="image/*">
+                                            </div>
+                                        </div>
+
+                                        <div class="space-y-4">
+                                            <label class="dash-label text-[9px]">Direct Image Link</label>
+                                            <div class="relative">
+                                                <input type="text" name="image_url" id="about-img-url" class="dash-input pr-12 text-xs" placeholder="https://images.unsplash.com/...">
+                                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-dash-muted opacity-50">
+                                                    <i data-lucide="link" class="w-4 h-4"></i>
+                                                </div>
+                                            </div>
+                                            <p class="text-[9px] text-dash-muted italic px-2">Tip: Upload an image or paste a direct URL from Unsplash.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Bar -->
+                                <div class="mt-12 pt-8 border-t border-white/5 flex items-center justify-between">
+                                    <div class="flex items-center gap-3 text-dash-muted">
+                                        <i data-lucide="info" class="w-4 h-4"></i>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider">Changes will affect the public About page</span>
+                                    </div>
+                                    <button type="submit" class="bg-gradient-to-br from-dash-accent to-dash-secondary px-12 py-4 rounded-2xl text-white font-black text-sm hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-dash-accent/20 flex items-center gap-3 group">
+                                        <span>Update Profile</span>
+                                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="admin-ui.js"></script>
+    <script src="homepage.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Self-init if not already in a shell
+            if ($('#admin-sidebar-container').is(':empty')) {
+                AdminUI.init('about');
+            } else {
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+            
+            const aboutForm = $('#form-about_page');
+            const aboutImgUrl = $('#about-img-url');
+            const aboutPreview = $('#about-img-preview');
+            
+            // 1. Data Loader
+            const loadAboutData = async () => {
+                try {
+                    const res = await fetch('/api/v1/manage/about_page');
+                    const data = await res.json();
+                    if (data.success && data.data.length > 0) {
+                        const about = data.data[0];
+                        $('#about-id').val(about.id);
+                        aboutForm.find('[name="title"]').val(about.title);
+                        aboutForm.find('[name="badge_text"]').val(about.badge_text);
+                        aboutForm.find('[name="description"]').val(about.description);
+                        aboutForm.find('[name="image_url"]').val(about.image_url);
+                        
+                        if (about.image_url) {
+                            updatePreview(about.image_url);
+                        }
+                    }
+                } catch (e) {
+                    console.error('About data load failed');
+                }
+            };
+
+            const updatePreview = (url) => {
+                if (url) {
+                    aboutPreview.find('img').attr('src', url).removeClass('hidden');
+                    aboutPreview.find('.placeholder').addClass('hidden');
+                } else {
+                    aboutPreview.find('img').addClass('hidden');
+                    aboutPreview.find('.placeholder').removeClass('hidden');
+                }
+            };
+
+            // Sync URL input with preview
+            aboutImgUrl.on('input', function() {
+                updatePreview($(this).val());
+            });
+
+            // 2. Image Upload
+            $('#about-upload').on('change', async function() {
+                const file = this.files[0];
+                if (!file) return;
+
+                const label = $('label[for="about-upload"]');
+                const origText = label.text();
+                label.text('Uploading...');
+
+                try {
+                    const res = await fetch('/api/v1/upload', {
+                        method: 'POST',
+                        headers: { 'x-file-name': file.name },
+                        body: await file.arrayBuffer()
+                    });
+                    const result = await res.json();
+                    if (result.success) {
+                        aboutImgUrl.val(result.url);
+                        updatePreview(result.url);
+                        label.text('Uploaded!');
+                        setTimeout(() => label.text(origText), 2000);
+                    }
+                } catch (e) {
+                    label.text('Failed!');
+                    setTimeout(() => label.text(origText), 2000);
+                }
+            });
+
+            // 3. Form Submit
+            aboutForm.on('submit', async function(e) {
+                e.preventDefault();
+                const formData = {};
+                $(this).serializeArray().forEach(i => formData[i.name] = i.value);
+                
+                const isUpdate = !!formData.id;
+                const method = isUpdate ? 'PUT' : 'POST';
+
+                try {
+                    const response = await fetch('/api/v1/manage/about_page', {
+                        method: method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    const resData = await response.json();
+                    if (resData.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Profile Updated',
+                            text: 'Your about page changes are now live.',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            background: '#0f172a',
+                            color: '#fff'
+                        });
+                        if (!isUpdate) loadAboutData(); // Fetch ID for future updates
+                    }
+                } catch (e) {
+                    Swal.fire({ icon: 'error', title: 'Save Failed', text: 'Communication error with server.' });
+                }
+            });
+
+            loadAboutData();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

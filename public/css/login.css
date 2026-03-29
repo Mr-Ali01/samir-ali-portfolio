@@ -1,0 +1,69 @@
+/* Admin Login Styles */
+
+body {
+    background: linear-gradient(135deg, #010409 0%, #0d1117 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-login {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.5);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.glass-login:hover {
+    border-color: rgba(56, 189, 248, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(56, 189, 248, 0.3);
+    border-radius: 50%;
+    border-top-color: #38BDF8;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error Shake Animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Loading Overlay Control */
+#loading-overlay.active {
+    transform: translateY(0);
+}
+
+/* Custom Google Button Override (Internal) */
+.g_id_signin {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 4px 12px rgba(56, 189, 248, 0.1));
+}
+
+.g_id_signin:hover {
+    filter: drop-shadow(0 4px 20px rgba(56, 189, 248, 0.3));
+    transform: scale(1.02);
+}
+
+/* Responsive Overrides */
+@media (max-width: 640px) {
+    .glass-login {
+        padding: 2rem;
+    }
+}

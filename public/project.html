@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects - Samir Ali</title>
-    
+
     <!-- Scripts & Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -36,7 +37,7 @@
             }
         }
     </script>
-    
+
     <!-- External Resources -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -44,44 +45,66 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/project.css">
 </head>
+
 <body class="antialiased">
-    
+
     <!-- Hero Background Animation -->
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <canvas id="heroCanvas" class="w-full h-full opacity-30 dark:opacity-20"></canvas>
-        <div class="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-theme-primary/10 blur-[150px] rounded-full dark:opacity-40"></div>
-        <div class="absolute bottom-[20%] left-[10%] w-[30%] h-[30%] bg-theme-secondary/10 blur-[150px] rounded-full dark:opacity-40"></div>
+        <div
+            class="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-theme-primary/10 blur-[150px] rounded-full dark:opacity-40">
+        </div>
+        <div
+            class="absolute bottom-[20%] left-[10%] w-[30%] h-[30%] bg-theme-secondary/10 blur-[150px] rounded-full dark:opacity-40">
+        </div>
     </div>
 
     <!-- Navbar -->
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-6 px-4 lg:px-12">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-2 group">
-                <div class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
+                <div
+                    class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
                     S</div>
-                <span class="text-xl font-bold tracking-tight text-theme-textPrimary group-hover:text-theme-primary transition-colors">Samir.</span>
+                <span
+                    class="text-xl font-bold tracking-tight text-theme-textPrimary group-hover:text-theme-primary transition-colors">Samir.</span>
             </a>
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                <a href="about.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
-                <a href="skill.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
-                <a href="project.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
-                <a href="experience.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
-                <a href="contact.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
-                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+                <!-- Pro links -->
+                <a href="about.html"
+                    class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html"
+                    class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html"
+                    class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html"
+                    class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html"
+                    class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html"
+                    class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+                <!-- Per links -->
+                <a href="personal.html#values"
+                    class="nav-link-per hidden text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Values</a>
+                <a href="personal.html#insights"
+                    class="nav-link-per hidden text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Insights</a>
             </div>
 
             <div class="flex items-center space-x-4 md:space-x-4">
                 <button id="theme-toggle"
                     class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 focus:ring-2 focus:ring-theme-primary/50 overflow-hidden">
-                    <span id="theme-icon-sun"
-                        class="absolute transition-all duration-500 ease-in-out transform"><i
+                    <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i
                             data-lucide="sun" class="w-5 h-5"></i></span>
-                    <span id="theme-icon-moon"
-                        class="absolute transition-all duration-500 ease-in-out transform"><i
+                    <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i
                             data-lucide="moon" class="w-5 h-5"></i></span>
                 </button>
+                <a href="settings.html"
+                    class="w-10 h-10 text-gray-400 hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden ml-1"
+                    title="Settings">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                </a>
 
                 <div class="hidden md:block">
                     <a href="index.html#contact"
@@ -96,97 +119,38 @@
         </div>
     </nav>
 
-    <main class="relative z-10 pt-32 pb-20 px-6">
+    <main class="relative z-10 pt-32 pb-20 px-6 md:px-10 lg:px-12">
         <!-- Hero Section -->
         <header class="max-w-7xl mx-auto space-y-6 mb-24" data-aos="fade-down">
             <h1 class="text-6xl md:text-8xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
-                PROJECTS<span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-primary">.</span>
+                PROJECTS<span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-primary">.</span>
             </h1>
-            <p class="max-w-2xl text-lg md:text-xl text-slate-500 dark:text-theme-textSecondary font-medium leading-relaxed">
-                A showcase of applications, tools, and experiments I've built exploring modern web technologies and solving practical challenges.
+            <p
+                class="max-w-2xl text-lg md:text-xl text-slate-500 dark:text-theme-textSecondary font-medium leading-relaxed">
+                A showcase of applications, tools, and experiments I've built exploring modern web technologies and
+                solving practical challenges.
             </p>
         </header>
 
         <!-- Featured Projects -->
-        <section class="max-w-7xl mx-auto mb-32">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-32">
             <div class="flex items-center gap-4 mb-12" data-aos="fade-right">
-                <div class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary border border-theme-primary/20">
+                <div
+                    class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary border border-theme-primary/20">
                     <i data-lucide="star" class="w-5 h-5"></i>
                 </div>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Featured Projects</h2>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                    Featured Projects</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1: WhatsApp Web Clone -->
-                <article class="project-card group" data-aos="fade-up">
-                    <div class="project-image-container">
-                        <img src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&q=80&w=1000" alt="WhatsApp Clone">
-                    </div>
-                    <div class="project-content p-8">
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Message</span>
-                            <span class="tech-tag">Realtime</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-slate-900 dark:text-white mb-3">WhatsApp Web Clone</h3>
-                        <p class="text-slate-500 dark:text-theme-textSecondary text-sm leading-relaxed mb-8 h-12 overflow-hidden line-clamp-2">
-                            A responsive messaging interface inspired by WhatsApp Web, built to study UI design and real-time communication.
-                        </p>
-                        <div class="flex items-center gap-3">
-                            <a href="#" class="btn-primary flex-1 py-3 text-xs uppercase font-black tracking-widest text-center">Live Demo <i data-lucide="arrow-up-right" class="w-3 h-3 inline ml-1"></i></a>
-                            <a href="#" class="btn-secondary px-6 py-3 text-xs uppercase font-black text-center"><i data-lucide="github" class="w-4 h-4"></i></a>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Project 2: Developer Portfolio System -->
-                <article class="project-card group" data-aos="fade-up" data-aos-delay="100">
-                    <div class="project-image-container">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000" alt="Portfolio System">
-                    </div>
-                    <div class="project-content p-8">
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Next.js</span>
-                            <span class="tech-tag">Framer Motion</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-slate-900 dark:text-white mb-3">Developer Portfolio System</h3>
-                        <p class="text-slate-500 dark:text-theme-textSecondary text-sm leading-relaxed mb-8 h-12 overflow-hidden line-clamp-2">
-                            A personal developer portfolio featuring a dynamic CMS, multiple project showcases, and detailed information bars.
-                        </p>
-                        <div class="flex items-center gap-3">
-                            <a href="#" class="btn-primary flex-1 py-3 text-xs uppercase font-black tracking-widest text-center">Live Demo <i data-lucide="arrow-up-right" class="w-3 h-3 inline ml-1"></i></a>
-                            <a href="#" class="btn-secondary px-6 py-3 text-xs uppercase font-black text-center"><i data-lucide="github" class="w-4 h-4"></i></a>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Project 3: SaveReels Downloader -->
-                <article class="project-card group" data-aos="fade-up" data-aos-delay="200">
-                    <div class="project-image-container">
-                        <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=1000" alt="SaveReels Downloader">
-                    </div>
-                    <div class="project-content p-8">
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">API</span>
-                            <span class="tech-tag">Tailwind</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-slate-900 dark:text-white mb-3">SaveReels Downloader</h3>
-                        <p class="text-slate-500 dark:text-theme-textSecondary text-sm leading-relaxed mb-8 h-12 overflow-hidden line-clamp-2">
-                            A web tool that allows users to download reels from Instagram. The application extracts the video source and...
-                        </p>
-                        <div class="flex items-center gap-3">
-                            <a href="#" class="btn-primary flex-1 py-3 text-xs uppercase font-black tracking-widest text-center">Live Demo <i data-lucide="arrow-up-right" class="w-3 h-3 inline ml-1"></i></a>
-                            <a href="#" class="btn-secondary px-6 py-3 text-xs uppercase font-black text-center"><i data-lucide="github" class="w-4 h-4"></i></a>
-                        </div>
-                    </div>
-                </article>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="featured-projects-grid">
+                <!-- Dynamic Featured Projects will load here -->
             </div>
         </section>
 
         <!-- Utility & UI Design Row -->
-        <section class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 mb-32">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-16 mb-32">
             <!-- Utility Tools -->
             <div class="space-y-10">
                 <div class="flex items-center gap-4" data-aos="fade-right">
@@ -196,32 +160,8 @@
                     <h2 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Utility Tools</h2>
                 </div>
                 
-                <div class="space-y-6">
-                    <!-- Tool 1 -->
-                    <div class="utility-card p-6" data-aos="fade-up">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-xl font-black text-slate-900 dark:text-white">Favicon Fetch API</h3>
-                            <i data-lucide="external-link" class="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity"></i>
-                        </div>
-                        <p class="text-slate-500 dark:text-theme-textSecondary text-sm mb-6">A utility API that retrieves a website's favicon from any URL...</p>
-                        <div class="flex gap-4">
-                            <a href="#" class="text-xs font-bold text-theme-primary hover:underline flex items-center gap-1">Live Demo <i data-lucide="link" class="w-3 h-3"></i></a>
-                            <a href="#" class="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1">Repository <i data-lucide="github" class="w-3 h-3"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Tool 2 -->
-                    <div class="utility-card p-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-xl font-black text-slate-900 dark:text-white">SaveLinks — Link Manager</h3>
-                            <i data-lucide="external-link" class="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity"></i>
-                        </div>
-                        <p class="text-slate-500 dark:text-theme-textSecondary text-sm mb-6">A lightweight web application for saving and organizing useful links.</p>
-                        <div class="flex gap-4">
-                            <a href="#" class="text-xs font-bold text-theme-primary hover:underline flex items-center gap-1">Live Demo <i data-lucide="link" class="w-3 h-3"></i></a>
-                            <a href="#" class="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1">Repository <i data-lucide="github" class="w-3 h-3"></i></a>
-                        </div>
-                    </div>
+                <div class="space-y-6" id="utility-tools-list">
+                    <!-- Dynamic Utility Tools will load here -->
                 </div>
             </div>
 
@@ -234,66 +174,79 @@
                     <h2 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">UI / DESIGN</h2>
                 </div>
                 
-                <!-- UI Card -->
-                <div class="utility-card p-6 group h-full" data-aos="fade-up">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xl font-black text-slate-900 dark:text-white">Food Discovery App UI (Static Template)</h3>
-                        <i data-lucide="layout" class="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity"></i>
-                    </div>
-                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm mb-6">A complete multi-page UI template for a food discovery platform...</p>
-                    <div class="flex gap-4">
-                        <a href="#" class="text-xs font-bold text-theme-primary hover:underline flex items-center gap-1">Live Demo <i data-lucide="link" class="w-3 h-3"></i></a>
-                        <a href="#" class="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1">Repository <i data-lucide="github" class="w-3 h-3"></i></a>
-                    </div>
+                <div class="space-y-6" id="ui-design-list">
+                    <!-- Dynamic UI Designs will load here -->
                 </div>
             </div>
         </section>
 
         <!-- Experiments Section -->
-        <section class="max-w-7xl mx-auto mb-32" data-aos="fade-up">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 py-16 px-10 rounded-[3rem] bg-slate-900/5 dark:bg-white/5 border border-slate-200 dark:border-white/5 relative overflow-hidden">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-32" data-aos="fade-up">
+            <div
+                class="flex flex-col md:flex-row md:items-center justify-between gap-8 py-16 px-10 rounded-[3rem] bg-slate-900/5 dark:bg-white/5 border border-slate-200 dark:border-white/5 relative overflow-hidden">
                 <div class="space-y-4 relative z-10">
                     <div class="flex items-center gap-4 mb-2">
-                        <div class="w-8 h-8 rounded-lg bg-orange-400/10 flex items-center justify-center text-orange-400">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-orange-400/10 flex items-center justify-center text-orange-400">
                             <i data-lucide="flask-conical" class="w-5 h-5"></i>
                         </div>
                         <h3 class="text-2xl font-black text-slate-900 dark:text-white uppercase">Experiments</h3>
                     </div>
-                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm max-w-sm">Smaller utilities, experiments, and development prototypes built while learning.</p>
+                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm max-w-sm">Smaller utilities,
+                        experiments, and development prototypes built while learning.</p>
                 </div>
                 <div class="relative z-10">
-                    <a href="#" class="px-8 py-4 rounded-2xl bg-white dark:bg-white/10 text-slate-900 dark:text-white font-black text-sm border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/20 transition-all flex items-center gap-2 group">
-                        See All Experiments <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    <a href="#"
+                        class="px-8 py-4 rounded-2xl bg-white dark:bg-white/10 text-slate-900 dark:text-white font-black text-sm border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/20 transition-all flex items-center gap-2 group">
+                        See All Experiments <i data-lucide="arrow-right"
+                            class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
                 <!-- Background Glow -->
-                <div class="absolute right-0 bottom-0 w-64 h-64 bg-orange-400/10 blur-[80px] rounded-full -mr-10 -mb-10"></div>
+                <div
+                    class="absolute right-0 bottom-0 w-64 h-64 bg-orange-400/10 blur-[80px] rounded-full -mr-10 -mb-10">
+                </div>
             </div>
         </section>
 
         <!-- CTA Section -->
-        <section class="max-w-7xl mx-auto rounded-[4rem] bg-gradient-to-br from-theme-primary via-[#0f172a] to-theme-secondary p-1 relative overflow-hidden group shadow-2xl" data-aos="zoom-in">
-            <div class="bg-[#0c1222] rounded-[3.8rem] p-16 md:p-24 text-center relative overflow-hidden h-full flex flex-col items-center justify-center">
-                <h3 class="text-4xl md:text-6xl font-black text-white mb-6 relative z-10">Interested in exploring more of my work?</h3>
-                <p class="text-theme-textSecondary text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto relative z-10 opacity-70">
-                    I love experimenting with new ideas. Discover my full collection of projects and repositories on GitHub.
+        <section
+            class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 rounded-[4rem] bg-gradient-to-br from-theme-primary via-[#0f172a] to-theme-secondary p-1 relative overflow-hidden group shadow-2xl"
+            data-aos="zoom-in">
+            <div
+                class="bg-[#0c1222] rounded-[3.8rem] p-16 md:p-24 text-center relative overflow-hidden h-full flex flex-col items-center justify-center">
+                <h3 class="text-4xl md:text-6xl font-black text-white mb-6 relative z-10">Interested in exploring more
+                    of my work?</h3>
+                <p
+                    class="text-theme-textSecondary text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto relative z-10 opacity-70">
+                    I love experimenting with new ideas. Discover my full collection of projects and repositories on
+                    GitHub.
                 </p>
                 <div class="relative z-10">
-                    <a href="https://github.com/samirali" target="_blank" class="bg-gradient-to-r from-theme-primary to-theme-secondary px-12 py-6 rounded-3xl text-white font-black text-xl shadow-[0_0_40px_rgba(56,189,248,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center gap-4 group/btn">
-                        Visit My GitHub <i data-lucide="github" class="w-6 h-6 transition-transform group-hover/btn:scale-125"></i>
+                    <a href="https://github.com/samirali" target="_blank"
+                        class="bg-gradient-to-r from-theme-primary to-theme-secondary px-12 py-6 rounded-3xl text-white font-black text-xl shadow-[0_0_40px_rgba(56,189,248,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center gap-4 group/btn">
+                        Visit My GitHub <i data-lucide="github"
+                            class="w-6 h-6 transition-transform group-hover/btn:scale-125"></i>
                     </a>
                 </div>
-                
+
                 <!-- Background dynamic layers -->
-                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none"></div>
-                <div class="absolute -top-40 -left-40 w-96 h-96 bg-theme-primary/10 blur-[150px] rounded-full animate-pulse-slow"></div>
-                <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-theme-secondary/10 blur-[150px] rounded-full animate-pulse-slow" style="animation-delay: 2s;"></div>
+                <div
+                    class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none">
+                </div>
+                <div
+                    class="absolute -top-40 -left-40 w-96 h-96 bg-theme-primary/10 blur-[150px] rounded-full animate-pulse-slow">
+                </div>
+                <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-theme-secondary/10 blur-[150px] rounded-full animate-pulse-slow"
+                    style="animation-delay: 2s;"></div>
             </div>
         </section>
     </main>
 
-    <footer class="py-16 border-t border-slate-200 dark:border-white/5 text-center mt-20 opacity-50">
-        <p class="text-slate-600 dark:text-white font-bold text-sm tracking-widest uppercase">© 2026 Samir Ali. All rights reserved.</p>
+    <footer
+        class="py-10 md:py-16 border-t border-slate-200 dark:border-white/5 text-center mt-20 opacity-50 px-6 md:px-10 lg:px-12">
+        <p class="text-slate-600 dark:text-white font-bold text-sm tracking-widest uppercase">© 2026 Samir Ali. All
+            rights reserved.</p>
     </footer>
 
     <!-- Scripts -->
@@ -301,4 +254,5 @@
     <script src="js/script.js"></script>
     <script src="js/project.js"></script>
 </body>
+
 </html>

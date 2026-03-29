@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS sections (
   section_name VARCHAR(100) NOT NULL UNIQUE,
   title VARCHAR(255) NOT NULL,
   content TEXT,
+  badge VARCHAR(100),
   image_url TEXT,
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -90,6 +91,28 @@ CREATE TABLE IF NOT EXISTS reviews (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- 9. education: Academic timeline management
+CREATE TABLE IF NOT EXISTS education (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  degree VARCHAR(255) NOT NULL,
+  institution VARCHAR(255) NOT NULL,
+  period VARCHAR(100) NOT NULL,
+  description TEXT,
+  display_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 10. experience: Professional work history management
+CREATE TABLE IF NOT EXISTS experience (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  role VARCHAR(255) NOT NULL,
+  company VARCHAR(255) NOT NULL,
+  period VARCHAR(100) NOT NULL,
+  description TEXT,
+  display_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- 6. contacts: Stores contact form submissions from the site
 CREATE TABLE IF NOT EXISTS contacts (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -102,10 +125,26 @@ CREATE TABLE IF NOT EXISTS contacts (
   INDEX idx_contact_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 7. site_stats: Tracks overall website statistics (visits, etc)
+CREATE TABLE IF NOT EXISTS site_stats (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  stat_name VARCHAR(100) UNIQUE NOT NULL,
+  stat_value INT DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 8. daily_visits: Tracks website traffic per day
+CREATE TABLE IF NOT EXISTS daily_visits (
+  visit_date DATE PRIMARY KEY,
+  count INT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==========================================================
 -- Sample Seed Data (For Testing/Initialization)
 -- ==========================================================
+
+-- Seed Initial Stats
+INSERT IGNORE INTO site_stats (stat_name, stat_value) VALUES ('total_visits', 0);
 
 -- Seed Section Data
 INSERT IGNORE INTO sections (section_name, title, content, is_active) VALUES

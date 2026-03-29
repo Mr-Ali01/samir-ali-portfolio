@@ -1,0 +1,75 @@
+/* Settings Page Specific Styles */
+
+:root {
+    --settings-accent: var(--theme-accent-primary); /* Matching your locked portfolio color */
+    --settings-accent-glow: rgba(56, 189, 248, 0.4);
+}
+
+.setting-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--theme-text-secondary);
+    min-width: 140px;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.setting-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.setting-btn.active {
+    background: var(--settings-accent) !important;
+    border-color: var(--settings-accent) !important;
+    color: white !important;
+    box-shadow: 0 10px 30px -5px var(--settings-accent-glow);
+}
+
+.setting-btn.active i {
+    color: white !important;
+}
+
+/* Glass panel specific to settings */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Custom checkbox/toggle scaling */
+.peer-checked:bg-theme-primary {
+    background-color: var(--settings-accent) !important;
+}
+
+/* Super admin button glow */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--settings-accent) 0%, var(--theme-accent-secondary) 100%);
+    box-shadow: 0 15px 45px -10px var(--settings-accent-glow);
+}
+
+/* Dark mode overrides for consistency with index */
+/* Removed hardcoded black background for theme consistency */
+
+.dark .glass-panel {
+    background: rgba(15, 15, 20, 0.7);
+}
+
+/* Animations */
+@keyframes settings-entrance {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.setting-card {
+    animation: settings-entrance 0.5s ease-out forwards;
+}

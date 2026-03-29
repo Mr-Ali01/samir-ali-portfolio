@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience - Samir Ali</title>
     
-    <!-- Scripts & Styles -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Scripts & Styles (Local Build) -->
+    <link rel="stylesheet" href="css/tailwind.css">
     <script>
         // Apply theme early on load to prevent flash
         if (localStorage.getItem('portfolio-theme') === 'dark') {
@@ -15,35 +15,11 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        theme: {
-                            primary: 'var(--theme-accent-primary)',
-                            secondary: 'var(--theme-accent-secondary)',
-                            glow: 'var(--theme-glow)',
-                            textPrimary: 'var(--theme-text-primary)',
-                            textSecondary: 'var(--theme-text-secondary)',
-                            bgStart: 'var(--theme-bg-start)',
-                            bgMid: 'var(--theme-bg-mid)',
-                            bgEnd: 'var(--theme-bg-end)',
-                        }
-                    },
-                    fontFamily: {
-                        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
     
-    <!-- External Resources -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Local Libraries -->
+    <script src="libs/jquery.min.js"></script>
+    <script src="libs/lucide.min.js"></script>
+    <link rel="stylesheet" href="libs/aos.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/experience.css">
 </head>
@@ -66,12 +42,16 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                <a href="about.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
-                <a href="skill.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
-                <a href="project.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
-                <a href="experience.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
-                <a href="contact.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
-                <a href="resume.html" class="nav-link text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+                <!-- Pro links -->
+                <a href="about.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">About</a>
+                <a href="skill.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Skills</a>
+                <a href="project.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Projects</a>
+                <a href="experience.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Experience</a>
+                <a href="contact.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Contact</a>
+                <a href="resume.html" class="nav-link-pro text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Resume</a>
+                <!-- Per links -->
+                <a href="personal.html#values" class="nav-link-per hidden text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Values</a>
+                <a href="personal.html#insights" class="nav-link-per hidden text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Insights</a>
             </div>
 
             <div class="flex items-center space-x-4">
@@ -79,6 +59,9 @@
                     <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="sun" class="w-5 h-5"></i></span>
                     <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="moon" class="w-5 h-5"></i></span>
                 </button>
+                <a href="settings.html" class="w-10 h-10 text-gray-400 hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden ml-1" title="Settings">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                </a>
                 <div class="hidden md:block">
                     <a href="index.html#contact" class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
                 </div>
@@ -89,7 +72,7 @@
         </div>
     </nav>
 
-    <main class="relative z-10 pt-32 pb-20 px-4">
+    <main class="relative z-10 pt-32 pb-20 px-6 md:px-10 lg:px-12">
         <!-- Hero Section -->
         <section class="max-w-4xl mx-auto text-center mb-24" data-aos="fade-up">
             <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-theme-primary/10 border border-theme-primary/20 backdrop-blur-sm mb-6 shadow-sm">
@@ -106,7 +89,7 @@
         </section>
 
         <!-- Stats Grid -->
-        <section class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
             <!-- Stat 1 -->
             <div class="glass-panel p-10 rounded-3xl group hover:border-theme-primary/50 transition-all duration-500" data-aos="fade-up" data-aos-delay="100">
                 <div class="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -137,7 +120,7 @@
         </section>
 
         <!-- Experience Timeline -->
-        <section class="max-w-6xl mx-auto relative mb-32">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 relative mb-32">
             <!-- Central Line -->
             <div class="absolute left-6 md:left-8 top-0 bottom-0 w-[2px] bg-gradient-to-b from-theme-primary via-theme-secondary to-transparent z-0 opacity-20"></div>
 
@@ -146,7 +129,7 @@
                 <div class="relative pl-20 md:pl-28 group" data-aos="fade-left">
                     <div class="absolute left-3.5 md:left-5.5 top-0 w-5 h-5 md:w-6 md:h-6 rounded-full bg-slate-900 border-2 border-theme-primary z-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-8 md:p-10 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-6 md:p-8 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
                         <div class="lg:col-span-8 space-y-4">
                             <span class="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[10px] font-black uppercase tracking-widest">Jan – Mar 2024</span>
                             <h2 class="text-2xl md:text-3xl font-black text-theme-textPrimary">Application Development Training</h2>
@@ -185,7 +168,7 @@
                 <div class="relative pl-20 md:pl-28 group" data-aos="fade-left" data-aos-delay="100">
                     <div class="absolute left-3.5 md:left-5.5 top-0 w-5 h-5 md:w-6 md:h-6 rounded-full bg-slate-900 border-2 border-theme-primary z-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-8 md:p-10 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-6 md:p-8 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
                         <div class="lg:col-span-8 space-y-4">
                             <span class="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[10px] font-black uppercase tracking-widest">2023 – Present</span>
                             <h2 class="text-2xl md:text-3xl font-black text-theme-textPrimary">Independent Developer</h2>
@@ -217,7 +200,7 @@
                 <div class="relative pl-20 md:pl-28 group" data-aos="fade-left" data-aos-delay="200">
                     <div class="absolute left-3.5 md:left-5.5 top-0 w-5 h-5 md:w-6 md:h-6 rounded-full bg-slate-900 border-2 border-theme-primary z-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-8 md:p-10 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-6 md:p-8 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
                         <div class="lg:col-span-8 space-y-4">
                             <span class="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[10px] font-black uppercase tracking-widest">2022 – 2025</span>
                             <h2 class="text-2xl md:text-3xl font-black text-theme-textPrimary">Bachelor of Computer Applications (BCA)</h2>
@@ -241,7 +224,7 @@
         </section>
 
         <!-- What I Work With Section -->
-        <section class="max-w-6xl mx-auto text-center mb-32" data-aos="fade-up">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 text-center mb-32" data-aos="fade-up">
             <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-theme-primary/10 border border-theme-primary/20 backdrop-blur-sm mb-6">
                 <i data-lucide="sparkles" class="w-4 h-4 text-theme-primary"></i>
                 <span class="text-theme-primary text-[10px] font-black tracking-widest uppercase">Skills & Technologies</span>
@@ -264,7 +247,7 @@
         </section>
 
         <!-- CTA Section -->
-        <section class="max-w-6xl mx-auto mb-20 px-4" data-aos="zoom-in">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-20 px-4" data-aos="zoom-in">
             <div class="relative rounded-[3rem] bg-slate-900 border border-white/10 p-12 md:p-20 overflow-hidden group text-center">
                 <!-- Background gradient glow -->
                 <div class="absolute -top-24 -right-24 w-96 h-96 bg-orange-600/20 blur-[120px] rounded-full group-hover:bg-orange-600/30 transition-all"></div>
@@ -282,12 +265,12 @@
         </section>
     </main>
 
-    <footer class="py-12 border-t border-white/5 text-center mt-20 opacity-50">
+    <footer class="py-10 md:py-16 border-t border-white/5 text-center mt-20 opacity-50 px-6 md:px-10 lg:px-12">
         <p class="text-theme-textPrimary text-sm">© 2026 Samir Ali. All rights reserved.</p>
     </footer>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="libs/aos.js"></script>
     <script src="js/script.js"></script>
     <script src="js/experience.js"></script>
 </body>

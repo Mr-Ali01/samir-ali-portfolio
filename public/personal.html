@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Hub - Samir Ali</title>
+    
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Apply theme early on load
+        if (localStorage.getItem('portfolio-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            primary: '#FF2D55',   /* Personal Accent: Magenta/Pink */
+                            secondary: '#FF4D6D',
+                            glow: 'rgba(255, 45, 85, 0.3)',
+                            textPrimary: 'var(--theme-text-primary)',
+                            textSecondary: 'var(--theme-text-secondary)',
+                            bgStart: 'var(--theme-bg-start)',
+                            bgMid: 'var(--theme-bg-mid)',
+                            bgEnd: 'var(--theme-bg-end)',
+                        }
+                    },
+                    fontFamily: {
+                        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- External Resources -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .personal-accent { color: #FF2D55; }
+        .bg-personal-accent { background-color: #FF2D55; }
+        .gradient-personal { background: linear-gradient(135deg, #FF2D55 0%, #FF708D 100%); }
+        .glass-card-personal { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 45, 85, 0.1);
+        }
+        .glow-dot {
+            width: 10px; height: 10px;
+            background: #FF2D55;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #FF2D55;
+        }
+    </style>
+</head>
+<body class="antialiased font-jakarta overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-6 px-4 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="personal.html" class="flex items-center space-x-2 group">
+                <div class="w-10 h-10 bg-personal-accent rounded-lg flex items-center justify-center font-bold text-white text-xl text-center group-hover:scale-110 transition-transform">
+                    S</div>
+                <span class="text-xl font-bold tracking-tight text-theme-textPrimary group-hover:personal-accent transition-colors">Samir.</span>
+            </a>
+
+            <!-- Desktop Menu (Personal Mode) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#values" class="nav-link text-sm font-semibold text-theme-textSecondary hover:personal-accent transition-all relative py-2">Values</a>
+                <a href="#insights" class="nav-link text-sm font-semibold text-theme-textSecondary hover:personal-accent transition-all relative py-2">Insights</a>
+            </div>
+
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <button id="theme-toggle" class="relative w-10 h-10 text-gray-400 hover:personal-accent transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden">
+                    <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="sun" class="w-5 h-5"></i></span>
+                    <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="moon" class="w-5 h-5"></i></span>
+                </button>
+                <a href="settings.html" class="relative w-10 h-10 text-gray-400 hover:personal-accent transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden" title="Settings">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-40 pb-20 px-6 md:px-10 lg:px-12">
+        <!-- Hero Section -->
+        <section class="max-w-4xl mx-auto text-center mb-24" data-aos="fade-up">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-personal-accent/10 border border-personal-accent/20 backdrop-blur-sm mb-6">
+                <i data-lucide="heart" class="w-4 h-4 text-theme-primary fill-theme-primary"></i>
+                <span class="text-[10px] font-black uppercase tracking-widest text-theme-primary">For the people who know me</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black text-theme-textPrimary mb-6 leading-tight">
+                The real me — <br><span class="personal-accent">beyond the résumé</span>
+            </h1>
+            <p class="text-xl text-theme-textSecondary leading-relaxed max-w-2xl mx-auto opacity-70">
+                This is the part of my site I don't share publicly. Just for you.
+            </p>
+        </section>
+
+        <!-- Core Values Section -->
+        <section id="values" class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-32">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] personal-accent mb-4">Core Values</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Value 1 -->
+                <div class="glass-card-personal p-6 rounded-[2rem] group hover:scale-[1.02] transition-all" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-12 h-12 rounded-2xl bg-personal-accent/10 flex items-center justify-center mb-6 group-hover:bg-personal-accent group-hover:text-white transition-all">
+                        <i data-lucide="heart" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-4">Authenticity</h3>
+                    <p class="text-theme-textSecondary text-sm leading-relaxed opacity-70">
+                        I believe in showing up as who I truly am — unfiltered, imperfect, and real. Authenticity is the foundation of every meaningful relationship.
+                    </p>
+                </div>
+                <!-- Value 2 -->
+                <div class="glass-card-personal p-8 rounded-[2rem] group hover:scale-[1.02] transition-all" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 rounded-2xl bg-personal-accent/10 flex items-center justify-center mb-6 group-hover:bg-personal-accent group-hover:text-white transition-all">
+                        <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-4">Curiosity</h3>
+                    <p class="text-theme-textSecondary text-sm leading-relaxed opacity-70">
+                        The world is too fascinating to stop asking "why". Curiosity isn't just a trait — it's the engine of my growth.
+                    </p>
+                </div>
+                <!-- Value 3 -->
+                <div class="glass-card-personal p-8 rounded-[2rem] group hover:scale-[1.02] transition-all" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-12 h-12 rounded-2xl bg-personal-accent/10 flex items-center justify-center mb-6 group-hover:bg-personal-accent group-hover:text-white transition-all">
+                        <i data-lucide="shield" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-4">Integrity</h3>
+                    <p class="text-theme-textSecondary text-sm leading-relaxed opacity-70">
+                        I say what I mean and mean what I say. In a world full of noise, being consistent and trustworthy matters deeply to me.
+                    </p>
+                </div>
+                <!-- Value 4 -->
+                <div class="glass-card-personal p-8 rounded-[2rem] group hover:scale-[1.02] transition-all" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-12 h-12 rounded-2xl bg-personal-accent/10 flex items-center justify-center mb-6 group-hover:bg-personal-accent group-hover:text-white transition-all">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-4">Growth</h3>
+                    <p class="text-theme-textSecondary text-sm leading-relaxed opacity-70">
+                        Every day is a chance to be slightly better than yesterday. I embrace discomfort as a signal that I'm expanding.
+                    </p>
+                </div>
+                <!-- Value 5 -->
+                <div class="glass-card-personal p-8 rounded-[2rem] group hover:scale-[1.02] transition-all" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-12 h-12 rounded-2xl bg-personal-accent/10 flex items-center justify-center mb-6 group-hover:bg-personal-accent group-hover:text-white transition-all">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-4">Purpose</h3>
+                    <p class="text-theme-textSecondary text-sm leading-relaxed opacity-70">
+                        I don't want to just do things — I want to do meaningful things. Purpose gives direction to all the effort.
+                    </p>
+                </div>
+                <!-- Value 6 -->
+                <div class="glass-card-personal p-8 rounded-[2rem] group hover:scale-[1.02] transition-all" data-aos="fade-up" data-aos-delay="500">
+                    <div class="w-12 h-12 rounded-2xl bg-personal-accent/10 flex items-center justify-center mb-6 group-hover:bg-personal-accent group-hover:text-white transition-all">
+                        <i data-lucide="star" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-theme-textPrimary mb-4">Excellence</h3>
+                    <p class="text-theme-textSecondary text-sm leading-relaxed opacity-70">
+                        Not perfectionism — but the genuine desire to put out work that I'm proud of and that helps others.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Life Insights Section -->
+        <section id="insights" class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-32">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] personal-accent mb-4">Life Insights</h2>
+            </div>
+            
+            <div class="space-y-12">
+                <!-- Insight 1 -->
+                <div class="flex gap-8 items-start" data-aos="fade-right">
+                    <div class="pt-1"><div class="glow-dot"></div></div>
+                    <div>
+                        <span class="text-[10px] font-black tracking-widest uppercase personal-accent opacity-60">On Work</span>
+                        <p class="text-2xl font-bold text-theme-textPrimary mt-2 leading-relaxed">
+                            "The best projects are the ones you're genuinely excited to tell people about."
+                        </p>
+                    </div>
+                </div>
+                <!-- Insight 2 -->
+                <div class="flex gap-8 items-start" data-aos="fade-right" data-aos-delay="100">
+                    <div class="pt-1"><div class="glow-dot"></div></div>
+                    <div>
+                        <span class="text-[10px] font-black tracking-widest uppercase personal-accent opacity-60">On Life</span>
+                        <p class="text-2xl font-bold text-theme-textPrimary mt-2 leading-relaxed">
+                            "Solitude is underrated. Some of the clearest thinking happens in silence."
+                        </p>
+                    </div>
+                </div>
+                <!-- Insight 3 -->
+                <div class="flex gap-8 items-start" data-aos="fade-right" data-aos-delay="200">
+                    <div class="pt-1"><div class="glow-dot"></div></div>
+                    <div>
+                        <span class="text-[10px] font-black tracking-widest uppercase personal-accent opacity-60">On Tech</span>
+                        <p class="text-2xl font-bold text-theme-textPrimary mt-2 leading-relaxed">
+                            "Technology is just a tool. The real question is what human problem it solves."
+                        </p>
+                    </div>
+                </div>
+                <!-- Insight 4 -->
+                <div class="flex gap-8 items-start" data-aos="fade-right" data-aos-delay="300">
+                    <div class="pt-1"><div class="glow-dot"></div></div>
+                    <div>
+                        <span class="text-[10px] font-black tracking-widest uppercase personal-accent opacity-60">On Creating</span>
+                        <p class="text-2xl font-bold text-theme-textPrimary mt-2 leading-relaxed">
+                            "You don't need permission to start. Build the thing. Share it. Iterate."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Message -->
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 text-center" data-aos="zoom-in">
+            <div class="glass-card-personal p-10 md:p-12 rounded-[3rem] border-personal-accent/20">
+                <i data-lucide="heart" class="w-12 h-12 personal-accent mx-auto mb-6"></i>
+                <p class="text-xl text-theme-textSecondary leading-relaxed italic opacity-80">
+                    Thank you for being someone I chose to share this with. That already means you matter to me.
+                </p>
+                <div class="mt-8 pt-8 border-t border-white/5">
+                    <p class="text-sm font-black text-theme-textSecondary uppercase tracking-widest">— Samir Ali</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-10 md:py-16 border-t border-white/5 text-center mt-20 opacity-50 px-6 md:px-10 lg:px-12">
+        <p class="text-theme-textPrimary text-sm">© 2026 Samir Ali. Personal Mode Enabled.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
