@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience & Education Management - Samir Ali Admin</title>
+    
+    <!-- Unified Theme Manager -->
+    <script src="theme-manager.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dash: {
+                            bg: 'var(--dash-bg)',
+                            accent: 'var(--dash-accent)',
+                            secondary: 'var(--dash-secondary)',
+                            border: 'var(--dash-border)',
+                            text: 'var(--dash-text)',
+                            muted: 'var(--dash-muted)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="bg-dash-bg text-dash-text antialiased">
+    <div class="flex relative z-10 min-h-screen">
+        <!-- Sidebar Container (Injected via admin-ui.js) -->
+        <div id="admin-sidebar-container"></div>
+
+        <main class="flex-1 ml-72 flex flex-col min-h-screen overflow-x-hidden">
+            <!-- Header Container (Injected via admin-ui.js) -->
+            <div id="admin-header-container" class="sticky top-0 z-40"></div>
+
+            <div id="admin-view-content" class="fade-in">
+                <div class="p-10">
+                    <div class="flex items-center justify-between mb-10">
+                        <div>
+                            <h1 id="page-title" class="text-4xl font-black mb-2 uppercase tracking-tighter">Experience & Education</h1>
+                            <p id="page-subtitle" class="text-dash-muted text-sm uppercase tracking-widest font-bold">Manage your professional journey and academic records</p>
+                        </div>
+                        <button class="add-btn bg-gradient-to-r from-dash-accent to-dash-secondary text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-dash-accent/20" data-entity="experience">
+                            Add New Entry
+                        </button>
+                    </div>
+
+                    <!-- Internal Sub-Tabs -->
+                    <div class="flex items-center gap-2 mb-10 bg-white/5 p-1.5 rounded-[1.5rem] w-fit border border-white/5">
+                        <button class="tab-btn active px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all" data-tab="experience">
+                            Work Experience
+                        </button>
+                        <button class="tab-btn px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all" data-tab="education">
+                            Academic Journey
+                        </button>
+                    </div>
+
+                    <!-- Experience List (Professional) -->
+                    <div id="pane-experience" class="section-pane active">
+                        <div id="experience-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 list-container">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+
+                    <!-- Education List (Academic) -->
+                    <div id="pane-education" class="section-pane">
+                        <div id="education-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 list-container">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Centralized Modal for Manage Entries -->
+    <div id="modal-backdrop" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-xl p-4">
+        <div id="modal-container" class="glass-panel w-full max-w-2xl rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl transform scale-95 transition-transform duration-200">
+            <div class="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
+                <div>
+                    <h3 id="modal-title" class="text-xl font-black mb-1">Entry Details</h3>
+                    <p id="modal-subtitle" class="text-[10px] text-dash-muted font-black uppercase tracking-widest">Update your portfolio history</p>
+                </div>
+                <button class="icon-btn close-modal"><i data-lucide="x"></i></button>
+            </div>
+            
+            <form id="crud-form" class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                <div id="form-fields" class="space-y-6">
+                    <!-- Fields injected by homepage.js -->
+                </div>
+
+                <div class="flex justify-end gap-4 pt-10">
+                    <button type="button" class="px-8 py-3 rounded-2xl border border-white/10 text-white font-black text-xs uppercase tracking-widest hover:bg-white/5 close-modal">Cancel</button>
+                    <button type="submit" class="bg-dash-accent px-10 py-4 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-dash-accent/30">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="admin-ui.js"></script>
+    <script src="homepage.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Self-init if not already in a shell (SPA Router handles executeBaseScripts if in shell)
+            if ($('#admin-sidebar-container').is(':empty')) {
+                AdminUI.init('experience');
+                // The SPA router executeBaseScripts logic will call initHomePageEditor('experience')
+            }
+        });
+    </script>
+</body>
+</html>

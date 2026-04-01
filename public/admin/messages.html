@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Management - Samir Ali Admin</title>
+    
+    <script src="theme-manager.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dash: {
+                            bg: 'var(--dash-bg)',
+                            accent: 'var(--dash-accent)',
+                            secondary: 'var(--dash-secondary)',
+                            border: 'var(--dash-border)',
+                            text: 'var(--dash-text)',
+                            muted: 'var(--dash-muted)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="bg-dash-bg text-dash-text antialiased">
+    <div class="flex relative z-10 min-h-screen">
+        <div id="admin-sidebar-container"></div>
+
+        <main class="flex-1 ml-72 flex flex-col min-h-screen overflow-x-hidden">
+            <div id="admin-header-container" class="sticky top-0 z-40"></div>
+
+            <div id="admin-view-content" class="fade-in">
+                <div class="p-10">
+                    <div class="flex items-center justify-between mb-10">
+                        <div>
+                            <h1 class="text-4xl font-black mb-2 uppercase tracking-tighter">Inquiries & Messages</h1>
+                            <p class="text-dash-muted text-sm uppercase tracking-widest font-bold">Manage your client communication and leads</p>
+                        </div>
+                    </div>
+
+                    <div id="contacts-list" class="space-y-6">
+                        <!-- Message Rows injected by messages.js -->
+                        <div class="text-center py-20 bg-white/5 rounded-[2rem] border border-dashed border-white/10 text-dash-muted">
+                            Loading messages...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Reply Modal -->
+    <div id="reply-modal-backdrop" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-xl p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl">
+            <div class="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
+                <div>
+                    <h3 class="text-xl font-black mb-1">Reply to Message</h3>
+                    <p id="reply-to-name" class="text-[10px] text-dash-accent font-black uppercase tracking-widest">To: Alex Johnson</p>
+                </div>
+                <button class="icon-btn close-reply-modal"><i data-lucide="x"></i></button>
+            </div>
+            
+            <form id="reply-form" class="p-8 space-y-6">
+                <input type="hidden" name="id" id="reply-contact-id">
+                
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Original Message</label>
+                    <div id="original-message-text" class="p-4 bg-white/5 rounded-xl text-sm italic opacity-60 border border-white/5 max-h-32 overflow-y-auto">
+                        <!-- Text here -->
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Your Response</label>
+                    <textarea name="reply_message" id="reply-message" rows="6" required class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none resize-none" placeholder="Type your email response here..."></textarea>
+                </div>
+
+                <div class="flex justify-end gap-4 pt-6">
+                    <button type="button" class="px-8 py-3 rounded-2xl border border-white/10 text-white font-black text-xs uppercase tracking-widest hover:bg-white/5 close-reply-modal">Cancel</button>
+                    <button type="submit" id="send-reply-btn" class="bg-dash-accent px-10 py-4 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-dash-accent/30 flex items-center gap-2">
+                        <span>Send Response</span>
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="admin-ui.js"></script>
+    <script>
+        $(document).ready(function() {
+            if ($('#admin-sidebar-container').is(':empty')) {
+                AdminUI.init('messages');
+            }
+        });
+
+        // Specialized logic for messages view
+        async function loadMessages() {
+            try {
+                const res = await fetch('/api/v1/manage/contacts');
+                const data = await res.json();
+                const container = $('#contacts-list');
+                container.empty();
+
+                if (!data.success || data.data.length === 0) {
+                    container.append('<div class="text-center py-20 bg-white/5 rounded-[2rem] border border-dashed border-white/10 text-dash-muted">No messages found.</div>');
+                    return;
+                }
+
+                data.data.forEach(msg => {
+                    const statusColors = {
+                        'new': 'text-dash-accent bg-dash-accent/10',
+                        'read': 'text-dash-muted bg-white/5',
+                        'replied': 'text-green-400 bg-green-400/10'
+                    };
+                    const color = statusColors[msg.status] || 'text-dash-muted';
+
+                    const rowHtml = `
+                        <div class="glass-panel p-8 rounded-[2.5rem] border border-white/5 group hover:border-white/10 transition-all">
+                            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                                <div class="flex items-center gap-6">
+                                    <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
+                                        <i data-lucide="user" class="w-6 h-6 text-dash-muted"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <h4 class="text-lg font-black">${msg.name}</h4>
+                                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${color}">${msg.status}</span>
+                                        </div>
+                                        <div class="text-xs text-dash-muted font-bold flex flex-wrap gap-x-4">
+                                            <span><i data-lucide="mail" class="w-3 h-3 inline mr-1"></i> ${msg.email}</span>
+                                            <span><i data-lucide="tag" class="w-3 h-3 inline mr-1"></i> ${msg.inquiry_type}</span>
+                                            <span><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i> ${new Date(msg.created_at).toLocaleDateString()}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-3">
+                                    <button class="view-msg-btn p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-all" data-full-msg='${JSON.stringify(msg).replace(/'/g, "&apos;")}'>
+                                        <i data-lucide="eye" class="w-5 h-5"></i>
+                                    </button>
+                                    <button class="reply-msg-btn bg-dash-accent/10 text-dash-accent hover:bg-dash-accent hover:text-white px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all" 
+                                            data-id="${msg.id}" data-name="${msg.name}" data-msg="${msg.message.replace(/'/g, "&apos;")}">
+                                        Reply
+                                    </button>
+                                    <button class="delete-msg-btn p-4 rounded-2xl bg-white/5 hover:bg-red-500/20 hover:text-red-500 transition-all" data-id="${msg.id}">
+                                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-8 border-t border-white/5">
+                                <p class="text-sm leading-relaxed text-dash-muted line-clamp-2">${msg.message}</p>
+                                ${msg.reply ? `
+                                    <div class="mt-4 p-4 bg-green-400/5 border border-green-400/10 rounded-2xl">
+                                        <span class="text-[9px] font-black uppercase tracking-widest text-green-400 block mb-2">Your Reply:</span>
+                                        <p class="text-xs text-dash-muted italic">${msg.reply}</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    container.append(rowHtml);
+                });
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Action Listeners
+        $(document).on('click', '.view-msg-btn', function() {
+            const msg = JSON.parse($(this).attr('data-full-msg'));
+            Swal.fire({
+                title: `<span class="text-2xl font-black">${msg.name}</span>`,
+                html: `
+                    <div class="text-left py-4 space-y-4">
+                        <div class="grid grid-cols-2 gap-4 text-[10px] font-black uppercase tracking-widest text-dash-muted">
+                            <div>Email: <span class="text-white block mt-1 normal-case">${msg.email}</span></div>
+                            <div>Company: <span class="text-white block mt-1 normal-case">${msg.company || 'N/A'}</span></div>
+                            <div>Role: <span class="text-white block mt-1 normal-case">${msg.role || 'N/A'}</span></div>
+                            <div>Type: <span class="text-white block mt-1 normal-case">${msg.inquiry_type}</span></div>
+                            <div>Budget: <span class="text-white block mt-1 normal-case">${msg.budget || 'N/A'}</span></div>
+                            <div>Timeline: <span class="text-white block mt-1 normal-case">${msg.timeline || 'N/A'}</span></div>
+                        </div>
+                        <hr class="border-white/5">
+                        <div class="text-sm leading-relaxed text-dash-muted bg-white/5 p-6 rounded-2xl border border-white/5">${msg.message.replace(/\n/g, '<br>')}</div>
+                    </div>
+                `,
+                background: '#0f172a',
+                color: '#f8fafc',
+                showConfirmButton: false,
+                showCloseButton: true,
+                width: '600px'
+            });
+        });
+
+        // Reply Modal logic
+        $(document).on('click', '.reply-msg-btn', function() {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            const msg = $(this).data('msg');
+
+            $('#reply-contact-id').val(id);
+            $('#reply-to-name').text(`To: ${name}`);
+            $('#original-message-text').text(msg);
+            $('#reply-modal-backdrop').removeClass('hidden').addClass('flex');
+            setTimeout(() => $('#reply-modal-backdrop > div').addClass('scale-100').removeClass('scale-95'), 10);
+        });
+
+        $('.close-reply-modal').click(function() {
+            $('#reply-modal-backdrop').addClass('hidden').removeClass('flex');
+            $('#reply-form')[0].reset();
+        });
+
+        $('#reply-form').submit(async function(e) {
+            e.preventDefault();
+            const $btn = $('#send-reply-btn');
+            const id = $('#reply-contact-id').val();
+            const reply_message = $('#reply-message').val();
+
+            $btn.prop('disabled', true).addClass('opacity-50');
+            $btn.find('span').text('Sending...');
+
+            try {
+                const res = await fetch('/api/v1/manage/contacts/reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, reply_message })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    Swal.fire('Sent!', 'Your reply has been sent via email.', 'success');
+                    $('.close-reply-modal').click();
+                    loadMessages();
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (e) {
+                Swal.fire('Error', e.message, 'error');
+            } finally {
+                $btn.prop('disabled', false).removeClass('opacity-50');
+                $btn.find('span').text('Send Response');
+            }
+        });
+
+        $(document).on('click', '.delete-msg-btn', async function() {
+            const id = $(this).data('id');
+            const confirm = await Swal.fire({
+                title: 'Delete Message?',
+                text: 'This will permanently remove the record.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444'
+            });
+
+            if (confirm.isConfirmed) {
+                const res = await fetch('/api/v1/manage/contacts', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                if ((await res.json()).success) {
+                    loadMessages();
+                }
+            }
+        });
+
+        window.loadDashboardMessages = loadMessages; // Export for SPA
+    </script>
+</body>
+</html>

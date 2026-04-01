@@ -269,15 +269,47 @@ const PORT = process.env.PORT || 5000;
                 await db.query(`INSERT INTO projects (name, category, short_description, tech_stack, preview_image, live_link, github_link) VALUES (?, ?, ?, ?, ?, ?, ?)`, p);
             }
         }
+        // --- MIGRATION: Ensure contacts table exists ---
+        // Force recreation once to ensure all columns (company, inquiry_type, etc) are present
+        // await db.query("DROP TABLE IF EXISTS contacts"); 
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS contacts (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                company VARCHAR(255),
+                role VARCHAR(100),
+                inquiry_type VARCHAR(100),
+                message TEXT,
+                budget VARCHAR(100),
+                timeline VARCHAR(100),
+                status ENUM('new', 'read', 'replied') DEFAULT 'new',
+                reply TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        `);
+
     } catch (e) {
         console.warn('Migration Skip/Failed:', e.message);
     }
 })();
 
-// 3. Import Auth Utilities
+// 3. Import Auth & Utility Libraries
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// --- NODEMAILER: Setup SMTP Transport ---
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: process.env.SMTP_PORT || 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+    }
+});
 
 /**
  * Utility: Parse JSON Request Body (Native Node.js)
@@ -287,6 +319,9 @@ const parseJSONBody = (req) => {
         let body = '';
         req.on('data', chunk => body += chunk.toString());
         req.on('end', () => {
+            console.log('--- Raw Body Received ---');
+            console.log(body);
+            console.log('-------------------------');
             try { resolve(JSON.parse(body)); }
             catch (e) { resolve({}); }
         });
@@ -476,6 +511,148 @@ const requestHandler = async (req, res) => {
             res.writeHead(401, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ success: false, error: 'Session expired or unauthorized' }));
         }
+    }
+
+    /**
+     * API: Submit Public Contact Inquiry
+     */
+    if (path === '/api/v1/contacts' && req.method === 'POST') {
+        try {
+            console.log('--- Incoming Contact Request ---');
+            const body = await parseJSONBody(req);
+            console.log('Parsed Body:', body);
+
+            const { name, email, company, role, inquiry_type, message, budget, timeline } = body;
+
+            if (!name || !email || !message) {
+                console.warn('Validation Failed: Missing required fields');
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: 'Name, Email and Message are required' }));
+            }
+
+            // 1. Save to Database
+            console.log('Inserting into database...');
+            const [result] = await db.query(
+                `INSERT INTO contacts (name, email, company, role, inquiry_type, message, budget, timeline) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [name, email, company || null, role || null, inquiry_type || 'general', message, budget || null, timeline || null]
+            );
+            console.log('✅ DB Insert Success! ID:', result.insertId);
+
+            // 2. Send Notification Email to Admin
+            console.log('Preparing SMTP notification...');
+            const adminEmail = process.env.ADMIN_EMAIL || 'sameerali18867@gmail.com';
+            const mailOptions = {
+                from: `"Portfolio Alerts" <${process.env.SMTP_USER}>`,
+                to: adminEmail,
+                subject: `🚀 New Inquiry: ${inquiry_type} from ${name}`,
+                html: `
+                    <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+                        <h2 style="color: #38bdf8;">New Portfolio Inquiry</h2>
+                        <p><strong>Name:</strong> ${name}</p>
+                        <p><strong>Email:</strong> ${email}</p>
+                        <p><strong>Type:</strong> ${inquiry_type}</p>
+                        <p><strong>Company:</strong> ${company || 'N/A'} (${role || 'N/A'})</p>
+                        <p><strong>Budget/Timeline:</strong> ${budget || 'N/A'} / ${timeline || 'N/A'}</p>
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                        <p><strong>Message:</strong></p>
+                        <p style="white-space: pre-wrap; background: #f9f9f9; padding: 15px; border-radius: 5px;">${message}</p>
+                        <a href="${process.env.ALLOWED_ORIGIN_URL}/admin/messages.html" style="display: inline-block; background: #38bdf8; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 20px;">View in Dashboard</a>
+                    </div>
+                `
+            };
+
+            // Fire and forget email
+            transporter.sendMail(mailOptions).then(() => console.log('✅ Admin Notification Sent')).catch(err => console.error('❌ SMTP Error:', err.message));
+
+            res.writeHead(201, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, message: 'Inquiry submitted successfully' }));
+        } catch (error) {
+            console.error('CRITICAL Contact API Error:', error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            const fullError = JSON.stringify(error, Object.getOwnPropertyNames(error));
+            res.end(JSON.stringify({ 
+                success: false, 
+                error: 'Submission failed', 
+                debug: JSON.parse(fullError)
+            }));
+        }
+        return;
+    }
+
+    if (path === '/api/v1/test-db' && req.method === 'GET') {
+        try {
+            const [rows] = await db.query('SELECT 1 + 1 AS result');
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, message: 'DB Connection OK', data: rows }));
+        } catch (error) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: error.message }));
+        }
+    }
+
+    /**
+     * API: Admin Reply to Inquiry
+     */
+    if (path === '/api/v1/manage/contacts/reply' && req.method === 'POST') {
+        const cookies = req.headers.cookie || '';
+        const token = cookies.split('; ').find(row => row.startsWith('portfolio_auth_token='))?.split('=')[1];
+        
+        if (!token) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: 'Unauthorized' }));
+        }
+
+        try {
+            jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key');
+            const { id, reply_message } = await parseJSONBody(req);
+
+            if (!id || !reply_message) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: 'ID and Reply Message required' }));
+            }
+
+            // 1. Fetch Contact Details
+            const [contacts] = await db.query('SELECT * FROM contacts WHERE id = ?', [id]);
+            if (contacts.length === 0) {
+                res.writeHead(404, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: 'Contact not found' }));
+            }
+            const contact = contacts[0];
+
+            // 2. Update DB
+            await db.query('UPDATE contacts SET reply = ?, status = "replied" WHERE id = ?', [reply_message, id]);
+
+            // 3. Send Email to Client
+            const mailOptions = {
+                from: `"Samir Ali" <${process.env.SMTP_USER}>`,
+                to: contact.email,
+                subject: `Re: Your Inquiry - Samir Ali Portfolio`,
+                html: `
+                    <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 30px; border-radius: 15px; color: #333;">
+                        <h2 style="color: #38bdf8;">Hello ${contact.name},</h2>
+                        <p>Thank you for reaching out! Regarding your inquiry about <strong>${contact.inquiry_type}</strong>:</p>
+                        <div style="background: #f4f8fa; padding: 20px; border-left: 4px solid #38bdf8; border-radius: 5px; margin: 20px 0; font-style: italic;">
+                            "${contact.message}"
+                        </div>
+                        <p><strong>Response:</strong></p>
+                        <p style="line-height: 1.6;">${reply_message.replace(/\n/g, '<br>')}</p>
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+                        <p style="font-size: 12px; color: #999;">Best regards,<br><strong>Samir Ali</strong><br>Full Stack Developer</p>
+                    </div>
+                `
+            };
+
+            await transporter.sendMail(mailOptions);
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, message: 'Reply sent and recorded' }));
+        } catch (error) {
+            console.error('Admin Reply Error:', error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: false, error: 'Reply failed' }));
+        }
+        return;
     }
 
     // --- API: Section Content (Public & Admin) ---

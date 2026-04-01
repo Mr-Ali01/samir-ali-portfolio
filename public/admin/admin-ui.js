@@ -83,7 +83,7 @@ const AdminUI = {
         const items = [
             { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard', url: 'dashboard.html' },
             { id: 'homepage', label: 'Home Page', icon: 'home', url: 'homepage.html' },
-            { id: 'messages', label: 'Messages', icon: 'message-square', url: 'messages.html', badge: 24 },
+            { id: 'messages', label: 'Messages', icon: 'message-square', url: 'messages.html' },
             { id: 'projects', label: 'Projects', icon: 'briefcase', url: 'projects.html' },
             { id: 'skills', label: 'Skills', icon: 'zap', url: 'skills.html' },
             { id: 'experience', label: 'Experience', icon: 'history', url: 'experience.html' },
@@ -164,10 +164,13 @@ const AdminUI = {
         if (pageId === 'dashboard' && typeof loadDashboardStats === 'function') {
             loadDashboardStats();
         }
+        if (pageId === 'messages' && typeof loadDashboardMessages === 'function') {
+            loadDashboardMessages();
+        }
         if (pageId === 'homepage' && typeof initHomePageEditor === 'function') {
             initHomePageEditor('education');
         }
-        if ((pageId === 'skills' || pageId === 'about' || pageId === 'projects') && typeof initHomePageEditor === 'function') {
+        if ((pageId === 'skills' || pageId === 'about' || pageId === 'projects' || pageId === 'experience') && typeof initHomePageEditor === 'function') {
             initHomePageEditor(pageId);
         }
     }
