@@ -152,28 +152,11 @@ $(document).ready(function () {
                     $('html, body').animate({ scrollTop: 0 }, 500);
                 });
             } else {
-                const err = new Error(result.error || 'Submission failed');
-                err.debug = result.debug;
-                throw err;
+                throw new Error(result.error || 'Submission failed');
             }
         } catch (error) {
             console.error('Submission Error:', error);
-
-            let displayMsg = error.message || 'Something went wrong. Please try again.';
-            let footerContent = '';
-
-            if (error.debug) {
-                console.error('Server Debug Info:', error.debug);
-                const debugStr = JSON.stringify(error.debug, null, 2);
-                footerContent = `<details><summary>View Server Debug Info</summary><pre style="font-size: 10px; text-align: left; background: #f4f4f4; padding: 10px; border-radius: 5px; color: #333; max-height: 200px; overflow: auto;">${debugStr}</pre></details>`;
-            }
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Submission Error',
-                text: displayMsg,
-                footer: footerContent
-            });
+            Swal.fire('Error', error.message || 'Something went wrong. Please try again.', 'error');
 
             // Reset Button
             $btn.html($originalContent);

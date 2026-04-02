@@ -319,9 +319,6 @@ const parseJSONBody = (req) => {
         let body = '';
         req.on('data', chunk => body += chunk.toString());
         req.on('end', () => {
-            console.log('--- Raw Body Received ---');
-            console.log(body);
-            console.log('-------------------------');
             try { resolve(JSON.parse(body)); }
             catch (e) { resolve({}); }
         });
@@ -518,29 +515,22 @@ const requestHandler = async (req, res) => {
      */
     if (path === '/api/v1/contacts' && req.method === 'POST') {
         try {
-            console.log('--- Incoming Contact Request ---');
             const body = await parseJSONBody(req);
-            console.log('Parsed Body:', body);
-
             const { name, email, company, role, inquiry_type, message, budget, timeline } = body;
 
             if (!name || !email || !message) {
-                console.warn('Validation Failed: Missing required fields');
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ success: false, error: 'Name, Email and Message are required' }));
             }
 
             // 1. Save to Database
-            console.log('Inserting into database...');
             const [result] = await db.query(
                 `INSERT INTO contacts (name, email, company, role, inquiry_type, message, budget, timeline) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [name, email, company || null, role || null, inquiry_type || 'general', message, budget || null, timeline || null]
             );
-            console.log('✅ DB Insert Success! ID:', result.insertId);
 
             // 2. Send Notification Email to Admin
-            console.log('Preparing SMTP notification...');
             const adminEmail = process.env.ADMIN_EMAIL || 'sameerali18867@gmail.com';
             const mailOptions = {
                 from: `"Portfolio Alerts" <${process.env.SMTP_USER}>`,
@@ -563,19 +553,14 @@ const requestHandler = async (req, res) => {
             };
 
             // Fire and forget email
-            transporter.sendMail(mailOptions).then(() => console.log('✅ Admin Notification Sent')).catch(err => console.error('❌ SMTP Error:', err.message));
+            transporter.sendMail(mailOptions).catch(err => console.error('SMTP Error:', err.message));
 
             res.writeHead(201, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ success: true, message: 'Inquiry submitted successfully' }));
         } catch (error) {
-            console.error('CRITICAL Contact API Error:', error);
+            console.error('Contact API Error:', error);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            const fullError = JSON.stringify(error, Object.getOwnPropertyNames(error));
-            res.end(JSON.stringify({ 
-                success: false, 
-                error: 'Submission failed', 
-                debug: JSON.parse(fullError)
-            }));
+            res.end(JSON.stringify({ success: false, error: 'Submission failed' }));
         }
         return;
     }

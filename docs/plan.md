@@ -154,9 +154,16 @@ Transition from manual `http` module handling to Express.js. Routes are strictly
 
 **6. `contacts`**
 * `id` (INT, PK, Auto Increment)
-* `name` (VARCHAR)
-* `email` (VARCHAR)
+* `name` (VARCHAR, NOT NULL)
+* `email` (VARCHAR, NOT NULL)
+* `company` (VARCHAR, NULL)
+* `role` (VARCHAR, NULL)
+* `inquiry_type` (VARCHAR, NULL)
 * `message` (TEXT)
+* `budget` (VARCHAR, NULL)
+* `timeline` (VARCHAR, NULL)
+* `status` (ENUM('new', 'read', 'replied') DEFAULT 'new')
+* `reply` (TEXT, NULL)
 * `created_at` (TIMESTAMP)
 
 
@@ -178,9 +185,25 @@ The portfolio now features a fully decoupled, dynamic content management system 
 
 ### 🔧 How to Manage Content
 1. Navigate to `/admin/dashboard.html` and click **Home Page**.
-2. Select the section you wish to edit (e.g., Education).
+2. Select the section you wish to edit (e.g., Education, Experience, Skills, About).
 3. Use **Add Entry** to create new items or the **Edit/Delete** icons on existing cards.
-4. Click **Publish Changes** (optional/placeholder) or simply refresh the homepage to see live updates.
+4. Refresh the homepage to see live updates (automatic re-fetching of dynamic content).
+
+## 📦 Contact & Inquiry Management System
+
+The portfolio now includes a native communication workflow for capturing and managing client inquiries.
+
+### 🏗️ Architecture Flow
+1. **Public Form (`contact.html`)**: A multi-step dynamic form capturing name, email, company, role, inquiry type, budget, and timeline. 
+2. **REST API (`POST /api/v1/contacts`)**: Validates input and persists data to MySQL.
+3. **SMTP Notification (`Nodemailer`)**: Triggers an automated, branded email to the Admin for every new inquiry.
+4. **Admin Inbox (`admin/messages.html`)**: A centralized view for reading and organizing all received inquiries.
+5. **Reply Interface**: Allows Admin to send branded email responses directly from the dashboard, with the conversation history saved in the database.
+
+### 📁 Technical Details
+- **Tables**: `contacts`.
+- **Infrastructure**: Native Node.js SMTP transport via `nodemailer`.
+- **UI Feedback**: Professional state management and library integration (SweetAlert2).
 
 ### Indexing & Optimization Considerations
 * Add Indexes on highly queried identification fields: `email` and `google_id` in the `admins` table to accelerate authentication sequences.
