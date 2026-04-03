@@ -5,20 +5,35 @@
 
 const AdminUI = {
     // 1. Core Config
-    init: function(activePage = 'dashboard') {
-        // Safeguard: Only render shell if containers are empty or don't exist
+    init: function(defaultPage = 'dashboard') {
+        // 1. Detect Active Page from URL for SPA robustness
+        const path = window.location.pathname;
+        const filename = path.split('/').pop();
+        let activePage = defaultPage;
+
+        if (filename && filename.endsWith('.html') && filename !== 'dashboard.html') {
+            activePage = filename.replace('.html', '');
+            // Simple mapping for non-standard IDs
+            if (activePage === 'settings-tab') activePage = 'settings';
+        }
+
+        // 2. Safeguard: Only render shell if containers are empty or don't exist
         const sidebar = $('#admin-sidebar-container');
         if (sidebar.length && sidebar.is(':empty')) {
             this.renderShell(activePage);
         } else if (!sidebar.length) {
-            // Fallback for non-existent containers
-            console.warn('Admin layout containers not found. Normal initialization.');
+            console.warn('Admin layout containers not found.');
         }
 
         this.setupRouting();
         
-        // Initial Page Script Run
-        this.executeBaseScripts(activePage);
+        // 3. Initial Page Script Run or Load Sub-page if needed
+        if (activePage !== 'dashboard') {
+            const url = filename; // The actual file to fetch
+            this.navigate(null, url, activePage);
+        } else {
+            this.executeBaseScripts(activePage);
+        }
     },
 
     // 2. Render Sidebar/Header Shell
@@ -88,7 +103,7 @@ const AdminUI = {
             { id: 'skills', label: 'Skills', icon: 'zap', url: 'skills.html' },
             { id: 'experience', label: 'Experience', icon: 'history', url: 'experience.html' },
             { id: 'about', label: 'About', icon: 'user', url: 'about.html' },
-            { id: 'settings', label: 'Settings', icon: 'settings', url: 'settings.html' }
+            { id: 'settings', label: 'Settings', icon: 'settings', url: 'settings-tab.html' }
         ];
 
         return items.map(item => `
@@ -110,7 +125,8 @@ const AdminUI = {
         // $(`[data-nav-id="${pageId}"]`).addClass('active');
 
         try {
-            const response = await fetch(url);
+            const fetchUrl = url.includes('?') ? `${url}&fragment=true` : `${url}?fragment=true`;
+            const response = await fetch(fetchUrl);
             const html = await response.text();
             
             // Extract the dynamic content (assumes the content is inside .admin-view-content)
@@ -160,6 +176,8 @@ const AdminUI = {
     },
 
     executeBaseScripts: function(pageId) {
+        console.log(`[AdminUI] Executing base scripts for: ${pageId}`);
+        
         // This simulates running $(document).ready() logic for specific views
         if (pageId === 'dashboard' && typeof loadDashboardStats === 'function') {
             loadDashboardStats();
@@ -169,6 +187,15 @@ const AdminUI = {
         }
         if (pageId === 'homepage' && typeof initHomePageEditor === 'function') {
             initHomePageEditor('education');
+        }
+        // Settings Manager Initialization
+        if (pageId === 'settings') {
+            if (typeof initSettingsManager === 'function') {
+                console.log('✅ Settings script found, initializing manager...');
+                initSettingsManager();
+            } else {
+                console.warn('❌ initSettingsManager not found. Ensure settings-tab.js is loaded.');
+            }
         }
         if ((pageId === 'skills' || pageId === 'about' || pageId === 'projects' || pageId === 'experience') && typeof initHomePageEditor === 'function') {
             initHomePageEditor(pageId);

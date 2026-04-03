@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Admin Dashboard</title>
+    <!-- Fallback Styles for standalone view -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dash-bg': '#020617',
+                        'dash-accent': '#38bdf8',
+                        'dash-secondary': '#8b5cf6',
+                        'dash-muted': '#94a3b8',
+                        'dash-text': '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.412.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Sync Settings Tab with Dashboard Branding */
+        .settings-tab-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            color: var(--dash-muted);
+        }
+        .settings-tab-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--dash-text);
+        }
+        .settings-tab-btn.active {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: var(--dash-accent);
+            color: var(--dash-accent);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+        }
+
+        .mode-toggle-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--dash-border);
+            color: var(--dash-muted);
+            transition: all 0.3s ease;
+        }
+        .mode-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .mode-toggle-btn.active {
+            background: var(--dash-accent);
+            border-color: var(--dash-accent);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+        
+        /* Transition fix for radio cards */
+        .peer:checked + div {
+            background: rgba(56, 189, 248, 0.1) !important;
+            border-color: var(--dash-accent) !important;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- This ID is required for AdminUI.navigate to find the content -->
+    <div id="admin-view-content">
+        <div class="p-10 max-w-6xl mx-auto">
+            <!-- Header Section -->
+            <div class="flex items-center justify-between mb-10">
+                <div>
+                    <h1 class="text-4xl font-black tracking-tight mb-2">Global Settings</h1>
+                    <p class="text-dash-muted text-sm font-medium">Control your portfolio experience, system preferences, and communication logic.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="save-all-settings" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-dash-accent to-dash-secondary text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-dash-accent/20 hover:scale-105 transition-all">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-8">
+                <!-- Tabs Navigation -->
+                <div class="col-span-12 lg:col-span-3">
+                    <div class="glass-panel p-4 space-y-2 sticky top-24">
+                        <button class="settings-tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all" data-tab="general">
+                            <i data-lucide="settings-2"></i> <span>General</span>
+                        </button>
+                        <button class="settings-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all" data-tab="ui-ux">
+                            <i data-lucide="palette"></i> <span>UI & Visuals</span>
+                        </button>
+                        <button class="settings-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all" data-tab="communication">
+                            <i data-lucide="mail"></i> <span>Communication</span>
+                        </button>
+                        <button class="settings-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all" data-tab="templates">
+                            <i data-lucide="file-text"></i> <span>Email Templates</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabs Content -->
+                <div class="col-span-12 lg:col-span-9">
+                    <!-- General Tab -->
+                    <div id="settings-general" class="settings-tab-panel space-y-6">
+                        <div class="glass-panel p-8">
+                            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                                <i data-lucide="layout" class="text-dash-accent"></i> System Mode
+                            </h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="experience_mode" value="professional" class="hidden peer" checked>
+                                    <div class="p-6 rounded-2xl border border-white/5 bg-white/[0.03] peer-checked:bg-dash-accent/10 peer-checked:border-dash-accent transition-all">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-black uppercase tracking-widest">Professional</span>
+                                            <i data-lucide="briefcase" class="w-4 h-4"></i>
+                                        </div>
+                                        <p class="text-[10px] text-dash-muted leading-relaxed">Focus on career, skills, and industry achievements. Best for recruiters.</p>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="experience_mode" value="personal" class="hidden peer">
+                                    <div class="p-6 rounded-2xl border border-white/5 bg-white/5 peer-checked:bg-dash-secondary/10 peer-checked:border-dash-secondary transition-all">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-black uppercase tracking-widest">Personal</span>
+                                            <i data-lucide="heart" class="w-4 h-4"></i>
+                                        </div>
+                                        <p class="text-[10px] text-dash-muted leading-relaxed">Showcase projects, hobbies, and personal growth. Best for networking.</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UI & Visuals Tab -->
+                    <div id="settings-ui-ux" class="settings-tab-panel space-y-6 hidden">
+                        <div class="glass-panel p-8">
+                            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                                <i data-lucide="palette" class="text-dash-accent"></i> Design & Motion
+                            </h3>
+                            <div class="space-y-8">
+                                <!-- Theme Selection -->
+                                <div>
+                                    <label class="dash-label">Theme Mode</label>
+                                    <div class="flex gap-4">
+                                        <button class="mode-toggle-btn active" data-setting="theme_mode" data-value="dark">Dark</button>
+                                        <button class="mode-toggle-btn" data-setting="theme_mode" data-value="light">Light</button>
+                                    </div>
+                                </div>
+
+                                <!-- Motion Control -->
+                                <div>
+                                    <label class="dash-label">Motion Level (AOS/Parallax)</label>
+                                    <select name="motion_control" class="dash-input">
+                                        <option value="full">Full Motion (Maximum Polish)</option>
+                                        <option value="reduced">Reduced Motion (Sleek & Fast)</option>
+                                        <option value="none">None (Static Performance)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Visual Effects toggles -->
+                                <div>
+                                    <label class="dash-label">Premium Visual Effects</label>
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+                                            <span class="text-xs font-bold">Glow Effects</span>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" name="effect_glow" class="sr-only peer" checked>
+                                                <div class="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dash-accent"></div>
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+                                            <span class="text-xs font-bold">Glass Blur</span>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" name="effect_blur" class="sr-only peer" checked>
+                                                <div class="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dash-accent"></div>
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+                                            <span class="text-xs font-bold">Soft Shadows</span>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" name="effect_shadows" class="sr-only peer" checked>
+                                                <div class="w-11 h-6 bg-white/[0.05] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-transparent after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dash-accent"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Communication Tab -->
+                    <div id="settings-communication" class="settings-tab-panel space-y-6 hidden">
+                        <div class="glass-panel p-8">
+                            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                                <i data-lucide="server" class="text-dash-accent"></i> SMTP Configuration
+                            </h3>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="col-span-2">
+                                    <label class="dash-label">SMTP Host</label>
+                                    <input type="text" name="smtp_host" class="dash-input" placeholder="smtp.gmail.com">
+                                </div>
+                                <div>
+                                    <label class="dash-label">SMTP Port</label>
+                                    <input type="number" name="smtp_port" class="dash-input" placeholder="465">
+                                </div>
+                                <div>
+                                    <label class="dash-label">Email ID</label>
+                                    <input type="email" name="smtp_user" class="dash-input" placeholder="you@domain.com">
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="dash-label">App Password</label>
+                                    <input type="password" name="smtp_pass" class="dash-input" placeholder="••••••••••••••••">
+                                    <p class="text-[9px] text-dash-muted mt-2 italic px-1">Note: This is stored securely. Never share your primary password.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-8">
+                            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                                <i data-lucide="zap" class="text-dash-accent"></i> Automation
+                            </h3>
+                            <div class="flex items-center justify-between p-6 bg-white/5 rounded-2xl">
+                                <div>
+                                    <h4 class="font-bold text-sm">Auto-Reply for Inquiries</h4>
+                                    <p class="text-[10px] text-dash-muted">Send an instant confirmation email to users after they submit the contact form.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="auto_reply" class="sr-only peer">
+                                    <div class="w-14 h-7 bg-white/[0.05] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-transparent after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dash-accent"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Templates Tab -->
+                    <div id="settings-templates" class="settings-tab-panel space-y-6 hidden">
+                        <div class="glass-panel p-8">
+                            <div class="flex items-center justify-between mb-8">
+                                <h3 class="text-lg font-bold flex items-center gap-2">
+                                    <i data-lucide="file-text" class="text-dash-accent"></i> Email Templates
+                                </h3>
+                                <select id="template-selector" class="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-bold outline-none">
+                                    <option value="inquiry_ack">Public: Inquiry Acknowledgment</option>
+                                    <option value="admin_notify">Admin: New Inquiry Alert</option>
+                                </select>
+                            </div>
+
+                            <div id="template-editor-container" class="space-y-6">
+                                <div>
+                                    <label class="dash-label">Email Subject</label>
+                                    <input type="text" id="template-subject" class="dash-input" placeholder="Subject line...">
+                                </div>
+                                <div>
+                                    <label class="dash-label">HTML Body Content</label>
+                                    <textarea id="template-body" class="dash-input min-h-[300px] font-mono text-xs" placeholder="HTML or Text content..."></textarea>
+                                </div>
+                                <div class="p-4 bg-dash-accent/5 border border-dash-accent/20 rounded-xl">
+                                    <h5 class="text-[10px] font-black uppercase tracking-widest text-dash-accent mb-2">Available Placeholders</h5>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="tag-mini">{{name}}</span>
+                                        <span class="tag-mini">{{email}}</span>
+                                        <span class="tag-mini">{{message}}</span>
+                                        <span class="tag-mini">{{inquiry_type}}</span>
+                                        <span class="tag-mini">{{date}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Settings Script -->
+    <script src="settings-tab.js"></script>
+</body>
+</html>

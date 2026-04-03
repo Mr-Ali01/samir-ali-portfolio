@@ -1,24 +1,80 @@
 $(document).ready(function () {
-    // 1. Dual-Mode Navigation Logic
-    const initModeNavigation = () => {
-        const mode = localStorage.getItem('experienceMode') || 'professional';
-        const isPersonal = mode === 'personal';
-        const brandingLink = $('.group[href="index.html"], .group[href="personal.html"]');
-        const backToHubLink = $('a:contains("Back to Hub")');
+    // 0. Global Settings Manager
+    const GlobalSettings = {
+        data: {},
+        init: async function() {
+            try {
+                // 1. Fetch from API
+                const res = await fetch('/api/v1/settings');
+                const result = await res.json();
+                if (result.success) {
+                    this.data = result.settings;
+                    this.applySettings();
+                } else {
+                    // Fallback to localStorage if API fails
+                    this.loadFromStorage();
+                    this.applySettings();
+                }
+            } catch (e) {
+                this.loadFromStorage();
+                this.applySettings();
+            }
+        },
+        loadFromStorage: function() {
+            this.data = {
+                experience_mode: localStorage.getItem('experienceMode') || 'professional',
+                theme_mode: localStorage.getItem('themeMode') || 'dark',
+                motion_control: localStorage.getItem('motionControl') || 'full',
+                visual_effects: JSON.parse(localStorage.getItem('visualEffects') || '{"glow":true,"blur":true,"shadows":true}')
+            };
+        },
+        applySettings: function() {
+            const s = this.data;
+            if (!s) return;
 
-        if (isPersonal) {
-            $('.nav-link-pro').addClass('hidden');
-            $('.nav-link-per').removeClass('hidden');
-            brandingLink.attr('href', 'personal.html');
-            backToHubLink.attr('href', 'personal.html');
-        } else {
-            $('.nav-link-pro').removeClass('hidden');
-            $('.nav-link-per').addClass('hidden');
-            brandingLink.attr('href', 'index.html');
-            backToHubLink.attr('href', 'index.html');
+            // A. Experience Mode
+            localStorage.setItem('experienceMode', s.experience_mode);
+            this.applyExperienceMode(s.experience_mode);
+
+            // B. Theme Mode
+            document.documentElement.setAttribute('data-theme', s.theme_mode);
+            localStorage.setItem('themeMode', s.theme_mode);
+
+            // C. Motion Control
+            document.documentElement.setAttribute('data-motion', s.motion_control);
+            if (s.motion_control === 'none' || s.motion_control === 'reduced') {
+                if (typeof AOS !== 'undefined') AOS.refresh();
+            }
+
+            // D. Visual Effects
+            if (s.visual_effects) {
+                const body = $('body');
+                s.visual_effects.glow ? body.removeClass('no-glow') : body.addClass('no-glow');
+                s.visual_effects.blur ? body.removeClass('no-blur') : body.addClass('no-blur');
+                s.visual_effects.shadows ? body.removeClass('no-shadows') : body.addClass('no-shadows');
+            }
+        },
+        applyExperienceMode: function(mode) {
+            const isPersonal = mode === 'personal';
+            const brandingLink = $('.group[href="index.html"], .group[href="personal.html"]');
+            const backToHubLink = $('a:contains("Back to Hub")');
+
+            if (isPersonal) {
+                $('.nav-link-pro').addClass('hidden');
+                $('.nav-link-per').removeClass('hidden');
+                brandingLink.attr('href', 'personal.html');
+                backToHubLink.attr('href', 'personal.html');
+            } else {
+                $('.nav-link-pro').removeClass('hidden');
+                $('.nav-link-per').addClass('hidden');
+                brandingLink.attr('href', 'index.html');
+                backToHubLink.attr('href', 'index.html');
+            }
         }
     };
-    initModeNavigation();
+
+    // Run Settings Initialization
+    GlobalSettings.init();
 
     // Initialize Lucide Icons
     lucide.createIcons();

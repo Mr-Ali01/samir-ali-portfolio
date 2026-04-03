@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-:root {
+:root, [data-theme="light"] {
     /* Light Theme (Default - Glassmorphism) */
     --theme-bg-start: #f8fafc;
     --theme-bg-mid: #e0f2fe;
     --theme-bg-end: #bae6fd;
     
-    --theme-accent-primary: #60A5FA;   /* Soft Blue */
-    --theme-accent-secondary: #818cf8; /* Light Purple tint */
-    --theme-glow: #38BDF8;
+    --theme-accent-primary: #3b82f6;   /* Richer blue for light mode */
+    --theme-accent-secondary: #6366f1; 
+    --theme-glow: rgba(56, 189, 248, 0.3);
     
     --theme-card-bg: rgba(255, 255, 255, 0.7);
     --theme-card-hover: rgba(255, 255, 255, 0.9);
@@ -19,7 +19,7 @@
     --theme-text-secondary: #475569;
 }
 
-html.dark {
+[data-theme="dark"] {
     /* Dark Theme (Neon Gradient + Glow UI) */
     --theme-bg-start: #0F172A;
     --theme-bg-mid: #1E1B4B;
@@ -27,7 +27,7 @@ html.dark {
     
     --theme-accent-primary: #38BDF8;   /* Soft Blue */
     --theme-accent-secondary: #8B5CF6; /* Purple Glow */
-    --theme-glow: #22C55E;             /* Optional Green Glow */
+    --theme-glow: #38BDF8;
     
     --theme-card-bg: rgba(255, 255, 255, 0.05);
     --theme-card-hover: rgba(255, 255, 255, 0.09);
@@ -35,6 +35,22 @@ html.dark {
     
     --theme-text-primary: #FFFFFF;
     --theme-text-secondary: #CBD5F5;
+}
+
+/* Visual Effect Overrides */
+.no-glow .neon-glow, .no-glow [class*="shadow-"], .no-glow .glass-panel:hover {
+    box-shadow: none !important;
+}
+
+.no-blur .glass-panel, .no-blur .backdrop-blur-md, .no-blur [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--theme-bg-start) !important;
+    opacity: 0.95;
+}
+
+.no-shadows .shadow-lg, .no-shadows .shadow-xl, .no-shadows [class*="shadow-"] {
+    box-shadow: none !important;
 }
 
 body {

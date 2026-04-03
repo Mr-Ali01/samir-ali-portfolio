@@ -289,6 +289,53 @@ const PORT = process.env.PORT || 5000;
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         `);
 
+        // --- MIGRATION: Ensure settings table exists ---
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS settings (
+                setting_key VARCHAR(100) PRIMARY KEY,
+                setting_value TEXT,
+                category VARCHAR(50),
+                is_secret BOOLEAN DEFAULT FALSE,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        `);
+
+        // Seed initial settings if empty
+        const [settingsRows] = await db.query("SELECT setting_key FROM settings");
+        if (settingsRows.length === 0) {
+            const initialSettings = [
+                ['experience_mode', 'professional', 'system', false],
+                ['theme_mode', 'dark', 'ui', false],
+                ['motion_control', 'full', 'ui', false],
+                ['visual_effects', JSON.stringify({ glow: true, blur: true, shadows: true }), 'ui', false],
+                ['auto_reply', 'off', 'communication', false],
+                ['default_communication', 'email', 'communication', false]
+            ];
+            for (const s of initialSettings) {
+                await db.query("INSERT INTO settings (setting_key, setting_value, category, is_secret) VALUES (?, ?, ?, ?)", s);
+            }
+        }
+
+        // --- MIGRATION: Ensure email_templates table exists ---
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS email_templates (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) UNIQUE,
+                subject VARCHAR(255),
+                body TEXT,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        `);
+
+        // Seed initial templates if empty
+        const [templateRows] = await db.query("SELECT id FROM email_templates");
+        if (templateRows.length === 0) {
+            await db.query(`INSERT INTO email_templates (name, subject, body) VALUES 
+                ('inquiry_ack', 'Thank you for reaching out!', 'Hi {{name}},\\n\\nThank you for your inquiry regarding {{inquiry_type}}. I have received your message and will review it shortly.\\n\\nBest regards,\\nSamir Ali'),
+                ('admin_notify', '🚀 New Portfolio Inquiry: {{inquiry_type}}', 'You have a new inquiry from {{name}} ({{email}}).\\n\\nMessage: {{message}}')
+            `);
+        }
+
     } catch (e) {
         console.warn('Migration Skip/Failed:', e.message);
     }
@@ -310,6 +357,51 @@ const transporter = nodemailer.createTransport({
         pass: process.env.SMTP_PASS
     }
 });
+
+/**
+ * Global Helpers for Settings & Templates
+ */
+const getSetting = async (key, defaultValue = null) => {
+    try {
+        const [rows] = await db.query("SELECT setting_value FROM settings WHERE setting_key = ?", [key]);
+        if (rows.length === 0) return defaultValue;
+        try { return JSON.parse(rows[0].setting_value); }
+        catch (e) { return rows[0].setting_value; }
+    } catch (e) { return defaultValue; }
+};
+
+const getTemplate = async (name) => {
+    try {
+        const [rows] = await db.query("SELECT subject, body FROM email_templates WHERE name = ?", [name]);
+        if (rows.length === 0) return null;
+        return { subject: rows[0].subject, body: rows[0].body };
+    } catch (e) { return null; }
+};
+
+const replacePlaceholders = (text, data) => {
+    let result = text;
+    Object.keys(data).forEach(key => {
+        const regex = new RegExp(`{{${key}}}`, 'g');
+        result = result.replace(regex, data[key] || '');
+    });
+    return result;
+};
+
+const getTransporter = async () => {
+    const smtpConfig = await getSetting('smtp_config');
+    if (smtpConfig && smtpConfig.user && smtpConfig.pass) {
+        return nodemailer.createTransport({
+            host: smtpConfig.host || 'smtp.gmail.com',
+            port: smtpConfig.port || 465,
+            secure: smtpConfig.secure !== undefined ? smtpConfig.secure : true,
+            auth: {
+                user: smtpConfig.user,
+                pass: smtpConfig.pass
+            }
+        });
+    }
+    return transporter; // Fallback to .env-based transporter
+};
 
 /**
  * Utility: Parse JSON Request Body (Native Node.js)
@@ -515,8 +607,8 @@ const requestHandler = async (req, res) => {
      */
     if (path === '/api/v1/contacts' && req.method === 'POST') {
         try {
-            const body = await parseJSONBody(req);
-            const { name, email, company, role, inquiry_type, message, budget, timeline } = body;
+            const rawBody = await parseJSONBody(req);
+            const { name, email, company, role, inquiry_type, message, budget, timeline } = rawBody;
 
             if (!name || !email || !message) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -524,36 +616,59 @@ const requestHandler = async (req, res) => {
             }
 
             // 1. Save to Database
-            const [result] = await db.query(
+            await db.query(
                 `INSERT INTO contacts (name, email, company, role, inquiry_type, message, budget, timeline) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [name, email, company || null, role || null, inquiry_type || 'general', message, budget || null, timeline || null]
             );
 
-            // 2. Send Notification Email to Admin
-            const adminEmail = process.env.ADMIN_EMAIL || 'sameerali18867@gmail.com';
-            const mailOptions = {
-                from: `"Portfolio Alerts" <${process.env.SMTP_USER}>`,
-                to: adminEmail,
-                subject: `🚀 New Inquiry: ${inquiry_type} from ${name}`,
-                html: `
-                    <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
-                        <h2 style="color: #38bdf8;">New Portfolio Inquiry</h2>
-                        <p><strong>Name:</strong> ${name}</p>
-                        <p><strong>Email:</strong> ${email}</p>
-                        <p><strong>Type:</strong> ${inquiry_type}</p>
-                        <p><strong>Company:</strong> ${company || 'N/A'} (${role || 'N/A'})</p>
-                        <p><strong>Budget/Timeline:</strong> ${budget || 'N/A'} / ${timeline || 'N/A'}</p>
-                        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-                        <p><strong>Message:</strong></p>
-                        <p style="white-space: pre-wrap; background: #f9f9f9; padding: 15px; border-radius: 5px;">${message}</p>
-                        <a href="${process.env.ALLOWED_ORIGIN_URL}/admin/messages.html" style="display: inline-block; background: #38bdf8; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 20px;">View in Dashboard</a>
-                    </div>
-                `
+            // 2. Dynamic Communication Logic
+            const settings = {
+                auto_reply: await getSetting('auto_reply', 'off'),
+                admin_email: process.env.ADMIN_EMAIL || 'sameerali18867@gmail.com'
             };
 
-            // Fire and forget email
-            transporter.sendMail(mailOptions).catch(err => console.error('SMTP Error:', err.message));
+            const data = { name, email, inquiry_type, message, date: new Date().toLocaleDateString() };
+
+            // A. Admin Notification
+            const adminTpl = await getTemplate('admin_notify');
+            const dynamicTransporter = await getTransporter();
+            if (adminTpl) {
+                const subject = replacePlaceholders(adminTpl.subject, data);
+                const body = replacePlaceholders(adminTpl.body, data);
+                
+                dynamicTransporter.sendMail({
+                    from: `"Portfolio Alert" <${process.env.SMTP_USER}>`,
+                    to: settings.admin_email,
+                    subject: subject,
+                    html: `<div style="font-family:sans-serif; padding:20px; border:1px solid #eee; border-radius:10px;">
+                            <h2 style="color:#3b82f6;">New Inquiry Received</h2>
+                            <p>${body.replace(/\n/g, '<br>')}</p>
+                            <hr>
+                            <p><small>View in Dashboard: <a href="${process.env.ALLOWED_ORIGIN_URL}/admin/messages.html">Admin Console</a></small></p>
+                           </div>`
+                }).catch(err => console.error('Admin Notify Error:', err.message));
+            }
+
+            // B. Auto-Reply to User
+            if (settings.auto_reply === 'on') {
+                const userTpl = await getTemplate('inquiry_ack');
+                if (userTpl) {
+                    const subject = replacePlaceholders(userTpl.subject, data);
+                    const body = replacePlaceholders(userTpl.body, data);
+
+                    dynamicTransporter.sendMail({
+                        from: `"Samir Ali" <${process.env.SMTP_USER}>`,
+                        to: email,
+                        subject: subject,
+                        html: `<div style="font-family:sans-serif; padding:20px; border:1px solid #eee; border-radius:10px;">
+                                ${body.replace(/\n/g, '<br>')}
+                                <br><br>
+                                <p><strong>Samir Ali</strong><br>Full Stack Developer</p>
+                               </div>`
+                    }).catch(err => console.error('Auto-Reply Error:', err.message));
+                }
+            }
 
             res.writeHead(201, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ success: true, message: 'Inquiry submitted successfully' }));
@@ -570,6 +685,102 @@ const requestHandler = async (req, res) => {
             const [rows] = await db.query('SELECT 1 + 1 AS result');
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ success: true, message: 'DB Connection OK', data: rows }));
+        } catch (error) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: error.message }));
+        }
+    }
+
+    /**
+     * API: Get Global Settings
+     */
+    if (path === '/api/v1/settings' && req.method === 'GET') {
+        try {
+            const [rows] = await db.query("SELECT setting_key, setting_value, category FROM settings WHERE is_secret = FALSE");
+            const settings = {};
+            rows.forEach(r => {
+                try { settings[r.setting_key] = JSON.parse(r.setting_value); }
+                catch(e) { settings[r.setting_key] = r.setting_value; }
+            });
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, settings }));
+        } catch (error) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: error.message }));
+        }
+    }
+
+    /**
+     * API: Update Global Settings (Admin Protected)
+     */
+    if (path === '/api/v1/settings/update' && req.method === 'POST') {
+        const cookies = req.headers.cookie || '';
+        const token = cookies.split('; ').find(row => row.startsWith('portfolio_auth_token='))?.split('=')[1];
+        if (!token) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: 'Unauthorized' }));
+        }
+
+        try {
+            jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key');
+            const { key, value } = await parseJSONBody(req);
+            if (!key) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: 'Setting key required' }));
+            }
+
+            const stringValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
+            await db.query("INSERT INTO settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = ?", [key, stringValue, stringValue]);
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, message: `Setting ${key} updated` }));
+        } catch (error) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: error.message }));
+        }
+    }
+
+    /**
+     * API: Manage Email Templates
+     */
+    if (path === '/api/v1/manage/email-templates' && req.method === 'GET') {
+        const cookies = req.headers.cookie || '';
+        const token = cookies.split('; ').find(row => row.startsWith('portfolio_auth_token='))?.split('=')[1];
+        if (!token) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: 'Unauthorized' }));
+        }
+
+        try {
+            jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key');
+            const [rows] = await db.query("SELECT * FROM email_templates");
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, templates: rows }));
+        } catch (error) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: error.message }));
+        }
+    }
+
+    if (path === '/api/v1/manage/email-templates/update' && req.method === 'POST') {
+        const cookies = req.headers.cookie || '';
+        const token = cookies.split('; ').find(row => row.startsWith('portfolio_auth_token='))?.split('=')[1];
+        if (!token) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: false, error: 'Unauthorized' }));
+        }
+
+        try {
+            jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key');
+            const { id, subject, body } = await parseJSONBody(req);
+            if (!id || !subject || !body) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: 'ID, Subject, and Body required' }));
+            }
+
+            await db.query("UPDATE email_templates SET subject = ?, body = ? WHERE id = ?", [subject, body, id]);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, message: 'Template updated successfully' }));
         } catch (error) {
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ success: false, error: error.message }));
@@ -761,11 +972,23 @@ const requestHandler = async (req, res) => {
     }
 
     // 3. Serve Frontend / Static Assets (e.g. index.html, style.css, JS files) natively
-    if (req.method === 'GET' && !path.startsWith('/api')) {
+    if ((req.method === 'GET' || req.method === 'HEAD') && !path.startsWith('/api')) {
         // Core Logic: Track visit only on main page loads (ignore assets like .css/js if possible)
         const isPage = path === '/' || path.endsWith('.html');
         if (isPage) await trackVisitor();
         
+        // Admin SPA Routing: If accessing an admin sub-page directly, serve the dashboard shell
+        // EXCEPT if it's an AJAX fragment request (fragment=true)
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        if (parsedUrl.pathname.startsWith('/admin/') && 
+            parsedUrl.pathname.endsWith('.html') && 
+            parsedUrl.pathname !== '/admin/dashboard.html' &&
+            !parsedUrl.searchParams.get('fragment')) {
+            
+            console.log(`[SPA Redirect] Redirecting ${parsedUrl.pathname} to dashboard shell`);
+            return serveStaticFile(res, '/admin/dashboard.html');
+        }
+
         return serveStaticFile(res, path);
     }
 
