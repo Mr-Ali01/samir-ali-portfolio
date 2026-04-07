@@ -1,15 +1,34 @@
 /* Dashboard Custom Styles - Samir Ali Admin */
 
 :root {
-    /* Theme Tokens Managed by theme-manager.js */
+    /* Default (Dark Context) */
     --dash-bg: #020617;
     --dash-accent: #38bdf8;
+    --dash-accentGlow: rgba(56, 189, 248, 0.4);
     --dash-secondary: #8b5cf6;
     --dash-sidebar: rgba(15, 23, 42, 0.8);
     --dash-border: rgba(255, 255, 255, 0.08);
     --dash-text: #f8fafc;
     --dash-muted: #94a3b8;
 }
+
+[data-theme="light"] {
+    --dash-bg: #f8fafc;
+    --dash-accent: #0284c7;
+    --dash-accentGlow: rgba(2, 132, 199, 0.2);
+    --dash-secondary: #7c3aed;
+    --dash-sidebar: rgba(255, 255, 255, 0.9);
+    --dash-border: rgba(0, 0, 0, 0.05);
+    --dash-text: #0f172a;
+    --dash-muted: #64748b;
+}
+
+/* Icon Toggle Transitions (Same as Portfolio) */
+#admin-theme-toggle #theme-icon-sun,
+#admin-theme-toggle #theme-icon-moon {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 
 body {
     background: var(--dash-bg);

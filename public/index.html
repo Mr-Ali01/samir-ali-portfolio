@@ -9,11 +9,9 @@
     <link rel="stylesheet" href="css/tailwind.css">
     <script>
         // Apply theme early on load to prevent flash
-        if (localStorage.getItem('portfolio-theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+        document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+        document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 
     <!-- Local Libraries -->
@@ -64,24 +62,22 @@
 
             <div class="flex items-center space-x-2 md:space-x-4">
                 <button id="theme-toggle"
-                    class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden">
+                    class="relative w-10 h-10 text-theme-textSecondary hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 overflow-hidden">
                     <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i
                             data-lucide="sun" class="w-5 h-5"></i></span>
                     <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i
                             data-lucide="moon" class="w-5 h-5"></i></span>
                 </button>
                 <a href="settings.html"
-                    class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden"
+                    class="relative w-10 h-10 text-theme-textSecondary hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 overflow-hidden"
                     title="Settings">
                     <i data-lucide="settings" class="w-5 h-5"></i>
                 </a>
-                <div class="hidden md:block">
-                    <a href="contact.html"
-                        class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
-                </div>
+
+
 
                 <!-- Mobile Toggle -->
-                <button class="md:hidden text-white hover:text-theme-primary" id="mobile-menu-btn">
+                <button class="md:hidden text-theme-textPrimary hover:text-theme-primary" id="mobile-menu-btn">
                     <i data-lucide="menu"></i>
                 </button>
             </div>
@@ -113,7 +109,8 @@
                         </h1>
                     </div>
 
-                    <p id="hero-description" class="text-lg md:text-xl text-theme-textSecondary leading-relaxed font-medium">
+                    <p id="hero-description"
+                        class="text-lg md:text-xl text-theme-textSecondary leading-relaxed font-medium">
                         Full Stack Developer building <span class="text-theme-textPrimary font-bold">fast, beautiful,
                             and purposeful</span> web experiences.
                     </p>
@@ -131,7 +128,8 @@
                         </a>
                         <a href="#" id="hero-btn-3" style="padding: 10px;"
                             class="bg-white/5 text-theme-textPrimary px-11 py-4 rounded-xl text-xs font-black hover:bg-white/10 transition-all">
-                            <span id="hero-btn-3-text">Resume</span> <span class="ml-2 w-2 h-2 bg-theme-primary rounded-full inline-block animate-pulse"></span>
+                            <span id="hero-btn-3-text">Resume</span> <span
+                                class="ml-2 w-2 h-2 bg-theme-primary rounded-full inline-block animate-pulse"></span>
                         </a>
                     </div>
 
@@ -139,19 +137,22 @@
                     <div class="flex flex-wrap items-center pt-8 mt-10 border-t border-theme-textPrimary/10 px-4"
                         style="display: flex; column-gap: 64px; row-gap: 24px; border-top: none;">
                         <div class="flex flex-col items-start">
-                            <div id="hero-stat-val-1" class="text-3xl md:text-3xl font-black text-theme-textPrimary tracking-tight">2+</div>
+                            <div id="hero-stat-val-1"
+                                class="text-3xl md:text-3xl font-black text-theme-textPrimary tracking-tight">2+</div>
                             <div id="hero-stat-lab-1"
                                 class="text-theme-textSecondary text-[10px] font-black uppercase tracking-[0.2em] mt-1 opacity-60 whitespace-nowrap">
                                 Years coding</div>
                         </div>
                         <div class="flex flex-col items-start">
-                            <div id="hero-stat-val-2" class="text-3xl md:text-3xl font-black text-theme-textPrimary tracking-tight">15+</div>
+                            <div id="hero-stat-val-2"
+                                class="text-3xl md:text-3xl font-black text-theme-textPrimary tracking-tight">15+</div>
                             <div id="hero-stat-lab-2"
                                 class="text-theme-textSecondary text-[10px] font-black uppercase tracking-[0.2em] mt-1 opacity-60 whitespace-nowrap">
                                 Projects built</div>
                         </div>
                         <div class="flex flex-col items-start">
-                            <div id="hero-stat-val-3" class="text-3xl md:text-3xl font-black text-theme-textPrimary tracking-tight">100%
+                            <div id="hero-stat-val-3"
+                                class="text-3xl md:text-3xl font-black text-theme-textPrimary tracking-tight">100%
                             </div>
                             <div id="hero-stat-lab-3"
                                 class="text-theme-textSecondary text-[10px] font-black uppercase tracking-[0.2em] mt-1 opacity-60 whitespace-nowrap">
@@ -174,7 +175,8 @@
                         <div
                             class="relative rounded-[2.5rem] overflow-hidden shadow-[0_25px_60px_-15px_rgba(56,189,248,0.3)] border border-white/10 group-hover:scale-[1.02] transition-all duration-500">
                             <!-- Controlled Responsive Image Height -->
-                            <img id="hero-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
+                            <img id="hero-img"
+                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
                                 alt="Samir Ali"
                                 class="w-auto object-contain hover:scale-[1.05] transition-transform duration-700 pointer-events-none"
                                 style="max-height: 350px;">
@@ -193,25 +195,23 @@
     <!-- About Me & Services Section -->
     <section id="about" class="relative z-10 break-words">
         <div class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-start">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
 
                 <!-- Left Side: About Me Content -->
                 <div class="w-full">
-                    <!-- <div class="inline-flex items-center space-x-2 mb-4">
-                        <span class="w-8 h-[2px] bg-theme-primary"></span>
-                        <span class="text-theme-primary font-bold uppercase tracking-wider text-sm">About Me</span>
-                    </div> -->
                     <h2 class="text-4xl lg:text-5xl font-extrabold mb-6 text-theme-textPrimary leading-tight">
                         <span id="about-title" class="text-gradient">About Me</span>
                     </h2>
-                    <div id="about-description" class="text-theme-textSecondary leading-relaxed text-lg mb-8 space-y-4">
+                    <div id="about-description" class="text-theme-textSecondary leading-relaxed text-base md:text-lg mb-8 space-y-4">
                         <p>
-                            I am a passionate and innovative developer dedicated to crafting immersive digital experiences.
+                            I am a passionate and innovative developer dedicated to crafting immersive digital
+                            experiences.
                             With a strong foundation in core web technologies, I continually strive to deliver seamless,
                             scalable, and beautifully designed user interfaces.
                         </p>
                         <p>
-                            I provide modern web development solutions focused on performance, scalability, and precise user
+                            I provide modern web development solutions focused on performance, scalability, and precise
+                            user
                             experience. From simple static landing sites to complex full-stack web applications, I help
                             bring ideas to life with clean and efficient code.
                         </p>
@@ -225,9 +225,8 @@
                 </div>
 
                 <!-- Right Side: 2x2 Service Cards -->
-                <div class="w-full mt-12 md:mt-0">
-                    <div class="grid grid-cols-2 gap-6 relative"
-                        style="display: grid; grid-template-columns: repeat(2, 1fr);">
+                <div class="w-full">
+                    <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 relative">
                         <!-- Decorative glow -->
                         <div
                             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-theme-primary/10 blur-[100px] rounded-full pointer-events-none z-[-1]">
@@ -235,84 +234,84 @@
 
                         <!-- Card 1 -->
                         <div
-                            class="glass-panel p-5 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            class="glass-panel p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
                             <div
                                 class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="database" class="w-6 h-6"></i>
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-3 sm:mb-4 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="database" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                             </div>
 
                             <h3
-                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-primary transition-colors line-clamp-2">
+                                class="text-base sm:text-lg font-bold mb-1 sm:mb-2 text-theme-textPrimary group-hover:text-theme-primary transition-colors line-clamp-2">
                                 Full-Stack Development
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                            <p class="text-theme-textSecondary text-xs sm:text-sm leading-relaxed mt-auto">
                                 Custom scalable web applications.
                             </p>
                         </div>
 
                         <!-- Card 2 -->
                         <div
-                            class="glass-panel p-5 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            class="glass-panel p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
                             <div
                                 class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="layers" class="w-6 h-6"></i>
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-3 sm:mb-4 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="layers" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                             </div>
 
                             <h3
-                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-secondary transition-colors line-clamp-2">
+                                class="text-base sm:text-lg font-bold mb-1 sm:mb-2 text-theme-textPrimary group-hover:text-theme-secondary transition-colors line-clamp-2">
                                 Custom Theme Websites
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                            <p class="text-theme-textSecondary text-xs sm:text-sm leading-relaxed mt-auto">
                                 Bespoke personalized website themes.
                             </p>
                         </div>
 
                         <!-- Card 3 -->
                         <div
-                            class="glass-panel p-5 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            class="glass-panel p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
                             <div
                                 class="absolute inset-0 bg-gradient-to-br from-theme-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="file-code-2" class="w-6 h-6"></i>
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-3 sm:mb-4 shadow-inner border border-white/10 text-theme-primary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="file-code-2" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                             </div>
 
                             <h3
-                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-primary transition-colors line-clamp-2">
+                                class="text-base sm:text-lg font-bold mb-1 sm:mb-2 text-theme-textPrimary group-hover:text-theme-primary transition-colors line-clamp-2">
                                 Static Website Development
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                            <p class="text-theme-textSecondary text-xs sm:text-sm leading-relaxed mt-auto">
                                 Fast, lightweight HTML sites.
                             </p>
                         </div>
 
                         <!-- Card 4 -->
                         <div
-                            class="glass-panel p-5 rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
+                            class="glass-panel p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl w-full h-full flex flex-col group hover:scale-[1.03] transition-all duration-300 relative overflow-hidden shadow-lg hover:shadow-2xl">
                             <div
                                 class="absolute inset-0 bg-gradient-to-br from-theme-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
 
                             <div
-                                class="w-12 h-12 rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-4 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
-                                <i data-lucide="smartphone" class="w-6 h-6"></i>
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/5 dark:bg-[#0f172a] flex items-center justify-center mb-3 sm:mb-4 shadow-inner border border-white/10 text-theme-secondary group-hover:neon-glow transition-all duration-300">
+                                <i data-lucide="smartphone" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                             </div>
 
                             <h3
-                                class="text-lg font-bold mb-2 text-theme-textPrimary group-hover:text-theme-secondary transition-colors line-clamp-2">
+                                class="text-base sm:text-lg font-bold mb-1 sm:mb-2 text-theme-textPrimary group-hover:text-theme-secondary transition-colors line-clamp-2">
                                 Responsive Web Design
                             </h3>
-                            <p class="text-theme-textSecondary text-sm leading-relaxed mt-auto">
+                            <p class="text-theme-textSecondary text-xs sm:text-sm leading-relaxed mt-auto">
                                 Flawless cross-device responsive performance.
                             </p>
                         </div>

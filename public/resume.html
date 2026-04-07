@@ -9,11 +9,9 @@
     <link rel="stylesheet" href="css/tailwind.css">
     <script>
         // Apply theme early on load to prevent flash
-        if (localStorage.getItem('portfolio-theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+        document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+        document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
     
     <!-- Local Libraries -->
@@ -56,9 +54,8 @@
                 <a href="settings.html" class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden" title="Settings">
                     <i data-lucide="settings" class="w-5 h-5"></i>
                 </a>
-                <div class="hidden md:block">
-                    <a href="contact.html" class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
-                </div>
+                </a>
+
                 <button class="md:hidden text-theme-textPrimary" id="mobile-menu-btn">
                     <i data-lucide="menu"></i>
                 </button>

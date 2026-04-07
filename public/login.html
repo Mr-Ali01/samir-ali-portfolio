@@ -10,12 +10,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-        // Apply theme early on load
-        if (localStorage.getItem('portfolio-theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        // Apply theme early on load to prevent flash
+        const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+        document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+        document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
     <script>
         tailwind.config = {

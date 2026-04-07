@@ -34,11 +34,8 @@ $(document).ready(function() {
         if (group === 'theme') {
             localStorage.setItem('portfolio-theme', value);
             // Apply theme immediately
-            if (value === 'dark') {
-                $('html').addClass('dark');
-            } else {
-                $('html').removeClass('dark');
-            }
+            $('html').toggleClass('dark', value === 'dark');
+            $('html').attr('data-theme', value);
         } else if (group === 'context') {
             localStorage.setItem('experienceMode', value);
             // Dynamic Redirect based on selection

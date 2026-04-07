@@ -3,27 +3,31 @@ $(document).ready(function () {
     const GlobalSettings = {
         data: {},
         init: async function() {
+            // 0. Load local preferences first as baseline
+            this.loadFromStorage();
+            this.applySettings();
+
             try {
                 // 1. Fetch from API
                 const res = await fetch('/api/v1/settings');
                 const result = await res.json();
                 if (result.success) {
-                    this.data = result.settings;
-                    this.applySettings();
-                } else {
-                    // Fallback to localStorage if API fails
-                    this.loadFromStorage();
+                    // 2. Merge API settings, but PRESERVE user's local theme choice
+                    const localTheme = localStorage.getItem('portfolio-theme');
+                    this.data = {
+                        ...result.settings,
+                        theme_mode: localTheme || result.settings.theme_mode
+                    };
                     this.applySettings();
                 }
             } catch (e) {
-                this.loadFromStorage();
-                this.applySettings();
+                console.warn('Settings fetch failed, using local storage.');
             }
         },
         loadFromStorage: function() {
             this.data = {
                 experience_mode: localStorage.getItem('experienceMode') || 'professional',
-                theme_mode: localStorage.getItem('themeMode') || 'dark',
+                theme_mode: localStorage.getItem('portfolio-theme') || localStorage.getItem('themeMode') || 'dark',
                 motion_control: localStorage.getItem('motionControl') || 'full',
                 visual_effects: JSON.parse(localStorage.getItem('visualEffects') || '{"glow":true,"blur":true,"shadows":true}')
             };
@@ -38,7 +42,9 @@ $(document).ready(function () {
 
             // B. Theme Mode
             document.documentElement.setAttribute('data-theme', s.theme_mode);
-            localStorage.setItem('themeMode', s.theme_mode);
+            document.documentElement.classList.toggle('dark', s.theme_mode === 'dark');
+            localStorage.setItem('portfolio-theme', s.theme_mode);
+            this.updateThemeIcons(s.theme_mode);
 
             // C. Motion Control
             document.documentElement.setAttribute('data-motion', s.motion_control);
@@ -53,6 +59,14 @@ $(document).ready(function () {
                 s.visual_effects.blur ? body.removeClass('no-blur') : body.addClass('no-blur');
                 s.visual_effects.shadows ? body.removeClass('no-shadows') : body.addClass('no-shadows');
             }
+
+            // E. Sync other UI elements (like Settings page buttons)
+            this.syncOtherUI(s.theme_mode);
+        },
+        syncOtherUI: function(theme) {
+            // Update any settings buttons if they exist on the current page
+            $(`.setting-btn[data-setting="theme"]`).removeClass('active');
+            $(`.setting-btn[data-setting="theme"][data-value="${theme}"]`).addClass('active');
         },
         applyExperienceMode: function(mode) {
             const isPersonal = mode === 'personal';
@@ -69,6 +83,17 @@ $(document).ready(function () {
                 $('.nav-link-per').addClass('hidden');
                 brandingLink.attr('href', 'index.html');
                 backToHubLink.attr('href', 'index.html');
+            }
+        },
+        updateThemeIcons: function(theme) {
+            const themeIconSun = $('#theme-icon-sun');
+            const themeIconMoon = $('#theme-icon-moon');
+            if (theme === 'dark') {
+                themeIconSun.removeClass('rotate-0 scale-100 opacity-100').addClass('-rotate-90 scale-0 opacity-0');
+                themeIconMoon.removeClass('rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
+            } else {
+                themeIconSun.removeClass('-rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
+                themeIconMoon.removeClass('rotate-0 scale-100 opacity-100').addClass('rotate-90 scale-0 opacity-0');
             }
         }
     };
@@ -277,25 +302,22 @@ $(document).ready(function () {
     const themeIconSun = $('#theme-icon-sun');
     const themeIconMoon = $('#theme-icon-moon');
 
-    // 1. Initial State Check (Default to Light, switch to Dark if saved)
+    // 1. Initial State Check (Default to Dark)
     let savedTheme = localStorage.getItem('portfolio-theme');
     
-    // If absolutely no theme is saved, assume 'light' as default requirement
     if (!savedTheme) {
-        savedTheme = 'light';
-        localStorage.setItem('portfolio-theme', 'light');
+        savedTheme = 'dark';
+        localStorage.setItem('portfolio-theme', 'dark');
     }
 
-    // Apply the saved theme immediately inside Document Ready (and sync icons)
+    // Apply the saved theme immediately and sync icons
+    document.documentElement.setAttribute('data-theme', savedTheme);
     if (savedTheme === 'dark') {
         $('html').addClass('dark');
-        themeIconSun.removeClass('rotate-0 scale-100 opacity-100').addClass('-rotate-90 scale-0 opacity-0');
-        themeIconMoon.removeClass('rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
     } else {
         $('html').removeClass('dark');
-        themeIconSun.removeClass('-rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
-        themeIconMoon.removeClass('rotate-0 scale-100 opacity-100').addClass('rotate-90 scale-0 opacity-0');
     }
+    GlobalSettings.updateThemeIcons(savedTheme);
 
     // 2. Toggling logic via user click
     $(document).on("click", "#theme-toggle", function(e) {
@@ -306,21 +328,42 @@ $(document).ready(function () {
         
         if (!isCurrentlyDark) {
             $('html').addClass('dark');
+            $('html').attr('data-theme', 'dark');
             localStorage.setItem('portfolio-theme', 'dark');
-            // Hard swap icons
-            $('#theme-icon-sun').removeClass('rotate-0 scale-100 opacity-100').addClass('-rotate-90 scale-0 opacity-0');
-            $('#theme-icon-moon').removeClass('rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
+            if (GlobalSettings && GlobalSettings.data) GlobalSettings.data.theme_mode = 'dark';
+            GlobalSettings.updateThemeIcons('dark');
         } else {
             $('html').removeClass('dark');
+            $('html').attr('data-theme', 'light');
             localStorage.setItem('portfolio-theme', 'light');
-            // Hard swap icons
-            $('#theme-icon-sun').removeClass('-rotate-90 scale-0 opacity-0').addClass('rotate-0 scale-100 opacity-100');
-            $('#theme-icon-moon').removeClass('rotate-0 scale-100 opacity-100').addClass('rotate-90 scale-0 opacity-0');
+            if (GlobalSettings && GlobalSettings.data) GlobalSettings.data.theme_mode = 'light';
+            GlobalSettings.updateThemeIcons('light');
         }
         
         // Prevent GSAP scroll trigger issues from stopping UI loop
         if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
             setTimeout(() => ScrollTrigger.refresh(), 50);
+        }
+
+        // Sync other UI elements that might be on the same page (e.g. Settings page)
+        GlobalSettings.syncOtherUI(!isCurrentlyDark ? 'dark' : 'light');
+    });
+
+    // 3. Multi-Tab Synchronization
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'portfolio-theme') {
+            const newTheme = e.newValue || 'dark';
+            
+            // Sync current page theme
+            document.documentElement.setAttribute('data-theme', newTheme);
+            $('html').toggleClass('dark', newTheme === 'dark');
+            GlobalSettings.updateThemeIcons(newTheme);
+            GlobalSettings.syncOtherUI(newTheme);
+            
+            // Refresh layout if needed
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                setTimeout(() => ScrollTrigger.refresh(), 100);
+            }
         }
     });
 

@@ -13,23 +13,24 @@
 
 /* Skill Badge Styles */
 .skill-badge {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--theme-card-bg);
+    border: 1px solid var(--theme-card-border);
     padding: 6px 14px;
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #CBD5F5;
+    color: var(--theme-text-primary);
     transition: all 0.3s ease;
     cursor: default;
+    backdrop-filter: blur(5px);
 }
 
 .skill-badge:hover {
-    background: rgba(56, 189, 248, 0.1);
-    border-color: rgba(56, 189, 248, 0.4);
-    color: #38BDF8;
+    background: var(--theme-accent-primary);
+    border-color: var(--theme-accent-primary);
+    color: #ffffff !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.1);
+    box-shadow: 0 4px 12px var(--theme-glow);
 }
 
 /* Neon Glow Effect on Cards */

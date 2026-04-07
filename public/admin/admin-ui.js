@@ -78,6 +78,10 @@ const AdminUI = {
                             <i data-lucide="bell"></i>
                             <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-dash-bg"></span>
                         </button>
+                        <button id="admin-theme-toggle" class="icon-btn relative overflow-hidden ml-1" onclick="AdminTheme.toggle()">
+                            <span id="theme-icon-sun" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="sun" class="w-4 h-4"></i></span>
+                            <span id="theme-icon-moon" class="absolute transition-all duration-500 ease-in-out transform"><i data-lucide="moon" class="w-4 h-4"></i></span>
+                        </button>
                     </div>
                     <div class="h-8 w-px bg-dash-border mx-2"></div>
                     <div class="w-10 h-10 rounded-xl overflow-hidden border border-dash-border">

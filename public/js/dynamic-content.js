@@ -220,18 +220,18 @@ $(document).ready(function () {
                             const c = colorMap[cat] || { color: 'text-theme-primary', bg: 'bg-theme-primary/10', icon: 'zap' };
 
                             const skillsHtml = catSkills.map(s => `
-                                <span class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[11px] font-black uppercase text-slate-600 dark:text-white/80 whitespace-nowrap group-hover:border-theme-primary/30 transition-colors">
+                                <span class="px-4 py-1.5 rounded-full bg-[var(--theme-card-bg)] border border-[var(--theme-card-border)] text-[11px] font-black uppercase text-[var(--theme-text-primary)] shadow-sm hover:!bg-[var(--theme-accent-primary)] hover:!text-white hover:border-[var(--theme-accent-primary)] hover:-translate-y-0.5 whitespace-nowrap transition-all cursor-default">
                                     ${s.name}
                                 </span>
                             `).join('');
 
                             homeGrid.append(`
-                                <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] border border-white/5 hover:border-theme-primary/20 transition-all group flex flex-col items-start" data-aos="fade-up">
+                                <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] transition-all group flex flex-col items-start" data-aos="fade-up">
                                     <div class="flex items-center gap-4 mb-8">
                                         <div class="w-10 h-10 rounded-xl ${c.bg} flex items-center justify-center ${c.color} group-hover:scale-110 transition-transform">
                                             <i data-lucide="${c.icon}" class="w-5 h-5"></i>
                                         </div>
-                                        <h3 class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-widest">${cat}</h3>
+                                        <h3 class="text-xl font-black text-[var(--theme-text-primary)] uppercase tracking-widest">${cat}</h3>
                                     </div>
                                     <div class="flex flex-wrap justify-start gap-3">
                                         ${skillsHtml}

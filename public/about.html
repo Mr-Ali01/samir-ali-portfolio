@@ -9,11 +9,9 @@
     <link rel="stylesheet" href="css/tailwind.css">
     <script>
         // Apply theme early on load to prevent flash
-        if (localStorage.getItem('portfolio-theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+        document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+        document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
     
     <!-- Local Libraries -->
@@ -53,9 +51,9 @@
                 <a href="personal.html#insights" class="nav-link-per hidden text-sm font-semibold text-theme-textSecondary hover:text-theme-primary transition-all relative py-2">Insights</a>
             </div>
 
-            <div class="flex items-center space-x-4 md:space-x-4">
+            <div class="flex items-center space-x-2 md:space-x-4">
                 <button id="theme-toggle"
-                    class="relative w-10 h-10 text-gray-400 hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-white/5 focus:ring-2 focus:ring-theme-primary/50 overflow-hidden">
+                    class="relative w-10 h-10 text-theme-textSecondary hover:text-theme-primary transition-all focus:outline-none flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 focus:ring-2 focus:ring-theme-primary/50 overflow-hidden">
                     <span id="theme-icon-sun"
                         class="absolute transition-all duration-500 ease-in-out transform"><i
                             data-lucide="sun" class="w-5 h-5"></i></span>
@@ -63,14 +61,9 @@
                         class="absolute transition-all duration-500 ease-in-out transform"><i
                             data-lucide="moon" class="w-5 h-5"></i></span>
                 </button>
-                <a href="settings.html" class="w-10 h-10 text-gray-400 hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-white/5 overflow-hidden ml-1" title="Settings">
+                <a href="settings.html" class="w-10 h-10 text-theme-textSecondary hover:text-theme-primary transition-all flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 overflow-hidden ml-1" title="Settings">
                     <i data-lucide="settings" class="w-5 h-5"></i>
                 </a>
-
-                <div class="hidden md:block">
-                    <a href="index.html#contact"
-                        class="bg-gradient-primary px-8 py-2.5 rounded-full font-semibold text-white text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all">Contact</a>
-                </div>
 
                 <!-- Mobile Toggle -->
                 <button class="md:hidden text-theme-textPrimary hover:text-theme-primary" id="mobile-menu-btn">
@@ -83,19 +76,19 @@
     <main class="relative z-10 pt-20">
         <!-- Hero / About Section -->
         <section class="relative z-10">
-            <div class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[70vh]">
+            <div class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center min-h-[70vh]">
             
             <!-- Left Side -->
-            <div class="space-y-8" data-aos="fade-right">
+            <div class="space-y-6 md:space-y-8" data-aos="fade-right">
                 <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-theme-primary/10 border border-theme-primary/20 backdrop-blur-sm shadow-sm transition-all hover:bg-theme-primary/20">
-                    <span id="about-page-badge" class="text-theme-primary text-xs font-black tracking-widest uppercase">🚀 WHO AM I?</span>
+                    <span id="about-page-badge" class="text-theme-primary text-[10px] md:text-xs font-black tracking-widest uppercase">🚀 WHO AM I?</span>
                 </div>
                 
-                <h1 id="about-page-title" class="text-5xl lg:text-7xl font-black text-white leading-tight">
+                <h1 id="about-page-title" class="text-4xl md:text-5xl lg:text-7xl font-black text-white leading-tight">
                     About <span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary drop-shadow-sm">Me</span>
                 </h1>
 
-                <div id="about-page-description" class="space-y-6 text-xl text-theme-textSecondary leading-relaxed font-medium">
+                <div id="about-page-description" class="space-y-4 md:space-y-6 text-base md:text-lg lg:text-xl text-theme-textSecondary leading-relaxed font-medium">
                     <p>
                         I am a passionate <span class="text-white border-b-2 border-theme-primary/30">Full-Stack Developer</span> dedicated to crafting immersive and scalable digital experiences. With a deep understanding of modern web technologies, I focus on performance, accessibility, and high-impact design.
                     </p>
@@ -105,123 +98,59 @@
                 </div>
 
                 <div class="pt-4">
-                    <a href="index.html#portfolio" class="inline-flex items-center space-x-3 bg-gradient-to-r from-theme-primary to-theme-secondary px-8 py-4 rounded-2xl text-white font-bold text-lg shadow-xl shadow-theme-primary/20 hover:scale-105 active:scale-95 transition-all group">
+                    <a href="index.html#portfolio" class="inline-flex items-center space-x-2 md:space-x-3 bg-gradient-to-r from-theme-primary to-theme-secondary px-6 py-3 md:px-8 md:py-4 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-lg shadow-xl shadow-theme-primary/20 hover:scale-105 active:scale-95 transition-all group">
                         <span>Check Out My Work</span>
-                        <i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i>
+                        <i data-lucide="arrow-right" class="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1"></i>
                     </a>
                 </div>
             </div>
 
             <!-- Right Side (Illustration Card) -->
-            <div class="relative flex justify-center items-center" data-aos="fade-left">
+            <div class="relative flex justify-center items-center mt-10 lg:mt-0" data-aos="fade-left">
                 <!-- Main Illustration Card -->
-                <div class="glass-card w-[80%] lg:w-[90%] aspect-square rounded-[3rem] relative z-10 flex items-center justify-center p-8 overflow-hidden group">
+                <div class="glass-card w-[90%] md:w-[70%] lg:w-[90%] aspect-square rounded-[2rem] md:rounded-[3rem] relative z-10 flex items-center justify-center p-4 md:p-8 overflow-hidden group">
                     <div class="absolute inset-0 bg-gradient-to-br from-theme-primary/10 to-transparent opacity-50"></div>
                     
                     <!-- Placeholder for Image or Abstract Illustration -->
-                    <div class="relative z-20 w-full h-full rounded-[2.5rem] bg-theme-bg/50 border border-white/5 flex items-center justify-center shadow-2xl overflow-hidden">
+                    <div class="relative z-20 w-full h-full rounded-[1.5rem] md:rounded-[2.5rem] bg-theme-bg/50 border border-white/5 flex items-center justify-center shadow-2xl overflow-hidden">
                         <img id="about-page-img" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000" alt="Code Scene" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80">
                         <div class="absolute inset-0 flex items-center justify-center bg-black/20">
-                             <div class="w-24 h-24 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center shadow-inner">
-                                <i data-lucide="code" class="w-12 h-12 text-theme-primary animate-pulse"></i>
+                             <div class="w-16 h-16 md:w-24 md:h-24 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center shadow-inner">
+                                <i data-lucide="code" class="w-8 h-8 md:w-12 md:h-12 text-theme-primary animate-pulse"></i>
                              </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Floating Tech Icons -->
-                <div class="absolute -top-10 -left-10 w-20 h-20 glass-card rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0s;">
-                    <i data-lucide="react" class="w-10 h-10 text-[#61DAFB]"></i>
+                <div class="absolute -top-4 -left-2 md:-top-10 md:-left-10 w-12 h-12 md:w-20 md:h-20 glass-card rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0s;">
+                    <i data-lucide="react" class="w-6 h-6 md:w-10 md:h-10 text-[#61DAFB]"></i>
                 </div>
-                <div class="absolute top-1/2 -right-12 w-16 h-16 glass-card rounded-3xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 1.5s;">
-                    <i data-lucide="database" class="w-8 h-8 text-theme-secondary"></i>
+                <div class="absolute top-1/2 -right-4 md:-right-12 w-10 h-10 md:w-16 md:h-16 glass-card rounded-xl md:rounded-3xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 1.5s;">
+                    <i data-lucide="database" class="w-5 h-5 md:w-8 md:h-8 text-theme-secondary"></i>
                 </div>
-                <div class="absolute bottom-4 -left-16 w-18 h-18 glass-card rounded-full flex items-center justify-center shadow-lg animate-float" style="animation-delay: 2.5s;">
-                    <i data-lucide="zap" class="w-9 h-9 text-orange-400"></i>
+                <div class="absolute bottom-4 -left-4 md:-left-16 w-12 h-12 md:w-18 md:h-18 glass-card rounded-full flex items-center justify-center shadow-lg animate-float" style="animation-delay: 2.5s;">
+                    <i data-lucide="zap" class="w-6 h-6 md:w-9 md:h-9 text-orange-400"></i>
                 </div>
-                <div class="absolute -bottom-12 right-20 w-20 h-20 glass-card rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.8s;">
-                    <i data-lucide="cpu" class="w-10 h-10 text-theme-primary"></i>
+                <div class="absolute -bottom-6 right-4 md:-bottom-12 md:right-20 w-12 h-12 md:w-20 md:h-20 glass-card rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.8s;">
+                    <i data-lucide="cpu" class="w-6 h-6 md:w-10 md:h-10 text-theme-primary"></i>
                 </div>
             </div>
         </section>
 
         <!-- Technical Skills Section -->
         <section class="relative z-10">
-            <div class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mt-20">
-            <div class="flex items-center gap-6 mb-16" data-aos="fade-right">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-theme-primary to-theme-secondary flex items-center justify-center shadow-xl shadow-theme-primary/20">
-                    <i data-lucide="award" class="text-white w-8 h-8"></i>
+            <div class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mt-10 md:mt-20">
+            <div class="flex items-center gap-4 md:gap-6 mb-10 md:mb-16" data-aos="fade-right">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-br from-theme-primary to-theme-secondary flex items-center justify-center shadow-xl shadow-theme-primary/20 shrink-0">
+                    <i data-lucide="award" class="text-white w-6 h-6 md:w-8 md:h-8"></i>
                 </div>
-                <h2 class="text-4xl lg:text-5xl font-extrabold text-white">Technical <span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary">Skills</span></h2>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white">Technical <span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary">Skills</span></h2>
             </div>
 
-            <!-- Skills Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8" id="about-page-skills-grid">
-                
-                <!-- Card 1: Development -->
-                <div class="glass-card p-6 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="0">
-                     <div class="w-12 h-12 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary group-hover:bg-theme-primary/20 transition-colors">
-                        <i data-lucide="code-2" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Development</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">JavaScript</span>
-                        <span class="skill-badge">Node.js</span>
-                        <span class="skill-badge">Java</span>
-                        <span class="skill-badge">JDBC</span>
-                        <span class="skill-badge">Hibernate</span>
-                        <span class="skill-badge">Spring Core</span>
-                    </div>
-                </div>
-
-                <!-- Card 2: Databases -->
-                <div class="glass-card p-6 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="100">
-                     <div class="w-12 h-12 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary group-hover:bg-theme-secondary/20 transition-colors">
-                        <i data-lucide="hard-drive" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Databases</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">MySQL</span>
-                    </div>
-                </div>
-
-                <!-- Card 3: Styling -->
-                <div class="glass-card p-6 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="200">
-                     <div class="w-12 h-12 rounded-xl bg-orange-400/10 flex items-center justify-center text-orange-400 group-hover:bg-orange-400/20 transition-colors">
-                        <i data-lucide="palette" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Styling</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">Tailwind CSS</span>
-                        <span class="skill-badge">CSS</span>
-                    </div>
-                </div>
-
-                <!-- Card 4: Tools -->
-                <div class="glass-card p-6 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="300">
-                     <div class="w-12 h-12 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary group-hover:bg-theme-primary/20 transition-colors">
-                        <i data-lucide="tool" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Tools</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">Git</span>
-                        <span class="skill-badge">GitHub</span>
-                        <span class="skill-badge">VS Code</span>
-                        <span class="skill-badge">Eclipse</span>
-                    </div>
-                </div>
-
-                <!-- Card 5: Design -->
-                <div class="glass-card p-6 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="400">
-                     <div class="w-12 h-12 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary group-hover:bg-theme-secondary/20 transition-colors">
-                        <i data-lucide="layout" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Design</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-badge">Canva</span>
-                    </div>
-                </div>
-
+            <!-- Skills Grid (Dynamically Populated from Database) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="about-page-skills-grid">
+                <!-- Skills will be loaded dynamically via JS (dynamic-content.js) from the 'skills' table -->
             </div>
         </section>
     </main>
