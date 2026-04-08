@@ -24,6 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     }
 
+    //* Custom Selection */
+    const style = document.createElement('style');
+    style.textContent = `
+        ::selection {
+            background: #38BDF8;
+            color: white;
+        }
+        @keyframes scroll-vertical {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(calc(-100% + 220px)); }
+            100% { transform: translateY(0); }
+        }
+        .animate-scroll-vertical {
+            animation: scroll-vertical 15s ease-in-out infinite;
+        }
+        .hover\:pause-scroll:hover {
+            animation-play-state: paused;
+        }
+    `;
+    document.head.appendChild(style);
+
     // 3. Hero Particles Background
     const canvas = document.getElementById('heroCanvas');
     if (canvas) {
@@ -132,21 +153,48 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (p.category === 'Featured') {
                         if (!featuredGrid) return;
                         const html = `
-                            <article class="project-card group" data-aos="fade-up" data-aos-delay="${delay}">
-                                <div class="project-image-container">
-                                    <img src="${p.preview_image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000'}" alt="${p.name}">
+                            <article class="project-card group flex flex-col h-[460px] w-full max-w-[350px] mx-auto bg-[var(--theme-card-bg)] rounded-[2rem] border border-[var(--theme-card-border)] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 relative" data-aos="fade-up" data-aos-delay="${delay}">
+                                
+                                <!-- Image Section (Top) -->
+                                <div class="relative w-full h-[220px] overflow-hidden group/image flex-shrink-0 bg-slate-100 dark:bg-slate-900 border-b border-[var(--theme-card-border)]">
+                                    <!-- Newly Launched Label -->
+                                    <div class="absolute top-4 left-4 z-20 bg-gradient-to-r from-theme-primary to-theme-secondary text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 neon-glow">
+                                        <div class="relative flex items-center justify-center">
+                                            <div class="w-2 h-2 bg-white rounded-full animate-ping absolute opacity-80"></div>
+                                            <div class="w-1.5 h-1.5 bg-white rounded-full relative z-10"></div> 
+                                        </div>
+                                        NEWLY LAUNCHED
+                                    </div>
+                                    
+                                    <!-- Scrolling Image Container -->
+                                    <div class="w-full absolute top-0 left-0 hover:pause-scroll animate-scroll-vertical group-hover:scale-105 transition-transform duration-[10s]">
+                                        <img src="${p.preview_image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000'}" alt="${p.name}" class="w-full h-auto min-h-[400px] object-cover object-top">
+                                    </div>
+                                    
+                                    <!-- Overlay Gradient -->
+                                    <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[var(--theme-card-bg)] via-[var(--theme-card-bg)]/50 to-transparent z-10 pointer-events-none"></div>
                                 </div>
-                                <div class="project-content p-8">
-                                    <div class="flex flex-wrap gap-2 mb-6">
+
+                                <!-- Card Content Structure -->
+                                <div class="p-6 flex flex-col flex-1 relative z-20 w-full overflow-hidden">
+                                    
+                                    <!-- Tech Stack (Strict Fixed Height) -->
+                                    <div class="flex flex-wrap gap-2 mb-4 h-[32px] overflow-hidden content-start flex-shrink-0 pt-1">
                                         ${techTags}
                                     </div>
-                                    <h3 class="text-2xl font-black text-slate-900 dark:text-white mb-3">${p.name}</h3>
-                                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm leading-relaxed mb-8 h-12 overflow-hidden line-clamp-2">
+
+                                    <!-- Title (Strict Fixed Height) -->
+                                    <h3 class="text-xl font-black text-[var(--theme-text-primary)] mb-2 tracking-tight line-clamp-1 h-[28px] overflow-hidden flex-shrink-0" title="${p.name}">${p.name}</h3>
+                                    
+                                    <!-- Description (Strict Fixed Height) -->
+                                    <p class="text-[var(--theme-text-secondary)] text-sm mb-5 line-clamp-2 leading-relaxed h-[48px] flex-shrink-0">
                                         ${p.short_description}
                                     </p>
-                                    <div class="flex items-center gap-3">
-                                        <a href="${p.live_link}" class="btn-primary flex-1 py-3 text-xs uppercase font-black tracking-widest text-center">Live Demo <i data-lucide="arrow-up-right" class="w-3 h-3 inline ml-1"></i></a>
-                                        <a href="${p.github_link}" class="btn-secondary px-6 py-3 text-xs uppercase font-black text-center"><i data-lucide="github" class="w-4 h-4"></i></a>
+
+                                    <!-- Bottom Buttons -->
+                                    <div class="flex flex-row items-center gap-3 mt-auto pt-4 border-t border-[var(--theme-card-border)]/50 flex-shrink-0 w-full">
+                                        <a href="${p.live_link}" target="_blank" rel="noopener noreferrer" class="flex-1 bg-gradient-to-r from-theme-primary to-theme-secondary hover:shadow-[0_0_20px_var(--theme-accent-primary)] hover:-translate-y-1 transition-all duration-300 py-3 px-4 rounded-xl text-white text-[11px] uppercase font-black tracking-wider text-center flex items-center justify-center gap-2">Live Demo <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                                        <a href="${p.github_link}" target="_blank" rel="noopener noreferrer" class="bg-slate-100 dark:bg-white/5 hover:bg-[var(--theme-card-border)] transition-colors duration-300 py-3 px-5 rounded-xl text-[var(--theme-text-primary)] hover:text-theme-primary hover:-translate-y-1 text-center flex items-center justify-center border border-[var(--theme-card-border)] max-w-[60px]" title="GitHub Repository"><i data-lucide="github" class="w-4 h-4"></i></a>
                                     </div>
                                 </div>
                             </article>
@@ -157,13 +205,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         const html = `
                             <div class="utility-card p-6" data-aos="fade-up" data-aos-delay="${delay}">
                                 <div class="flex justify-between items-start mb-4">
-                                    <h3 class="text-xl font-black text-slate-900 dark:text-white">${p.name}</h3>
-                                    <i data-lucide="external-link" class="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity"></i>
+                                    <h3 class="text-lg md:text-xl font-black text-[var(--theme-text-primary)]">${p.name}</h3>
+                                    <i data-lucide="external-link" class="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity text-[var(--theme-text-primary)]"></i>
                                 </div>
-                                <p class="text-slate-500 dark:text-theme-textSecondary text-sm mb-6">${p.short_description}</p>
-                                <div class="flex gap-4">
-                                    <a href="${p.live_link}" class="text-xs font-bold text-theme-primary hover:underline flex items-center gap-1">Live Demo <i data-lucide="link" class="w-3 h-3"></i></a>
-                                    <a href="${p.github_link}" class="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1">Repository <i data-lucide="github" class="w-3 h-3"></i></a>
+                                <p class="text-[var(--theme-text-secondary)] text-sm mb-6">${p.short_description}</p>
+                                <div class="flex flex-wrap gap-4 mt-auto">
+                                    <a href="${p.live_link}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-theme-primary hover:underline flex items-center gap-1">Live Demo <i data-lucide="link" class="w-3 h-3"></i></a>
+                                    <a href="${p.github_link}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-[var(--theme-text-secondary)] hover:text-theme-primary transition-colors flex items-center gap-1">Repository <i data-lucide="github" class="w-3 h-3"></i></a>
                                 </div>
                             </div>
                         `;
@@ -173,13 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         const html = `
                             <div class="utility-card p-6 group h-full" data-aos="fade-up" data-aos-delay="${delay}">
                                 <div class="flex justify-between items-start mb-4">
-                                    <h3 class="text-xl font-black text-slate-900 dark:text-white">${p.name}</h3>
-                                    <i data-lucide="layout" class="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity"></i>
+                                    <h3 class="text-lg md:text-xl font-black text-[var(--theme-text-primary)]">${p.name}</h3>
+                                    <i data-lucide="layout" class="w-5 h-5 opacity-20 group-hover:opacity-100 transition-opacity text-[var(--theme-text-primary)]"></i>
                                 </div>
-                                <p class="text-slate-500 dark:text-theme-textSecondary text-sm mb-6">${p.short_description}</p>
-                                <div class="flex gap-4">
-                                    <a href="${p.live_link}" class="text-xs font-bold text-theme-primary hover:underline flex items-center gap-1">Live Demo <i data-lucide="link" class="w-3 h-3"></i></a>
-                                    <a href="${p.github_link}" class="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1">Repository <i data-lucide="github" class="w-3 h-3"></i></a>
+                                <p class="text-[var(--theme-text-secondary)] text-sm mb-6">${p.short_description}</p>
+                                <div class="flex flex-wrap gap-4 mt-auto">
+                                    <a href="${p.live_link}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-theme-primary hover:underline flex items-center gap-1">Live Demo <i data-lucide="link" class="w-3 h-3"></i></a>
+                                    <a href="${p.github_link}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-[var(--theme-text-secondary)] hover:text-theme-primary transition-colors flex items-center gap-1">Repository <i data-lucide="github" class="w-3 h-3"></i></a>
                                 </div>
                             </div>
                         `;

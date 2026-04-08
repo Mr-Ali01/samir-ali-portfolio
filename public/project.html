@@ -116,27 +116,48 @@
     </nav>
 
     <main class="relative z-10 pt-32 pb-20 px-6 md:px-10 lg:px-12">
-        <!-- Hero Section -->
-        <header class="max-w-7xl mx-auto space-y-6 mb-24" data-aos="fade-down">
-            <h1 class="text-6xl md:text-8xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
-                PROJECTS<span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary via-theme-secondary to-theme-primary">.</span>
-            </h1>
-            <p
-                class="max-w-2xl text-lg md:text-xl text-slate-500 dark:text-theme-textSecondary font-medium leading-relaxed">
-                A showcase of applications, tools, and experiments I've built exploring modern web technologies and
-                solving practical challenges.
-            </p>
+        <!-- Premium Hero Section -->
+        <header class="max-w-7xl mx-auto relative rounded-3xl md:rounded-[3rem] overflow-hidden mb-16 md:mb-24 flex flex-col items-center justify-center py-16 px-6 md:py-20 md:px-12 shadow-2xl group border border-[var(--theme-card-border)]" data-aos="fade-down">
+            
+            <!-- Dynamic Background Layers -->
+            <div class="absolute inset-0 z-0 overflow-hidden bg-[var(--theme-bg-start)]">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80" alt="Laptop Code Background" class="w-full h-full object-cover transition-transform duration-[20s] group-hover:scale-110 opacity-30 dark:opacity-20 mix-blend-luminosity" />
+                
+                <!-- Fade Overlays -->
+                <div class="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-start)] via-transparent to-[var(--theme-bg-start)]/50"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-theme-primary/10 to-theme-secondary/10 mix-blend-overlay"></div>
+            </div>
+
+            <!-- Content block -->
+            <div class="relative z-10 w-full text-center space-y-4 md:space-y-6">
+                <!-- Section Badge -->
+                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[var(--theme-card-bg)] border border-[var(--theme-card-border)] backdrop-blur-md shadow-sm mx-auto">
+                    <i data-lucide="folder-code" class="w-4 h-4 text-theme-primary"></i>
+                    <span class="text-[var(--theme-text-primary)] text-[10px] md:text-xs font-black tracking-widest uppercase">My Works</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-[var(--theme-text-primary)] uppercase drop-shadow-md">
+                    Projects<span class="text-transparent bg-clip-text bg-gradient-to-r from-theme-primary to-theme-secondary">.</span>
+                </h1>
+                
+                <p class="max-w-2xl mx-auto text-base md:text-lg lg:text-xl text-[var(--theme-text-secondary)] font-medium leading-relaxed">
+                    A showcase of applications, tools, and technical experiments I've built exploring modern web technologies and solving practical challenges.
+                </p>
+            </div>
+            
+            <!-- Animated decorative elements -->
+            <div class="absolute top-[20%] right-[10%] w-48 h-48 bg-theme-primary/20 blur-[80px] rounded-full animate-pulse-slow pointer-events-none z-0"></div>
+            <div class="absolute bottom-[20%] left-[10%] w-48 h-48 bg-theme-secondary/20 blur-[80px] rounded-full animate-pulse-slow pointer-events-none z-0"></div>
         </header>
 
         <!-- Featured Projects -->
-        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-32">
-            <div class="flex items-center gap-4 mb-12" data-aos="fade-right">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-20 md:mb-32">
+            <div class="flex items-center gap-4 mb-10 md:mb-12" data-aos="fade-right">
                 <div
                     class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary border border-theme-primary/20">
                     <i data-lucide="star" class="w-5 h-5"></i>
                 </div>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                <h2 class="text-2xl md:text-3xl font-black text-[var(--theme-text-primary)] uppercase tracking-tight">
                     Featured Projects</h2>
             </div>
 
@@ -146,83 +167,83 @@
         </section>
 
         <!-- Utility & UI Design Row -->
-        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-16 mb-32">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-20 md:mb-32">
             <!-- Utility Tools -->
-            <div class="space-y-10">
+            <div class="space-y-8 md:space-y-10">
                 <div class="flex items-center gap-4" data-aos="fade-right">
                     <div class="w-10 h-10 rounded-xl bg-theme-primary/10 flex items-center justify-center text-theme-primary border border-theme-primary/20">
                         <i data-lucide="wrench" class="w-5 h-5"></i>
                     </div>
-                    <h2 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Utility Tools</h2>
+                    <h2 class="text-2xl font-black text-[var(--theme-text-primary)] uppercase tracking-tight">Utility Tools</h2>
                 </div>
                 
-                <div class="space-y-6" id="utility-tools-list">
+                <div class="space-y-4 md:space-y-6" id="utility-tools-list">
                     <!-- Dynamic Utility Tools will load here -->
                 </div>
             </div>
 
             <!-- UI / DESIGN -->
-            <div class="space-y-10">
+            <div class="space-y-8 md:space-y-10">
                 <div class="flex items-center gap-4" data-aos="fade-right">
                     <div class="w-10 h-10 rounded-xl bg-theme-secondary/10 flex items-center justify-center text-theme-secondary border border-theme-secondary/20">
                         <i data-lucide="layout" class="w-5 h-5"></i>
                     </div>
-                    <h2 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">UI / DESIGN</h2>
+                    <h2 class="text-2xl font-black text-[var(--theme-text-primary)] uppercase tracking-tight">UI / DESIGN</h2>
                 </div>
                 
-                <div class="space-y-6" id="ui-design-list">
+                <div class="space-y-4 md:space-y-6" id="ui-design-list">
                     <!-- Dynamic UI Designs will load here -->
                 </div>
             </div>
         </section>
 
         <!-- Experiments Section -->
-        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-32" data-aos="fade-up">
+        <section class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 mb-20 md:mb-32" data-aos="fade-up">
             <div
-                class="flex flex-col md:flex-row md:items-center justify-between gap-8 py-16 px-10 rounded-[3rem] bg-slate-900/5 dark:bg-white/5 border border-slate-200 dark:border-white/5 relative overflow-hidden">
-                <div class="space-y-4 relative z-10">
-                    <div class="flex items-center gap-4 mb-2">
+                class="flex flex-col md:flex-row md:items-center justify-between gap-8 py-10 px-6 sm:px-10 md:py-16 rounded-3xl md:rounded-[3rem] bg-[var(--theme-card-bg)] border border-[var(--theme-card-border)] relative overflow-hidden">
+                <div class="space-y-3 md:space-y-4 relative z-10">
+                    <div class="flex items-center gap-3 md:gap-4 mb-2">
                         <div
-                            class="w-8 h-8 rounded-lg bg-orange-400/10 flex items-center justify-center text-orange-400">
+                            class="w-8 h-8 rounded-lg bg-orange-400/10 flex flex-shrink-0 items-center justify-center text-orange-400">
                             <i data-lucide="flask-conical" class="w-5 h-5"></i>
                         </div>
-                        <h3 class="text-2xl font-black text-slate-900 dark:text-white uppercase">Experiments</h3>
+                        <h3 class="text-xl md:text-2xl font-black text-[var(--theme-text-primary)] uppercase">Experiments</h3>
                     </div>
-                    <p class="text-slate-500 dark:text-theme-textSecondary text-sm max-w-sm">Smaller utilities,
+                    <p class="text-[var(--theme-text-secondary)] text-sm max-w-sm">Smaller utilities,
                         experiments, and development prototypes built while learning.</p>
                 </div>
-                <div class="relative z-10">
+                <div class="relative z-10 w-full md:w-auto">
                     <a href="#"
-                        class="px-8 py-4 rounded-2xl bg-white dark:bg-white/10 text-slate-900 dark:text-white font-black text-sm border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/20 transition-all flex items-center gap-2 group">
+                        class="px-6 py-4 md:px-8 md:py-4 w-full md:w-auto justify-center rounded-xl md:rounded-2xl bg-white dark:bg-white/10 text-slate-900 dark:text-white font-black text-sm border border-[var(--theme-card-border)] hover:bg-slate-50 dark:hover:bg-white/20 transition-all flex items-center gap-2 group">
                         See All Experiments <i data-lucide="arrow-right"
                             class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
                 <!-- Background Glow -->
                 <div
-                    class="absolute right-0 bottom-0 w-64 h-64 bg-orange-400/10 blur-[80px] rounded-full -mr-10 -mb-10">
+                    class="absolute right-0 bottom-0 w-64 h-64 bg-orange-400/10 blur-[80px] rounded-full -mr-10 -mb-10 pointer-events-none">
                 </div>
             </div>
         </section>
 
         <!-- CTA Section -->
         <section
-            class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 rounded-[4rem] bg-gradient-to-br from-theme-primary via-[#0f172a] to-theme-secondary p-1 relative overflow-hidden group shadow-2xl"
+            class="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 py-10 md:py-16 rounded-[2.5rem] md:rounded-[4rem] bg-gradient-to-br from-theme-primary via-[#0f172a] to-theme-secondary p-1 relative overflow-hidden group shadow-2xl mb-12"
             data-aos="zoom-in">
             <div
-                class="bg-[#0c1222] rounded-[3.8rem] p-16 md:p-24 text-center relative overflow-hidden h-full flex flex-col items-center justify-center">
-                <h3 class="text-4xl md:text-6xl font-black text-white mb-6 relative z-10">Interested in exploring more
+                class="bg-[#0c1222] rounded-[2.3rem] md:rounded-[3.8rem] px-6 py-16 md:p-24 text-center relative overflow-hidden h-full flex flex-col items-center justify-center">
+                <h3 class="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 md:mb-6 relative z-10 leading-tight">Interested in exploring more
                     of my work?</h3>
                 <p
-                    class="text-theme-textSecondary text-lg md:text-xl font-medium mb-12 max-w-2xl mx-auto relative z-10 opacity-70">
+                    class="text-theme-textSecondary text-base sm:text-lg md:text-xl font-medium mb-10 md:mb-12 max-w-2xl mx-auto relative z-10 opacity-70 px-2 lg:px-0">
                     I love experimenting with new ideas. Discover my full collection of projects and repositories on
                     GitHub.
                 </p>
-                <div class="relative z-10">
+                <div class="relative z-10 w-full sm:w-auto px-2">
                     <a href="https://github.com/samirali" target="_blank"
-                        class="bg-gradient-to-r from-theme-primary to-theme-secondary px-12 py-6 rounded-3xl text-white font-black text-xl shadow-[0_0_40px_rgba(56,189,248,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center gap-4 group/btn">
+                        class="bg-gradient-to-r from-theme-primary to-theme-secondary px-8 py-4 sm:px-12 sm:py-6 rounded-2xl sm:rounded-3xl text-white font-black text-base sm:text-xl shadow-[0_0_40px_rgba(56,189,248,0.3)] hover:scale-105 active:scale-95 transition-all flex justify-center items-center gap-3 md:gap-4 group/btn w-full sm:w-auto">
                         Visit My GitHub <i data-lucide="github"
-                            class="w-6 h-6 transition-transform group-hover/btn:scale-125"></i>
+                            class="w-5 h-5 md:w-6 md:h-6 transition-transform group-hover/btn:scale-125"></i>
                     </a>
                 </div>
 
@@ -231,9 +252,9 @@
                     class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none">
                 </div>
                 <div
-                    class="absolute -top-40 -left-40 w-96 h-96 bg-theme-primary/10 blur-[150px] rounded-full animate-pulse-slow">
+                    class="absolute -top-40 -left-40 w-64 h-64 md:w-96 md:h-96 bg-theme-primary/10 blur-[100px] md:blur-[150px] rounded-full animate-pulse-slow pointer-events-none z-0">
                 </div>
-                <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-theme-secondary/10 blur-[150px] rounded-full animate-pulse-slow"
+                <div class="absolute -bottom-40 -right-40 w-64 h-64 md:w-96 md:h-96 bg-theme-secondary/10 blur-[100px] md:blur-[150px] rounded-full animate-pulse-slow pointer-events-none z-0"
                     style="animation-delay: 2s;"></div>
             </div>
         </section>
