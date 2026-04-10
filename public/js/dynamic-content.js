@@ -10,7 +10,7 @@ $(document).ready(function () {
                 fetch('/api/v1/manage/education'),
                 fetch('/api/v1/manage/certifications')
             ]);
-            
+
             const eduData = await eduRes.json();
             const certData = await certRes.json();
 
@@ -67,38 +67,144 @@ $(document).ready(function () {
         // Similar logic for experience section if added to home page
     };
 
-    // 3. Fetch & Render Projects
+    // 3. Fetch & Render Projects (Home Page Filter logic & SaaS Template)
     const loadProjects = async () => {
         try {
             const res = await fetch('/api/v1/manage/projects');
             const data = await res.json();
             if (data.success) {
+                const allProjects = data.data;
                 const grid = $('#projects-grid');
-                grid.empty();
-                data.data.forEach(p => {
-                    const html = `
-                        <div class="project-item group glass-panel rounded-[2rem] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col pb-4" data-category="${p.category || 'website'}">
-                            <div class="p-3 bg-gray-50/50 dark:bg-white/5 relative mx-3 mt-3 rounded-xl border-b-[3px] border-theme-primary overflow-hidden group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
-                                <div class="aspect-video w-full relative overflow-hidden rounded-lg">
-                                    <img src="${p.preview_image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-3 transition-opacity duration-300">
-                                        <a href="${p.live_link}" class="px-4 py-2 bg-theme-primary hover:brightness-110 text-white text-sm font-bold rounded-full transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 flex items-center"><i data-lucide="external-link" class="w-4 h-4 mr-1"></i>Live</a>
-                                        <a href="${p.github_link}" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-full border border-white/20 transition-transform transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 flex items-center"><i data-lucide="github" class="w-4 h-4 mr-1"></i>Source</a>
+                const noProjectsMsg = $('#no-projects-msg');
+                let currentFilter = 'all';
+
+                const renderProjects = () => {
+                    grid.empty();
+
+                    // Filter Logic
+                    let filtered = [];
+                    if (currentFilter === 'all') {
+                        filtered = allProjects.filter(p => !p.category || p.category === 'Featured');
+                    } else if (currentFilter === 'seo') {
+                        filtered = allProjects.filter(p => (p.category || '').toLowerCase().includes('seo'));
+                    } else {
+                        filtered = allProjects.filter(p => (p.category || '').toLowerCase() === currentFilter);
+                    }
+
+                    // Strict Limit: Only show max 3 items
+                    filtered = filtered.slice(0, 3);
+
+                    if (filtered.length === 0) {
+                        grid.hide();
+                        noProjectsMsg.removeClass('hidden');
+                    } else {
+                        grid.show();
+                        noProjectsMsg.addClass('hidden');
+
+                        // Ensure styles for scrolling and animation exist on the home page globally
+                        if (!document.getElementById('home-project-card-styles')) {
+                            const style = document.createElement('style');
+                            style.id = 'home-project-card-styles';
+                            style.textContent = `
+                                @keyframes scroll-vertical {
+                                    0% { transform: translateY(0); }
+                                    50% { transform: translateY(calc(-100% + 220px)); }
+                                    100% { transform: translateY(0); }
+                                }
+                                .animate-scroll-vertical {
+                                    animation: scroll-vertical 15s ease-in-out infinite;
+                                }
+                                .hover\\:pause-scroll:hover {
+                                    animation-play-state: paused;
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+
+                        filtered.forEach((p, index) => {
+                            const delay = index * 100;
+                            const techTags = (p.tech_stack || '').split(',')
+                                .map(t => `<span class="inline-block px-3 py-1 bg-slate-100 dark:bg-slate-800 text-[var(--theme-text-primary)] text-[10px] font-black rounded-lg border border-[var(--theme-card-border)] shadow-sm truncate" style="max-width: 100px;">${t.trim()}</span>`)
+                                .join('');
+
+                            const html = `
+                                <article class="project-card group flex flex-col w-full mx-auto bg-[var(--theme-card-bg)] rounded-[2rem] border border-[var(--theme-card-border)] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 relative" style="height: 460px; max-width: 350px;" data-aos="fade-up" data-aos-delay="${delay}">
+                                    
+                                    <!-- Image Section (Top) -->
+                                    <div class="relative w-full overflow-hidden group/image flex-shrink-0 bg-slate-100 dark:bg-slate-900 border-b border-[var(--theme-card-border)]" style="height: 220px;">
+                                        <!-- Newly Launched Label -->
+                                        <div class="absolute top-4 left-4 z-20 bg-gradient-to-r from-theme-primary to-theme-secondary text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2.5 neon-glow">
+                                            <div class="relative flex items-center justify-center mr-0.5">
+                                                <div class="w-2 h-2 bg-white rounded-full animate-ping absolute opacity-80"></div>
+                                                <div class="w-1.5 h-1.5 bg-white rounded-full relative z-10"></div> 
+                                            </div>
+                                            <span style="padding-left: 5px;">NEWLY LAUNCHED</span>
+                                        </div>
+                                        
+                                        <!-- Scrolling Image Container -->
+                                        <div class="w-full absolute top-0 left-0 hover:pause-scroll animate-scroll-vertical group-hover:scale-105 transition-transform" style="transition-duration: 10s;">
+                                            <img src="${p.preview_image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000'}" alt="${p.name}" class="w-full h-auto object-cover object-top" style="min-height: 400px;">
+                                        </div>
+                                        
+                                        <!-- Overlay Gradient -->
+                                        <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[var(--theme-card-bg)] via-[var(--theme-card-bg)]/50 to-transparent z-10 pointer-events-none"></div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="px-5 pt-4 flex-1 flex flex-col">
-                                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">${p.name}</h4>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">${p.short_description}</p>
-                                <div class="flex flex-wrap gap-2 mt-auto">
-                                    ${(p.tech_stack || '').split(',').map(t => `<span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 text-[10px] uppercase font-bold rounded-md">${t.trim()}</span>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    grid.append(html);
+
+                                    <!-- Card Content Structure -->
+                                    <div class="p-6 flex flex-col flex-1 relative z-20 w-full overflow-hidden">
+                                        
+                                        <!-- Tech Stack (Strict Fixed Height) -->
+                                        <div class="flex flex-wrap gap-2 mb-4 overflow-hidden content-start flex-shrink-0 pt-1" style="height: 32px;">
+                                            ${techTags}
+                                        </div>
+
+                                        <!-- Title (Strict Fixed Height) -->
+                                        <h3 class="text-xl font-black text-[var(--theme-text-primary)] mb-2 tracking-tight line-clamp-1 overflow-hidden flex-shrink-0" style="height: 28px;" title="${p.name}">${p.name}</h3>
+                                        
+                                        <!-- Description (Strict Fixed Height) -->
+                                        <p class="text-[var(--theme-text-secondary)] text-sm mb-5 line-clamp-2 leading-relaxed flex-shrink-0" style="height: 48px;">
+                                            ${p.short_description}
+                                        </p>
+
+                                        <!-- Bottom Buttons -->
+                                        <div class="flex flex-row items-center gap-3 mt-auto pt-4 border-t border-[var(--theme-card-border)]/50 flex-shrink-0 w-full">
+                                            <a href="${p.live_link}" target="_blank" rel="noopener noreferrer" class="flex-1 bg-gradient-to-r from-theme-primary to-theme-secondary hover:shadow-[0_0_20px_var(--theme-accent-primary)] hover:-translate-y-1 transition-all duration-300 py-3 px-4 rounded-xl text-white text-[11px] uppercase font-black tracking-wider text-center flex items-center justify-center gap-2">Live Demo <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                                            <a href="${p.github_link}" target="_blank" rel="noopener noreferrer" class="bg-slate-100 dark:bg-white/5 hover:bg-[var(--theme-card-border)] transition-colors duration-300 py-3 px-5 rounded-xl text-[var(--theme-text-primary)] hover:text-theme-primary hover:-translate-y-1 text-center flex items-center justify-center border border-[var(--theme-card-border)]" style="max-width: 60px;" title="GitHub Repository"><i data-lucide="github" class="w-4 h-4"></i></a>
+                                        </div>
+                                    </div>
+                                </article>
+                            `;
+                            grid.append(html);
+                        });
+
+                        lucide.createIcons();
+                        if (typeof AOS !== 'undefined') AOS.refresh();
+                    }
+                };
+
+                // Initial Render
+                renderProjects();
+
+                // Bind Filter Buttons
+                $('.filter-btn').on('click', function () {
+                    // Update active state visuals
+                    $('.filter-btn').removeClass('active bg-theme-primary text-white neon-glow')
+                        .addClass('bg-white text-slate-600')
+                        .css('filter', '');
+
+                    $(this).removeClass('bg-white text-slate-600')
+                        .addClass('active bg-theme-primary text-white neon-glow');
+
+                    const selectedFilter = $(this).data('filter');
+
+                    // Simple fade animation for transition
+                    grid.css('opacity', '0');
+                    setTimeout(() => {
+                        currentFilter = selectedFilter;
+                        renderProjects();
+                        grid.css('opacity', '1');
+                    }, 300);
                 });
-                lucide.createIcons();
             }
         } catch (error) {
             console.error('Failed to load projects:', error);
@@ -179,7 +285,7 @@ $(document).ready(function () {
                 const about = data.data[0];
                 $('#about-page-badge').text(about.badge_text || '🚀 ABOUT ME');
                 $('#about-page-title').text(about.title);
-                
+
                 // Map description with line breaks preserved
                 const descHtml = (about.description || '').split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
                 $('#about-page-description').html(descHtml);
@@ -241,7 +347,7 @@ $(document).ready(function () {
                         }
                     });
                 }
-                
+
                 // --- NEW: Handle About Page Skills Grid (#about-page-skills-grid) ---
                 const aboutSkillsGrid = $('#about-page-skills-grid');
                 if (aboutSkillsGrid.length) {
@@ -258,9 +364,9 @@ $(document).ready(function () {
                                 'Design': { color: 'text-theme-secondary', bg: 'bg-theme-secondary/10', icon: 'layout' }
                             };
                             const c = colorMap[cat] || { color: 'text-theme-primary', bg: 'bg-theme-primary/10', icon: 'zap' };
-                            
+
                             const badgesHtml = catSkills.map(s => `<span class="skill-badge">${s.name}</span>`).join('');
-                            
+
                             aboutSkillsGrid.append(`
                                 <div class="glass-card p-6 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="${idx * 100}">
                                      <div class="w-12 h-12 rounded-xl ${c.bg} flex items-center justify-center ${c.color} group-hover:bg-theme-primary/20 transition-colors">

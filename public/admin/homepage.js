@@ -1,15 +1,24 @@
 /* Home Page Management - Samir Ali Admin */
 
 function initHomePageEditor(forcedEntity = null) {
-    let currentEntity = forcedEntity || 'education';
+    let currentEntity = forcedEntity || 'hero';
+    
+    // Hard reset UI state to ensure clean navigation
+    $('.tab-btn').removeClass('active');
+    $('.section-pane').removeClass('active');
     
     // Auto-detect entity if not forced (for direct page loads)
     if (!forcedEntity) {
         if (window.location.pathname.includes('skills.html')) currentEntity = 'skills';
-        if (window.location.pathname.includes('about.html')) currentEntity = 'about';
-        if (window.location.pathname.includes('experience.html')) currentEntity = 'experience';
-        if (window.location.pathname.includes('projects.html')) currentEntity = 'projects';
+        else if (window.location.pathname.includes('about.html')) currentEntity = 'about';
+        else if (window.location.pathname.includes('experience.html')) currentEntity = 'experience';
+        else if (window.location.pathname.includes('projects.html')) currentEntity = 'projects';
+        else currentEntity = 'hero';
     }
+
+    // Apply active class securely to target
+    $(`.tab-btn[data-tab="${currentEntity}"]`).addClass('active');
+    $(`#pane-${currentEntity}`).addClass('active');
 
     console.log(`[AdminEditor] Initializing for entity: ${currentEntity} (Forced: ${!!forcedEntity})`);
 
@@ -65,14 +74,17 @@ function initHomePageEditor(forcedEntity = null) {
                         `).join('');
 
                         preview.append(`
-                            <div class="glass-panel p-8 rounded-[2rem] border border-white/5 flex flex-col items-start bg-white/5 opacity-80 scale-95" data-aos="fade-up">
-                                <div class="flex items-center gap-3 mb-6">
-                                    <div class="w-8 h-8 rounded-xl ${c.bg} flex items-center justify-center ${c.color}">
-                                        <i data-lucide="${c.icon}" class="w-4 h-4"></i>
+                            <div class="bg-[rgba(15,23,42,0.4)] backdrop-blur-xl border border-white/5 hover:border-white/10 p-6 sm:p-8 rounded-[2rem] flex flex-col items-start shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group" data-aos="fade-up">
+                                <!-- Subtle Background Hue -->
+                                <div class="absolute -top-16 -right-16 w-32 h-32 ${c.bg.replace('/10', '/5')} rounded-full blur-[40px] group-hover:scale-150 transition-transform duration-500 pointer-events-none"></div>
+
+                                <div class="flex items-center gap-3 mb-6 relative z-10 w-full">
+                                    <div class="w-10 h-10 rounded-xl ${c.bg} flex items-center justify-center ${c.color} border border-white/5 shadow-inner">
+                                        <i data-lucide="${c.icon}" class="w-5 h-5"></i>
                                     </div>
-                                    <h4 class="text-xs font-black uppercase tracking-widest text-white">${cat}</h4>
+                                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-dash-text w-full truncate">${cat}</h4>
                                 </div>
-                                <div class="flex flex-wrap gap-2">
+                                <div class="flex flex-wrap gap-2 relative z-10">
                                     ${pillsHtml}
                                 </div>
                             </div>
@@ -147,7 +159,7 @@ function initHomePageEditor(forcedEntity = null) {
     // Auto-detect view-specific data ONLY if not already forced by shell/init
     const needsAutoLoad = !forcedEntity;
     if (needsAutoLoad) {
-        const activeTab = $('.tab-btn.active').data('tab') || 'education';
+        const activeTab = $('.tab-btn.active').data('tab') || 'hero';
         currentEntity = activeTab;
         if (activeTab === 'hero') {
             loadHeroData();
@@ -299,28 +311,32 @@ function initHomePageEditor(forcedEntity = null) {
         const c = config[currentEntity] || { title: 'Untitled', sub: '', icon: 'box' };
 
         return `
-            <div class="glass-panel p-6 rounded-[2rem] border border-white/5 hover:border-white/10 transition-all flex items-center justify-between group overflow-hidden relative">
-                <div class="flex items-center gap-6 relative z-10">
+            <div class="bg-[rgba(15,23,42,0.4)] backdrop-blur-xl p-5 sm:p-6 rounded-[2rem] border border-[var(--dash-border)] shadow-sm hover:shadow-[0_10px_40px_-10px_rgba(56,189,248,0.15)] hover:border-white/10 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group overflow-hidden relative">
+                <!-- Ambient Hover Glow -->
+                <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-dash-accent/0 group-hover:via-dash-accent/30 to-transparent transition-all duration-500"></div>
+
+                <div class="flex items-center gap-4 sm:gap-6 relative z-10 min-w-0">
                     ${c.preview ? `
-                        <div class="w-16 h-16 rounded-xl overflow-hidden shadow-lg border border-white/10 shrink-0">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden shadow-lg border border-white/10 shrink-0 relative group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
                             <img src="${c.preview}" class="w-full h-full object-cover">
                         </div>
                     ` : `
-                        <div class="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                            <i data-lucide="${c.icon}" class="w-6 h-6 text-dash-accent"></i>
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0 group-hover:bg-dash-accent/10 group-hover:border-dash-accent/20 transition-all duration-300 shadow-inner">
+                            <i data-lucide="${c.icon}" class="w-5 h-5 sm:w-6 sm:h-6 text-dash-muted group-hover:text-dash-accent transition-colors"></i>
                         </div>
                     `}
-                    <div class="space-y-1">
-                        <span class="text-[10px] font-black uppercase text-dash-accent tracking-widest">${c.sub}</span>
-                        <h4 class="text-lg font-black">${c.title}</h4>
+                    <div class="space-y-1 sm:space-y-1.5 min-w-0">
+                        <span class="text-[9px] sm:text-[10px] font-black uppercase text-dash-accent tracking-[0.2em] bg-dash-accent/10 px-2.5 py-1 rounded-sm">${c.sub}</span>
+                        <h4 class="text-base sm:text-lg font-black text-dash-text truncate">${c.title}</h4>
                     </div>
                 </div>
-                <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity relative z-10">
-                    <button class="edit-btn p-3 rounded-xl bg-white/5 hover:bg-dash-accent/20 hover:text-dash-accent transition-all" data-id="${item.id}">
-                        <i data-lucide="edit-3" class="w-4 h-4"></i>
+                <div class="flex items-center gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity relative z-10 w-full sm:w-auto mt-2 sm:mt-0 pt-4 sm:pt-0 border-t border-white/5 sm:border-0 justify-end">
+                    <button class="edit-btn flex-1 sm:flex-none flex items-center justify-center py-3 sm:py-0 sm:w-12 sm:h-12 rounded-xl bg-white/5 hover:bg-dash-accent hover:text-white text-dash-muted transition-all duration-300" data-id="${item.id}" title="Edit Entry">
+                        <i data-lucide="edit-3" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </button>
-                    <button class="delete-btn p-3 rounded-xl bg-white/5 hover:bg-red-500/20 hover:text-red-500 transition-all" data-id="${item.id}">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <button class="delete-btn flex-1 sm:flex-none flex items-center justify-center py-3 sm:py-0 sm:w-12 sm:h-12 rounded-xl bg-white/5 hover:bg-red-500 hover:text-white text-dash-muted transition-all duration-300" data-id="${item.id}" title="Delete Entry">
+                        <i data-lucide="trash-2" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </button>
                 </div>
             </div>

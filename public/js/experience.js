@@ -69,26 +69,53 @@ $(document).ready(function () {
             if (expData.success) {
                 expData.data.forEach((exp, index) => {
                     const itemHtml = `
-                        <div class="relative pl-20 md:pl-28 group" data-aos="fade-left" data-aos-delay="${index * 100}">
-                            <div class="absolute left-3.5 md:left-5.5 top-0 w-5 h-5 md:w-6 md:h-6 rounded-full bg-slate-900 border-2 border-theme-primary z-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
-                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-6 md:p-8 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
-                                <div class="lg:col-span-8 space-y-4">
-                                    <span class="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[10px] font-black uppercase tracking-widest">${exp.period}</span>
-                                    <h2 class="text-2xl md:text-3xl font-black text-theme-textPrimary">${exp.role}</h2>
-                                    <p class="text-orange-500 font-bold text-sm italic">${exp.company}</p>
-                                    <p class="text-theme-textSecondary leading-relaxed text-sm md:text-base">${exp.description}</p>
+                        <div class="relative pl-12 md:pl-20 group" data-aos="fade-left" data-aos-delay="${index * 100}">
+                            <!-- Timeline Dot Indicator -->
+                            <div class="absolute left-0 top-8 md:top-10 w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 group-hover:border-theme-primary z-10 shadow-sm group-hover:shadow-[0_0_20px_var(--theme-accent-primary)] transition-all duration-300">
+                                <div class="w-3 h-3 md:w-4 md:h-4 bg-theme-primary rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                            </div>
+
+                            <!-- Modern Experience Card (SaaS Style) -->
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 bg-white/40 dark:bg-[#0a0a0ab3] backdrop-blur-xl border border-slate-200/60 dark:border-white/10 rounded-2xl md:rounded-[20px] p-6 md:p-8 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl hover:shadow-theme-primary/20 dark:hover:shadow-theme-primary/10 transition-all duration-300 relative overflow-hidden group/card">
+                                
+                                <!-- Soft Glassmorphism Gradient Overlay on Hover -->
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-900/5 to-purple-900/10 dark:from-theme-primary/10 dark:to-theme-secondary/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                                <!-- Left Content (Role Details) -->
+                                <div class="lg:col-span-8 flex flex-col justify-center space-y-5 px-1 relative z-10">
+                                    <!-- Date Badge Pill -->
+                                    <div class="flex items-center">
+                                        <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-theme-primary/10 border border-theme-primary/20 text-theme-primary text-xs md:text-sm font-bold tracking-wider shadow-[0_0_15px_rgba(56,189,248,0.15)] group-hover/card:shadow-[0_0_20px_var(--theme-accent-primary)] transition-all">
+                                            ${exp.period}
+                                        </span>
+                                    </div>
+                                    <!-- Title & Subtitle Context -->
+                                    <div>
+                                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-2 leading-tight">${exp.role}</h2>
+                                        <p class="text-cyan-500 dark:text-cyan-400 font-bold text-base md:text-lg tracking-wide flex items-center gap-2">
+                                            <i data-lucide="building-2" class="w-5 h-5"></i> ${exp.company}
+                                        </p>
+                                    </div>
+                                    <!-- Description -->
+                                    <p class="text-slate-600 dark:text-slate-400 leading-loose text-sm md:text-[15px] font-medium max-w-2xl">
+                                        ${exp.description}
+                                    </p>
                                 </div>
-                                <div class="lg:col-span-4 lg:border-l lg:border-white/5 lg:pl-8 space-y-4 flex flex-col justify-center">
-                                    <div class="p-6 rounded-2xl bg-orange-500/5 border border-orange-500/10">
-                                        <h4 class="text-orange-500 font-black text-xs uppercase tracking-wider mb-4">Focus Areas</h4>
-                                        <ul class="space-y-3">
-                                            <li class="flex items-start gap-3 text-xs md:text-sm text-theme-textSecondary">
-                                                <div class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0"></div>
-                                                <span>Application Development</span>
+
+                                <!-- Right Content (Focus Areas Mini Card) -->
+                                <div class="lg:col-span-4 flex flex-col justify-center h-full relative z-10">
+                                    <div class="bg-slate-50 border border-slate-200 dark:bg-white/[0.02] dark:border-white/5 rounded-2xl p-5 md:p-6 shadow-inner h-full flex flex-col backdrop-blur-md transition-colors group-hover/card:border-theme-primary/20">
+                                        <h4 class="text-slate-800 dark:text-white font-bold text-sm uppercase tracking-widest mb-5 flex items-center gap-2">
+                                            <i data-lucide="target" class="w-4 h-4 text-theme-secondary"></i> Focus Areas
+                                        </h4>
+                                        <ul class="space-y-4 mt-auto border-l-2 border-slate-200 dark:border-white/5 pl-4">
+                                            <li class="flex items-start gap-4 text-sm text-slate-600 dark:text-slate-400 relative">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-theme-secondary shrink-0 shadow-[0_0_8px_var(--theme-accent-secondary)] absolute -left-[21px] top-1"></div>
+                                                <span class="font-semibold leading-relaxed">Application Development</span>
                                             </li>
-                                            <li class="flex items-start gap-3 text-xs md:text-sm text-theme-textSecondary">
-                                                <div class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0"></div>
-                                                <span>UI/UX & Workflow Logic</span>
+                                            <li class="flex items-start gap-4 text-sm text-slate-600 dark:text-slate-400 relative">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-theme-secondary shrink-0 shadow-[0_0_8px_var(--theme-accent-secondary)] absolute -left-[21px] top-1"></div>
+                                                <span class="font-semibold leading-relaxed">UI/UX & Workflow Logic</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -105,22 +132,52 @@ $(document).ready(function () {
                 eduData.data.forEach((edu, index) => {
                     const isBCA = edu.degree.includes('BCA');
                     const itemHtml = `
-                        <div class="relative pl-20 md:pl-28 group" data-aos="fade-left" data-aos-delay="${(expData.data.length + index) * 100}">
-                            <div class="absolute left-3.5 md:left-5.5 top-0 w-5 h-5 md:w-6 md:h-6 rounded-full bg-slate-900 border-2 border-theme-primary z-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
-                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-6 md:p-8 rounded-[2.5rem] relative overflow-hidden group-hover:border-theme-primary/30 transition-all">
-                                <div class="lg:col-span-8 space-y-4">
-                                    <span class="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[10px] font-black uppercase tracking-widest">${edu.period}</span>
-                                    <h2 class="text-2xl md:text-3xl font-black text-theme-textPrimary">${edu.degree}</h2>
-                                    <div class="flex items-center gap-2 text-theme-textSecondary text-sm">
-                                        <i data-lucide="school" class="w-4 h-4"></i> ${edu.institution}
+                        <div class="relative pl-12 md:pl-20 group" data-aos="fade-left" data-aos-delay="${(expData.data.length + index) * 100}">
+                            <!-- Timeline Dot Indicator -->
+                            <div class="absolute left-0 top-8 md:top-10 w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 group-hover:border-theme-primary z-10 shadow-sm group-hover:shadow-[0_0_20px_var(--theme-accent-primary)] transition-all duration-300">
+                                <div class="w-3 h-3 md:w-4 md:h-4 bg-theme-primary rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                            </div>
+
+                            <!-- Modern Education Card (SaaS Style) -->
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 bg-white/40 dark:bg-[#0a0a0ab3] backdrop-blur-xl border border-slate-200/60 dark:border-white/10 rounded-2xl md:rounded-[20px] p-6 md:p-8 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl hover:shadow-theme-primary/20 dark:hover:shadow-theme-primary/10 transition-all duration-300 relative overflow-hidden group/card">
+                                
+                                <!-- Soft Glassmorphism Gradient Overlay on Hover -->
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-900/5 to-purple-900/10 dark:from-theme-primary/10 dark:to-theme-secondary/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                                <!-- Left Content -->
+                                <div class="lg:col-span-8 flex flex-col justify-center space-y-5 px-1 relative z-10">
+                                    <!-- Date Badge Pill -->
+                                    <div class="flex items-center">
+                                        <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-theme-primary/10 border border-theme-primary/20 text-theme-primary text-xs md:text-sm font-bold tracking-wider shadow-[0_0_15px_rgba(56,189,248,0.15)] group-hover/card:shadow-[0_0_20px_var(--theme-accent-primary)] transition-all">
+                                            ${edu.period}
+                                        </span>
                                     </div>
-                                    <p class="text-theme-textSecondary leading-relaxed text-sm md:text-base mt-2">${edu.description}</p>
+                                    <!-- Title & Subtitle Context -->
+                                    <div>
+                                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-2 leading-tight">${edu.degree}</h2>
+                                        <p class="text-cyan-500 dark:text-cyan-400 font-bold text-base md:text-lg flex items-center gap-2">
+                                            <i data-lucide="school" class="w-5 h-5"></i> ${edu.institution}
+                                        </p>
+                                    </div>
+                                    <p class="text-slate-600 dark:text-slate-400 leading-loose text-sm md:text-[15px] font-medium max-w-2xl">
+                                        ${edu.description}
+                                    </p>
                                 </div>
-                                <div class="lg:col-span-4 lg:border-l lg:border-white/5 lg:pl-8 flex items-center justify-center">
-                                    <div class="relative p-8 rounded-3xl ${isBCA ? 'bg-green-500/5 border border-green-500/20' : 'bg-blue-500/5 border border-blue-500/20'} text-center w-full max-w-[200px]">
-                                        <i data-lucide="${isBCA ? 'leaf' : 'award'}" class="absolute -top-3 -right-3 w-8 h-8 ${isBCA ? 'text-green-500/40' : 'text-blue-500/40'}"></i>
-                                        <span class="block text-[10px] font-black text-theme-textSecondary uppercase tracking-widest mb-1">Status</span>
-                                        <span class="block text-2xl font-black text-theme-textPrimary">${isBCA ? 'Completed' : 'Certified'}</span>
+
+                                <!-- Right Content (Education Status Mini Card) -->
+                                <div class="lg:col-span-4 flex w-full items-center justify-center relative z-10 h-full">
+                                    <div class="relative bg-slate-50 border border-slate-200 dark:bg-white/[0.02] dark:border-white/5 rounded-2xl p-6 flex flex-col justify-center items-center backdrop-blur-md shadow-inner transition-colors group-hover/card:border-theme-primary/20 w-full h-full text-center">
+                                        
+                                        <div class="w-14 h-14 rounded-full ${isBCA ? 'bg-green-500' : 'bg-blue-500'} bg-opacity-10 border ${isBCA ? 'border-green-500/20' : 'border-blue-500/20'} flex items-center justify-center mb-5">
+                                            <i data-lucide="${isBCA ? 'check-circle-2' : 'award'}" class="w-7 h-7 ${isBCA ? 'text-green-500' : 'text-blue-500'} shadow-sm"></i>
+                                        </div>
+
+                                        <span class="block text-[11px] font-bold uppercase tracking-widest mb-1.5 ${isBCA ? 'text-green-500' : 'text-blue-500'} opacity-80">
+                                            Programme Status
+                                        </span>
+                                        <span class="block text-2xl font-black ${isBCA ? 'text-green-500' : 'text-blue-500'} tracking-tight drop-shadow-sm">
+                                            ${isBCA ? 'Completed' : 'Certified'}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

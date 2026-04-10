@@ -190,7 +190,7 @@ const AdminUI = {
             loadDashboardMessages();
         }
         if (pageId === 'homepage' && typeof initHomePageEditor === 'function') {
-            initHomePageEditor('education');
+            initHomePageEditor('hero');
         }
         // Settings Manager Initialization
         if (pageId === 'settings') {
