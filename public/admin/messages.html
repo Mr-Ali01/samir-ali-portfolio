@@ -60,35 +60,39 @@
 
     <!-- Reply Modal -->
     <div id="reply-modal-backdrop" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-xl p-4">
-        <div class="glass-panel w-full max-w-2xl rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl">
-            <div class="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
+        <div class="glass-panel w-[320px] h-[500px] rounded-[2.5rem] border border-white/10 flex flex-col overflow-hidden shadow-2xl transform scale-95 transition-transform duration-200">
+            <!-- Header -->
+            <div class="p-6 pb-4 border-b border-white/5 flex items-center justify-between bg-white/5 shrink-0">
                 <div>
-                    <h3 class="text-xl font-black mb-1">Reply to Message</h3>
-                    <p id="reply-to-name" class="text-[10px] text-dash-accent font-black uppercase tracking-widest">To: Alex Johnson</p>
+                    <h3 class="text-sm font-black mb-0.5">Reply Studio</h3>
+                    <p id="reply-to-name" class="text-[8px] text-dash-accent font-black uppercase tracking-widest">Target: Loading...</p>
                 </div>
-                <button class="icon-btn close-reply-modal"><i data-lucide="x"></i></button>
+                <button class="icon-btn close-reply-modal p-1.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-all"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
             </div>
             
-            <form id="reply-form" class="p-8 space-y-6">
+            <form id="reply-form" class="flex-1 flex flex-col overflow-hidden">
                 <input type="hidden" name="id" id="reply-contact-id">
                 
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Original Message</label>
-                    <div id="original-message-text" class="p-4 bg-white/5 rounded-xl text-sm italic opacity-60 border border-white/5 max-h-32 overflow-y-auto">
-                        <!-- Text here -->
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Inquiry Preview</label>
+                        <div id="original-message-text" class="p-4 bg-white/5 rounded-xl text-xs italic opacity-60 border border-white/5 max-h-32 overflow-y-auto custom-scrollbar leading-relaxed">
+                            <!-- Text here -->
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Your Response</label>
+                        <textarea name="reply_message" id="reply-message" rows="6" required class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-xs focus:border-dash-accent transition-all outline-none resize-none placeholder:opacity-30" placeholder="Draft your email response..."></textarea>
                     </div>
                 </div>
 
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-dash-muted">Your Response</label>
-                    <textarea name="reply_message" id="reply-message" rows="6" required class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none resize-none" placeholder="Type your email response here..."></textarea>
-                </div>
-
-                <div class="flex justify-end gap-4 pt-6">
-                    <button type="button" class="px-8 py-3 rounded-2xl border border-white/10 text-white font-black text-xs uppercase tracking-widest hover:bg-white/5 close-reply-modal">Cancel</button>
-                    <button type="submit" id="send-reply-btn" class="bg-dash-accent px-10 py-4 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-dash-accent/30 flex items-center gap-2">
-                        <span>Send Response</span>
-                        <i data-lucide="send" class="w-4 h-4"></i>
+                <!-- Footer -->
+                <div class="p-5 border-t border-white/5 bg-black/20 flex items-center gap-3 shrink-0">
+                    <button type="button" class="flex-1 py-2.5 rounded-xl border border-white/10 text-white font-black text-[9px] uppercase tracking-widest hover:bg-white/5 close-reply-modal">Abort</button>
+                    <button type="submit" id="send-reply-btn" class="flex-1 bg-dash-accent py-2.5 rounded-xl text-white font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-dash-accent/30 flex items-center justify-center gap-2">
+                        <span>Dispatch</span>
+                        <i data-lucide="send" class="w-3 h-3"></i>
                     </button>
                 </div>
             </form>
@@ -146,15 +150,17 @@
                                 </div>
                                 
                                 <div class="flex items-center gap-3">
-                                    <button class="view-msg-btn p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-all" data-full-msg='${JSON.stringify(msg).replace(/'/g, "&apos;")}'>
-                                        <i data-lucide="eye" class="w-5 h-5"></i>
+                                    <button class="view-msg-btn p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/5" data-full-msg='${JSON.stringify(msg).replace(/'/g, "&apos;")}'>
+                                        <i data-lucide="eye" class="w-4 h-4"></i>
                                     </button>
-                                    <button class="reply-msg-btn bg-dash-accent/10 text-dash-accent hover:bg-dash-accent hover:text-white px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all" 
-                                            data-id="${msg.id}" data-name="${msg.name}" data-msg="${msg.message.replace(/'/g, "&apos;")}">
+                                    <button class="reply-msg-btn bg-dash-accent/10 text-dash-accent hover:bg-dash-accent hover:text-white px-5 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all border border-dash-accent/20" 
+                                            data-id="${msg.id}" 
+                                            data-name="${msg.name}" 
+                                            data-msg="${btoa(unescape(encodeURIComponent(msg.message)))}">
                                         Reply
                                     </button>
-                                    <button class="delete-msg-btn p-4 rounded-2xl bg-white/5 hover:bg-red-500/20 hover:text-red-500 transition-all" data-id="${msg.id}">
-                                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                    <button class="delete-msg-btn p-3 rounded-xl bg-white/5 hover:bg-red-500/20 hover:text-red-500 transition-all border border-white/5" data-id="${msg.id}">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
                                     </button>
                                 </div>
                             </div>
@@ -182,26 +188,22 @@
         $(document).on('click', '.view-msg-btn', function() {
             const msg = JSON.parse($(this).attr('data-full-msg'));
             Swal.fire({
-                title: `<span class="text-2xl font-black">${msg.name}</span>`,
+                title: `<span class="text-xl font-black">${msg.name}</span>`,
                 html: `
-                    <div class="text-left py-4 space-y-4">
-                        <div class="grid grid-cols-2 gap-4 text-[10px] font-black uppercase tracking-widest text-dash-muted">
-                            <div>Email: <span class="text-white block mt-1 normal-case">${msg.email}</span></div>
-                            <div>Company: <span class="text-white block mt-1 normal-case">${msg.company || 'N/A'}</span></div>
-                            <div>Role: <span class="text-white block mt-1 normal-case">${msg.role || 'N/A'}</span></div>
-                            <div>Type: <span class="text-white block mt-1 normal-case">${msg.inquiry_type}</span></div>
-                            <div>Budget: <span class="text-white block mt-1 normal-case">${msg.budget || 'N/A'}</span></div>
-                            <div>Timeline: <span class="text-white block mt-1 normal-case">${msg.timeline || 'N/A'}</span></div>
+                    <div class="text-left py-2 space-y-4">
+                        <div class="grid grid-cols-2 gap-4 text-[9px] font-black uppercase tracking-widest text-dash-muted">
+                            <div>From: <span class="text-dash-accent block mt-1 normal-case font-bold">${msg.email}</span></div>
+                            <div>Subject: <span class="text-white block mt-1 normal-case">${msg.inquiry_type}</span></div>
                         </div>
-                        <hr class="border-white/5">
-                        <div class="text-sm leading-relaxed text-dash-muted bg-white/5 p-6 rounded-2xl border border-white/5">${msg.message.replace(/\n/g, '<br>')}</div>
+                        <div class="text-xs leading-relaxed text-dash-muted bg-white/5 p-5 rounded-2xl border border-white/5 h-48 overflow-y-auto custom-scrollbar">${msg.message.replace(/\n/g, '<br>')}</div>
                     </div>
                 `,
-                background: '#0f172a',
-                color: '#f8fafc',
+                background: 'rgba(15,23,42,0.95)',
+                color: '#fff',
                 showConfirmButton: false,
                 showCloseButton: true,
-                width: '600px'
+                width: '500px',
+                backdrop: 'rgba(15,23,42,0.8)'
             });
         });
 
@@ -209,16 +211,24 @@
         $(document).on('click', '.reply-msg-btn', function() {
             const id = $(this).data('id');
             const name = $(this).data('name');
-            const msg = $(this).data('msg');
+            const encodedMsg = $(this).data('msg');
+            const msg = decodeURIComponent(escape(atob(encodedMsg)));
 
             $('#reply-contact-id').val(id);
             $('#reply-to-name').text(`To: ${name}`);
             $('#original-message-text').text(msg);
+            
+            // Lock background scroll
+            $('body').addClass('overflow-hidden');
+
             $('#reply-modal-backdrop').removeClass('hidden').addClass('flex');
             setTimeout(() => $('#reply-modal-backdrop > div').addClass('scale-100').removeClass('scale-95'), 10);
         });
 
         $('.close-reply-modal').click(function() {
+            // Unlock background scroll
+            $('body').removeClass('overflow-hidden');
+
             $('#reply-modal-backdrop').addClass('hidden').removeClass('flex');
             $('#reply-form')[0].reset();
         });
@@ -240,14 +250,30 @@
                 });
                 const result = await res.json();
                 if (result.success) {
-                    Swal.fire('Sent!', 'Your reply has been sent via email.', 'success');
+                    Swal.fire({
+                        title: 'Reply Sent!',
+                        text: 'Your response was successfully dispatched.',
+                        icon: 'success',
+                        background: 'rgba(15,23,42,0.95)',
+                        color: '#fff',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        position: 'top-end',
+                        toast: true
+                    });
                     $('.close-reply-modal').click();
                     loadMessages();
                 } else {
                     throw new Error(result.error);
                 }
             } catch (e) {
-                Swal.fire('Error', e.message, 'error');
+                Swal.fire({
+                    title: 'Dispatch Error',
+                    text: e.message,
+                    icon: 'error',
+                    background: '#0f172a',
+                    color: '#fff'
+                });
             } finally {
                 $btn.prop('disabled', false).removeClass('opacity-50');
                 $btn.find('span').text('Send Response');
@@ -256,22 +282,41 @@
 
         $(document).on('click', '.delete-msg-btn', async function() {
             const id = $(this).data('id');
-            const confirm = await Swal.fire({
-                title: 'Delete Message?',
-                text: 'This will permanently remove the record.',
+            const result = await Swal.fire({
+                title: 'Destroy Record?',
+                text: 'This message will be removed permanently.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#ef4444'
+                confirmButtonText: 'Delete Forever',
+                background: 'rgba(15,23,42,0.95)',
+                color: '#fff',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: 'rgba(255,255,255,0.05)',
+                backdrop: 'rgba(15,23,42,0.8)'
             });
 
-            if (confirm.isConfirmed) {
-                const res = await fetch('/api/v1/manage/contacts', {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id })
-                });
-                if ((await res.json()).success) {
-                    loadMessages();
+            if (result.isConfirmed) {
+                try {
+                    const res = await fetch('/api/v1/manage/contacts', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    if ((await res.json()).success) {
+                        Swal.fire({
+                            title: 'Purged',
+                            icon: 'success',
+                            background: 'rgba(15,23,42,0.95)',
+                            color: '#fff',
+                            timer: 1500,
+                            showConfirmButton: false,
+                            position: 'top-end',
+                            toast: true
+                        });
+                        loadMessages();
+                    }
+                } catch (err) {
+                    Swal.fire({ title: 'Error', text: 'Delete failed.', icon: 'error', background: '#0f172a', color: '#fff' });
                 }
             }
         });

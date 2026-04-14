@@ -263,13 +263,20 @@ $(document).ready(function () {
             const res = await fetch('/api/v1/manage/about');
             const data = await res.json();
             if (data.success && data.data.length > 0) {
-                const about = data.data[0];
-                $('#about-title').text(about.title);
-                const descHtml = (about.description || '').replace(/\n/g, '<br>');
-                $('#about-description').html(descHtml);
-                if (about.image_url && $('#about-img').length) {
-                    $('#about-img').attr('src', about.image_url);
+                // Use first entry for main title/image
+                const first = data.data[0];
+                $('#about-title').text(first.title || 'About Me');
+                if (first.image_url && $('#about-img').length) {
+                    $('#about-img').attr('src', first.image_url);
                 }
+
+                // Render all blocks as sequential paragraphs
+                const fullDescHtml = data.data.map(item => {
+                    const desc = (item.description || '').replace(/\n/g, '<br>');
+                    return `<p>${desc}</p>`;
+                }).join('');
+                
+                $('#about-description').html(fullDescHtml);
             }
         } catch (error) {
             console.error('Failed to load about section:', error);
@@ -368,11 +375,13 @@ $(document).ready(function () {
                             const badgesHtml = catSkills.map(s => `<span class="skill-badge">${s.name}</span>`).join('');
 
                             aboutSkillsGrid.append(`
-                                <div class="glass-card p-6 rounded-[2.5rem] space-y-6 hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="${idx * 100}">
-                                     <div class="w-12 h-12 rounded-xl ${c.bg} flex items-center justify-center ${c.color} group-hover:bg-theme-primary/20 transition-colors">
-                                        <i data-lucide="${c.icon}" class="w-6 h-6"></i>
+                                <div class="glass-card p-8 rounded-[2.5rem] hover:scale-[1.05] transition-all duration-500 border border-white/5 relative overflow-hidden group shadow-xl" data-aos="zoom-in" data-aos-delay="${idx * 100}">
+                                     <div class="flex items-center gap-5 mb-6">
+                                        <div class="w-12 h-12 rounded-xl ${c.bg} flex items-center justify-center ${c.color} group-hover:bg-theme-primary/20 transition-colors shrink-0">
+                                            <i data-lucide="${c.icon}" class="w-6 h-6"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-white uppercase tracking-wider">${cat}</h3>
                                     </div>
-                                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">${cat}</h3>
                                     <div class="flex flex-wrap gap-2">
                                         ${badgesHtml}
                                     </div>

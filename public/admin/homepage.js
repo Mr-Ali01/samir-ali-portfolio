@@ -19,27 +19,29 @@ function initHomePageEditor(forcedEntity = null) {
     // Apply active class securely to target
     $(`.tab-btn[data-tab="${currentEntity}"]`).addClass('active');
     $(`#pane-${currentEntity}`).addClass('active');
-
-    console.log(`[AdminEditor] Initializing for entity: ${currentEntity} (Forced: ${!!forcedEntity})`);
+    
+    console.log(`[AdminEditor] Initializing for entity: ${currentEntity}`);
 
     let heroData = null; 
 
     // 2. Fetcher for Lists (Education, Experience)
-    const fetchResourceData = async () => {
+    // 1. Fetch data for a specific entity and refresh its UI container
+    const fetchResourceData = async (entityOverride = null) => {
+        const activeEntity = entityOverride || currentEntity;
         try {
-            const res = await fetch(`/api/v1/manage/${currentEntity}`);
+            const res = await fetch(`/api/v1/manage/${activeEntity}`);
             const data = await res.json();
-            console.log(`[AdminEditor] Fetched ${currentEntity} data:`, data.success ? data.data.length + ' items' : 'failed');
+            console.log(`[AdminEditor] Fetched ${activeEntity} data:`, data.success ? data.data.length + ' items' : 'failed');
             if (data.success) {
-                renderList(data.data);
-            }
-            
-            // Auto-load preview if we are in the skills tab
-            if (currentEntity === 'skills' || $('#skills-home-preview').length) {
-                loadSkillsPreview();
+                renderList(data.data, activeEntity);
             }
         } catch (error) {
-            console.error('Fetch failed:', error);
+            console.error(`[AdminEditor] Failed to fetch ${activeEntity}:`, error);
+        }
+
+        // Auto-load preview if we are on the skills related tab/page
+        if (activeEntity === 'skills' || $('#skills-home-preview').length) {
+            loadSkillsPreview();
         }
     };
 
@@ -156,17 +158,7 @@ function initHomePageEditor(forcedEntity = null) {
         }
     });
 
-    // Auto-detect view-specific data ONLY if not already forced by shell/init
-    const needsAutoLoad = !forcedEntity;
-    if (needsAutoLoad) {
-        const activeTab = $('.tab-btn.active').data('tab') || 'hero';
-        currentEntity = activeTab;
-        if (activeTab === 'hero') {
-            loadHeroData();
-        } else {
-            fetchResourceData();
-        }
-    }
+    // Clean up old listeners (Wait: handled by .off() in handlers below)
 
     // 4. Hero Form Submit (Delegated)
     $(document).off('submit', '#form-hero').on('submit', '#form-hero', async function(e) {
@@ -242,10 +234,11 @@ function initHomePageEditor(forcedEntity = null) {
         }
     });
 
-    const renderList = (items) => {
-        const containerId = `#${currentEntity}-list`;
+    // 2. Render List into designated container
+    const renderList = (items, entityOverride = null) => {
+        const activeEntity = entityOverride || currentEntity;
+        const containerId = `#${activeEntity}-list`;
         const container = $(containerId);
-        console.log(`[AdminEditor] Rendering to container: ${containerId} (Found: ${container.length > 0})`);
         
         if (!container.length) {
             console.warn(`[AdminEditor] ABORT: Container ${containerId} not found in DOM!`);
@@ -263,7 +256,7 @@ function initHomePageEditor(forcedEntity = null) {
         }
 
         // SPECIAL: Category-wise Grouping for Skills (Only on skills.html and when skills tab is active)
-        if (currentEntity === 'skills' && window.location.pathname.includes('skills.html')) {
+        if (activeEntity === 'skills' && window.location.pathname.includes('skills.html')) {
             const categories = ['Development', 'Databases', 'Styling', 'Tools', 'Design', 'Learning'];
             container.removeClass('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'); // Reset original grid
 
@@ -284,7 +277,7 @@ function initHomePageEditor(forcedEntity = null) {
                     const $innerContainer = $group.find('.list-container-inner');
                     
                     catSkills.forEach(item => {
-                        $innerContainer.append(createItemCard(item));
+                        $innerContainer.append(createItemCard(item, activeEntity));
                     });
                     
                     container.append($group);
@@ -293,22 +286,24 @@ function initHomePageEditor(forcedEntity = null) {
         } else {
             // Default Flat List
             items.forEach(item => {
-                container.append(createItemCard(item));
+                container.append(createItemCard(item, activeEntity));
             });
         }
         lucide.createIcons();
     };
 
-    const createItemCard = (item) => {
+    // 3. Simple Item Card Generator
+    const createItemCard = (item, entityOverride = null) => {
+        const activeEntity = entityOverride || currentEntity;
         const config = {
             education: { title: item.degree, sub: item.institution, icon: 'graduation-cap' },
             experience: { title: item.role, sub: item.company, icon: 'briefcase' },
             skills: { title: item.name, sub: item.category, icon: 'zap' },
             certifications: { title: item.name, sub: item.issuer, icon: 'award' },
             projects: { title: item.name, sub: item.category, icon: 'briefcase', preview: item.preview_image },
-            about: { title: item.title, sub: 'Mini Bio', icon: 'user' }
+            about: { title: item.title || 'About Section', sub: 'Content Block', icon: 'user' }
         };
-        const c = config[currentEntity] || { title: 'Untitled', sub: '', icon: 'box' };
+        const c = config[activeEntity] || { title: item.title || item.name || 'Untitled', sub: item.category || 'Mini Bio', icon: 'box' };
 
         return `
             <div class="bg-[rgba(15,23,42,0.4)] backdrop-blur-xl p-5 sm:p-6 rounded-[2rem] border border-[var(--dash-border)] shadow-sm hover:shadow-[0_10px_40px_-10px_rgba(56,189,248,0.15)] hover:border-white/10 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group overflow-hidden relative">
@@ -322,8 +317,8 @@ function initHomePageEditor(forcedEntity = null) {
                             <img src="${c.preview}" class="w-full h-full object-cover">
                         </div>
                     ` : `
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0 group-hover:bg-dash-accent/10 group-hover:border-dash-accent/20 transition-all duration-300 shadow-inner">
-                            <i data-lucide="${c.icon}" class="w-5 h-5 sm:w-6 sm:h-6 text-dash-muted group-hover:text-dash-accent transition-colors"></i>
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0 group-hover:bg-dash-accent/10 group-hover:border-dash-accent/20 transition-all duration-300 shadow-inner relative z-10">
+                            <i data-lucide="${c.icon}" class="w-5 h-5 sm:w-6 sm:h-6 text-dash-muted group-hover:text-dash-accent transition-colors pointer-events-none"></i>
                         </div>
                     `}
                     <div class="space-y-1 sm:space-y-1.5 min-w-0">
@@ -332,36 +327,57 @@ function initHomePageEditor(forcedEntity = null) {
                     </div>
                 </div>
                 <div class="flex items-center gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity relative z-10 w-full sm:w-auto mt-2 sm:mt-0 pt-4 sm:pt-0 border-t border-white/5 sm:border-0 justify-end">
-                    <button class="edit-btn flex-1 sm:flex-none flex items-center justify-center py-3 sm:py-0 sm:w-12 sm:h-12 rounded-xl bg-white/5 hover:bg-dash-accent hover:text-white text-dash-muted transition-all duration-300" data-id="${item.id}" title="Edit Entry">
-                        <i data-lucide="edit-3" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                    </button>
-                    <button class="delete-btn flex-1 sm:flex-none flex items-center justify-center py-3 sm:py-0 sm:w-12 sm:h-12 rounded-xl bg-white/5 hover:bg-red-500 hover:text-white text-dash-muted transition-all duration-300" data-id="${item.id}" title="Delete Entry">
-                        <i data-lucide="trash-2" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                    </button>
+                    <!-- Actions -->
+                    <div class="flex items-center gap-2">
+                        <button class="edit-btn p-3 bg-white/5 border border-white/10 rounded-xl text-dash-muted hover:bg-dash-accent/10 hover:text-dash-accent transition-all group/btn cursor-pointer relative z-30" data-id="${item.id}" data-entity="${activeEntity}">
+                            <i data-lucide="edit-3" class="w-4 h-4 pointer-events-none"></i>
+                        </button>
+                        <button class="delete-btn p-3 bg-white/5 border border-white/10 rounded-xl text-dash-muted hover:bg-red-500/10 hover:text-red-500 transition-all group/btn cursor-pointer relative z-30" data-id="${item.id}" data-entity="${activeEntity}">
+                            <i data-lucide="trash-2" class="w-4 h-4 pointer-events-none"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
     };
 
-    // 6. CRUD Modals
     // 6. CRUD Modals (Delegated)
-    $(document).off('click', '.add-btn').on('click', '.add-btn', () => openModal());
-    $(document).off('click', '.edit-btn').on('click', '.edit-btn', function() {
-        const id = $(this).data('id');
-        openModal(id);
+    $(document).off('click', '.add-btn').on('click', '.add-btn', function(e) {
+        e.preventDefault();
+        const entity = $(this).data('entity') || $(this).closest('.section-pane').data('tab') || $(this).closest('.section-pane').attr('id')?.replace('pane-', '') || currentEntity;
+        console.log(`[Admin] Add button clicked for entity: ${entity}`);
+        openModal(null, entity);
     });
 
-    const openModal = async (id = null) => {
+    $(document).off('click', '.edit-btn').on('click', '.edit-btn', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        const entity = $(this).data('entity') || $(this).closest('.section-pane').attr('id')?.replace('pane-', '') || currentEntity;
+        console.log(`[Admin] Edit button clicked for entity: ${entity}, ID: ${id}`);
+        openModal(id, entity);
+    });
+
+    const openModal = async (id = null, entityOverride = null) => {
+        const activeEntity = entityOverride || currentEntity;
         const modal = $('#modal-backdrop');
         const formFields = $('#form-fields');
         formFields.empty();
         
         let formData = {};
         if (id) {
-            const res = await fetch(`/api/v1/manage/${currentEntity}`);
-            const json = await res.json();
-            formData = json.data.find(i => i.id == id);
+            try {
+                const res = await fetch(`/api/v1/manage/${activeEntity}`);
+                const json = await res.json();
+                formData = (json.data || []).find(i => i.id == id) || {};
+            } catch (e) {
+                console.error('Modal data fetch failed:', e);
+            }
         }
+
+        // Update Modal Title
+        const actionLabel = id ? 'Edit' : 'Add New';
+        const entityLabel = activeEntity.charAt(0).toUpperCase() + activeEntity.slice(1);
+        $('#modal-title').text(`${actionLabel} ${entityLabel} Block`);
 
         const config = {
             education: [
@@ -409,21 +425,25 @@ function initHomePageEditor(forcedEntity = null) {
             ]
         };
 
-        const fields = config[currentEntity] || [];
+        const fields = config[activeEntity] || [];
+        
         fields.forEach(f => {
-            const val = formData[f.name] || '';
+            const val = formData[f.name] !== undefined ? formData[f.name] : '';
             let fieldHtml = '';
             
             if (f.type === 'textarea') {
-                fieldHtml = `<textarea name="${f.name}" rows="3" class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none resize-none">${val}</textarea>`;
+                fieldHtml = `<textarea name="${f.name}" rows="3" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-dash-accent transition-all outline-none resize-none placeholder:text-white/20" placeholder="Enter ${f.label.toLowerCase()}...">${val}</textarea>`;
             } else if (f.type === 'select') {
                 fieldHtml = `
-                    <select name="${f.name}" class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none appearance-none">
-                        ${f.options.map(opt => `<option value="${opt}" ${val === opt ? 'selected' : ''}>${opt}</option>`).join('')}
-                    </select>
+                    <div class="relative">
+                        <select name="${f.name}" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-dash-accent transition-all outline-none appearance-none">
+                            ${f.options.map(opt => `<option value="${opt}" ${val === opt ? 'selected' : ''} class="bg-slate-900">${opt}</option>`).join('')}
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50"><i data-lucide="chevron-down" class="w-4 h-4"></i></div>
+                    </div>
                 `;
             } else {
-                fieldHtml = `<input type="${f.type}" name="${f.name}" value="${val}" class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-sm focus:border-dash-accent transition-all outline-none">`;
+                fieldHtml = `<input type="${f.type}" name="${f.name}" value="${val}" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-dash-accent transition-all outline-none placeholder:text-white/20" placeholder="Enter ${f.label.toLowerCase()}...">`;
             }
 
             const html = `
@@ -436,6 +456,10 @@ function initHomePageEditor(forcedEntity = null) {
         });
 
         if (id) formFields.append(`<input type="hidden" name="id" value="${id}">`);
+        formFields.append(`<input type="hidden" id="active-modal-entity" value="${activeEntity}">`);
+
+        // Lock body scroll
+        $('body').addClass('overflow-hidden');
 
         modal.removeClass('hidden').addClass('flex');
         setTimeout(() => modal.find('#modal-container').removeClass('scale-95').addClass('scale-100'), 10);
@@ -445,6 +469,10 @@ function initHomePageEditor(forcedEntity = null) {
     function closeModal() {
         const modal = $('#modal-backdrop');
         modal.find('#modal-container').removeClass('scale-100').addClass('scale-95');
+        
+        // Unlock body scroll
+        $('body').removeClass('overflow-hidden');
+        
         setTimeout(() => modal.addClass('hidden').removeClass('flex'), 200);
     }
 
@@ -458,10 +486,11 @@ function initHomePageEditor(forcedEntity = null) {
         const isUpdate = !!data.id;
         if (!isUpdate) delete data.id;
 
+        const entity = $('#active-modal-entity').val() || currentEntity;
         const method = isUpdate ? 'PUT' : 'POST';
 
         try {
-            const res = await fetch(`/api/v1/manage/${currentEntity}`, {
+            const res = await fetch(`/api/v1/manage/${entity}`, {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -469,51 +498,82 @@ function initHomePageEditor(forcedEntity = null) {
             const result = await res.json();
             if (result.success) {
                 closeModal();
-                fetchResourceData();
-                Swal.fire({ title: 'Success!', text: `Item ${method === 'PUT' ? 'updated' : 'added'} successfully`, icon: 'success', confirmButtonColor: '#38bdf8', timer: 1500 });
+                fetchResourceData(entity);
+                Swal.fire({ 
+                    title: 'Sync Successful', 
+                    text: `Resource in ${entity} has been updated.`, 
+                    icon: 'success', 
+                    background: 'rgba(15,23,42,0.95)',
+                    color: '#fff',
+                    confirmButtonColor: '#38bdf8',
+                    backdrop: 'rgba(15,23,42,0.6)',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
             }
         } catch (error) {
-            Swal.fire('Error', 'Action failed', 'error');
+            Swal.fire({
+                title: 'Operation Failed',
+                text: 'Could not sync changes to the server.',
+                icon: 'error',
+                background: '#0f172a',
+                color: '#fff',
+                confirmButtonColor: '#ef4444'
+            });
         }
     });
 
     // 8. Delete Logic with SweetAlert Confirmation (Delegated)
     $(document).off('click', '.delete-btn').on('click', '.delete-btn', async function() {
         const id = $(this).data('id');
+        const entity = $(this).data('entity') || currentEntity;
         
-        const confirm = await Swal.fire({
-            title: 'Delete this entry?',
-            text: 'This action cannot be undone!',
+        const result = await Swal.fire({
+            title: 'Irreversible Action',
+            text: `Remove this entry from ${entity}? This will be permanently erased.`,
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonText: 'Permanently Delete',
+            background: 'rgba(15,23,42,0.95)',
+            color: '#fff',
             confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#1e293b',
-            confirmButtonText: 'Yes, delete it!'
+            cancelButtonColor: 'rgba(255,255,255,0.05)',
+            backdrop: 'rgba(15,23,42,0.8)'
         });
 
-        if (confirm.isConfirmed) {
+        if (result.isConfirmed) {
             try {
-                const res = await fetch(`/api/v1/manage/${currentEntity}`, {
+                const res = await fetch(`/api/v1/manage/${entity}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id })
                 });
                 if ((await res.json()).success) {
-                    fetchResourceData();
-                    Swal.fire('Deleted!', 'Entry has been removed.', 'success');
+                    fetchResourceData(entity);
+                    Swal.fire({ 
+                        title: 'Purged', 
+                        text: 'Item removed from database.', 
+                        icon: 'success', 
+                        background: 'rgba(15,23,42,0.95)', 
+                        color: '#fff',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        position: 'top-end',
+                        toast: true
+                    });
                 }
             } catch (error) {
-                Swal.fire('Error', 'Delete failed', 'error');
+                Swal.fire({ title: 'Error', text: 'Deletion encountered a server fault.', icon: 'error', background: '#0f172a', color: '#fff' });
             }
         }
     });
 
-    // Initial Load - Only if not already handled by tab auto-load
-    if (forcedEntity) {
-        if (forcedEntity === 'hero') loadHeroData();
-        else fetchResourceData();
-    } else if (!$('.tab-btn').length) {
-        // Fallback for single-pane pages without forced entity
-        fetchResourceData();
+    // Initial Load - Ensure data is fetched after all functions are defined
+    if (currentEntity === 'hero') {
+        loadHeroData();
+    } else {
+        fetchResourceData(currentEntity);
     }
 }

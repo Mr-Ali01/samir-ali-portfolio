@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Management - Samir Ali Admin</title>
-    
+
     <!-- Unified Theme Manager (Must be first) -->
     <script src="theme-manager.js"></script>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,14 +40,17 @@
             opacity: 0.7;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .tab-btn:hover {
             opacity: 1;
             color: var(--dash-text);
         }
+
         .tab-btn.active {
             opacity: 1;
             color: var(--dash-accent);
         }
+
         .tab-btn.active::after {
             content: '';
             position: absolute;
@@ -59,11 +63,30 @@
             border-radius: 99px;
             box-shadow: 0 0 10px var(--dash-accent);
         }
-        .section-pane { display: none; }
-        .section-pane.active { display: block; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-pane {
+            display: none;
+        }
+
+        .section-pane.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
+
 <body class="bg-dash-bg text-dash-text antialiased">
     <div class="flex relative z-10 min-h-screen">
         <!-- Shared Sidebar Container (Injected via admin-ui.js) -->
@@ -75,222 +98,304 @@
             <div id="admin-header-container" class="sticky top-0 z-40"></div>
 
             <div id="admin-view-content" class="fade-in">
-            <div class="p-6 md:p-10 lg:p-12 space-y-12">
-                
-                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
-                    <div>
-                        <h1 class="text-3xl md:text-4xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-dash-text to-dash-text/50">Home Configurator</h1>
-                        <p class="text-dash-muted text-sm font-medium">Dynamically control your portfolio homepage sections.</p>
+                <div class="p-6 md:p-10 lg:p-12 space-y-12">
+
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
+                        <div>
+                            <h1
+                                class="text-3xl md:text-4xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-dash-text to-dash-text/50">
+                                Home Configurator</h1>
+                            <p class="text-dash-muted text-sm font-medium">Dynamically control your portfolio homepage
+                                sections.</p>
+                        </div>
                     </div>
-                </div>
 
-            <!-- Tab Navigation -->
-            <div class="flex items-center gap-4 sm:gap-8 border-b border-dash-border mb-10 overflow-x-auto custom-scrollbar pb-2">
-                <button class="tab-btn active px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all" data-tab="hero">Hero Section</button>
-                <button class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all" data-tab="about">About Config</button>
-                <button class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all" data-tab="skills">Skills Preview</button>
-                <button class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all" data-tab="education">Education</button>
-                <button class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all" data-tab="experience">Experience</button>
-            </div>
+                    <!-- Tab Navigation -->
+                    <div
+                        class="flex items-center gap-4 sm:gap-8 border-b border-dash-border mb-10 overflow-x-auto custom-scrollbar pb-2">
+                        <button
+                            class="tab-btn active px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all"
+                            data-tab="hero">Hero Section</button>
+                        <button
+                            class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all"
+                            data-tab="about">About Config</button>
+                        <button
+                            class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all"
+                            data-tab="skills">Skills Preview</button>
+                        <button
+                            class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all"
+                            data-tab="education">Education</button>
+                        <button
+                            class="tab-btn px-2 sm:px-4 py-3 font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] whitespace-nowrap transition-all"
+                            data-tab="experience">Experience</button>
+                    </div>
 
-            <!-- Tab Panes -->
-            <div id="tab-panes">
-                <!-- 1. Hero Content -->
-                <div class="section-pane active" id="pane-hero">
-                    <div class="bg-[rgba(15,23,42,0.4)] backdrop-blur-2xl p-6 sm:p-10 rounded-[2.5rem] max-w-5xl border border-[var(--dash-border)] shadow-2xl relative overflow-hidden">
-                        <!-- Glow overlay -->
-                        <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-dash-accent/30 to-transparent pointer-events-none"></div>
-                        <div class="absolute -top-40 -right-40 w-80 h-80 bg-dash-accent/10 rounded-full blur-[80px] pointer-events-none"></div>
-
-                        <h3 class="text-lg md:text-xl font-black mb-8 flex items-center gap-3 text-dash-text relative z-10">
-                            <div class="w-10 h-10 rounded-xl bg-dash-accent/10 flex items-center justify-center border border-dash-accent/20"><i data-lucide="zap" class="text-dash-accent"></i></div> 
-                            Core Hero Configuration
-                        </h3>
-                        <form id="form-hero" class="space-y-8 relative z-10" onsubmit="return false;" method="POST">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label class="dash-label">Main Name / Branding</label>
-                                    <input type="text" name="name" class="dash-input" placeholder="e.g. SAMIR ALY">
+                    <!-- Tab Panes -->
+                    <div id="tab-panes">
+                        <!-- 1. Hero Content -->
+                        <div class="section-pane active" id="pane-hero">
+                            <div
+                                class="bg-[rgba(15,23,42,0.4)] backdrop-blur-2xl p-6 sm:p-10 rounded-[2.5rem] max-w-5xl border border-[var(--dash-border)] shadow-2xl relative overflow-hidden">
+                                <!-- Glow overlay -->
+                                <div
+                                    class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-dash-accent/30 to-transparent pointer-events-none">
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="dash-label">Status Label (Header pill)</label>
-                                    <input type="text" name="status" class="dash-input" placeholder="e.g. Available now">
+                                <div
+                                    class="absolute -top-40 -right-40 w-80 h-80 bg-dash-accent/10 rounded-full blur-[80px] pointer-events-none">
                                 </div>
-                            </div>
-                            
-                            <div class="space-y-2">
-                                <label class="dash-label">Hero Tagline / Headline Description</label>
-                                <textarea name="description" rows="3" class="dash-input resize-y min-h-[100px]" placeholder="Type out your bold intro text..."></textarea>
-                            </div>
 
-                            <!-- Buttons Section -->
-                            <div class="space-y-4 pt-6 border-t border-dash-border/30">
-                                <h4 class="text-[10px] font-black uppercase tracking-widest text-dash-accent bg-dash-accent/10 inline-block px-3 py-1 rounded-sm">Call To Actions</h4>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                <h3
+                                    class="text-lg md:text-xl font-black mb-8 flex items-center gap-3 text-dash-text relative z-10">
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-dash-accent/10 flex items-center justify-center border border-dash-accent/20">
+                                        <i data-lucide="zap" class="text-dash-accent"></i></div>
+                                    Core Hero Configuration
+                                </h3>
+                                <form id="form-hero" class="space-y-8 relative z-10" onsubmit="return false;"
+                                    method="POST">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="space-y-2">
+                                            <label class="dash-label">Main Name / Branding</label>
+                                            <input type="text" name="name" class="dash-input"
+                                                placeholder="e.g. SAMIR ALY">
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="dash-label">Status Label (Header pill)</label>
+                                            <input type="text" name="status" class="dash-input"
+                                                placeholder="e.g. Available now">
+                                        </div>
+                                    </div>
+
                                     <div class="space-y-2">
-                                        <label class="dash-label text-[9px] text-dash-muted">Primary Button</label>
-                                        <input type="text" name="btn_1" class="dash-input text-xs pt-3 pb-3">
+                                        <label class="dash-label">Hero Tagline / Headline Description</label>
+                                        <textarea name="description" rows="3" class="dash-input resize-y min-h-[100px]"
+                                            placeholder="Type out your bold intro text..."></textarea>
                                     </div>
-                                    <div class="space-y-2">
-                                        <label class="dash-label text-[9px] text-dash-muted">Secondary Btn</label>
-                                        <input type="text" name="btn_2" class="dash-input text-xs pt-3 pb-3">
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label class="dash-label text-[9px] text-dash-muted">Tertiary Btn (Resume)</label>
-                                        <input type="text" name="btn_3" class="dash-input text-xs pt-3 pb-3">
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Stats Section -->
-                            <div class="space-y-4 pt-6 border-t border-dash-border/30">
-                                <h4 class="text-[10px] font-black uppercase tracking-widest text-dash-secondary bg-dash-secondary/10 inline-block px-3 py-1 rounded-sm">Metrics Grid</h4>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                    <div class="flex gap-2">
-                                        <input type="text" name="stat_val_1" class="dash-input w-2/5 p-3 text-center font-bold" placeholder="Val (2+)">
-                                        <input type="text" name="stat_lab_1" class="dash-input w-3/5 p-3 text-xs" placeholder="Metric Name">
+                                    <!-- Buttons Section -->
+                                    <div class="space-y-4 pt-6 border-t border-dash-border/30">
+                                        <h4
+                                            class="text-[10px] font-black uppercase tracking-widest text-dash-accent bg-dash-accent/10 inline-block px-3 py-1 rounded-sm">
+                                            Call To Actions</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                            <div class="space-y-2">
+                                                <label class="dash-label text-[9px] text-dash-muted">Primary
+                                                    Button</label>
+                                                <input type="text" name="btn_1" class="dash-input text-xs pt-3 pb-3">
+                                            </div>
+                                            <div class="space-y-2">
+                                                <label class="dash-label text-[9px] text-dash-muted">Secondary
+                                                    Btn</label>
+                                                <input type="text" name="btn_2" class="dash-input text-xs pt-3 pb-3">
+                                            </div>
+                                            <div class="space-y-2">
+                                                <label class="dash-label text-[9px] text-dash-muted">Tertiary Btn
+                                                    (Resume)</label>
+                                                <input type="text" name="btn_3" class="dash-input text-xs pt-3 pb-3">
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="flex gap-2">
-                                        <input type="text" name="stat_val_2" class="dash-input w-2/5 p-3 text-center font-bold" placeholder="Val (15+)">
-                                        <input type="text" name="stat_lab_2" class="dash-input w-3/5 p-3 text-xs" placeholder="Metric Name">
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <input type="text" name="stat_val_3" class="dash-input w-2/5 p-3 text-center font-bold" placeholder="Val (100%)">
-                                        <input type="text" name="stat_lab_3" class="dash-input w-3/5 p-3 text-xs" placeholder="Metric Name">
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Image Upload Layer -->
-                            <div class="space-y-3 pt-6 border-t border-dash-border/30 group">
-                                <label class="dash-label">Hero Profile Render Engine</label>
-                                <div class="flex flex-col sm:flex-row items-center gap-4">
-                                    <input type="file" id="hero-image-file" class="hidden" accept="image/*">
-                                    <label for="hero-image-file" class="flex-1 w-full bg-[#050B14] border border-white/5 border-dashed rounded-xl p-6 text-xs text-dash-muted font-bold text-center cursor-pointer hover:border-dash-accent transition-all group-hover:bg-[#08101f]">
-                                        <i data-lucide="upload-cloud" class="w-6 h-6 mx-auto mb-2 opacity-50 group-hover:opacity-100 group-hover:text-dash-accent transition-all"></i>
-                                        Upload a new subject rendering (PNG/JPG)
-                                    </label>
-                                    <div id="hero-img-preview" class="w-full sm:w-24 h-24 rounded-xl bg-white/5 border border-white/10 overflow-hidden shadow-sm hidden">
-                                        <img src="" class="w-full h-full object-cover">
+                                    <!-- Stats Section -->
+                                    <div class="space-y-4 pt-6 border-t border-dash-border/30">
+                                        <h4
+                                            class="text-[10px] font-black uppercase tracking-widest text-dash-secondary bg-dash-secondary/10 inline-block px-3 py-1 rounded-sm">
+                                            Metrics Grid</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                            <div class="flex gap-2">
+                                                <input type="text" name="stat_val_1"
+                                                    class="dash-input w-2/5 p-3 text-center font-bold"
+                                                    placeholder="Val (2+)">
+                                                <input type="text" name="stat_lab_1"
+                                                    class="dash-input w-3/5 p-3 text-xs" placeholder="Metric Name">
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <input type="text" name="stat_val_2"
+                                                    class="dash-input w-2/5 p-3 text-center font-bold"
+                                                    placeholder="Val (15+)">
+                                                <input type="text" name="stat_lab_2"
+                                                    class="dash-input w-3/5 p-3 text-xs" placeholder="Metric Name">
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <input type="text" name="stat_val_3"
+                                                    class="dash-input w-2/5 p-3 text-center font-bold"
+                                                    placeholder="Val (100%)">
+                                                <input type="text" name="stat_lab_3"
+                                                    class="dash-input w-3/5 p-3 text-xs" placeholder="Metric Name">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <input type="hidden" name="image_url">
-                            </div>
 
-                            <div class="flex flex-col sm:flex-row justify-end pt-8 border-t border-dash-border/30 mt-8">
-                                <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-dash-accent to-blue-600 outline-none text-white px-8 md:px-12 py-4 rounded-xl font-black text-xs uppercase cursor-pointer tracking-[0.2em] shadow-xl shadow-dash-accent/20 hover:shadow-dash-accent/40 hover:-translate-y-1 transition-all flex items-center justify-center group">
-                                    Publish Hero Layout 
-                                    <i data-lucide="check-circle" class="w-4 h-4 ml-2.5 opacity-80 group-hover:scale-110 transition-transform"></i>
+                                    <!-- Image Upload Layer -->
+                                    <div class="space-y-3 pt-6 border-t border-dash-border/30 group">
+                                        <label class="dash-label">Hero Profile Render Engine</label>
+                                        <div class="flex flex-col sm:flex-row items-center gap-4">
+                                            <input type="file" id="hero-image-file" class="hidden" accept="image/*">
+                                            <label for="hero-image-file"
+                                                class="flex-1 w-full bg-[#050B14] border border-white/5 border-dashed rounded-xl p-6 text-xs text-dash-muted font-bold text-center cursor-pointer hover:border-dash-accent transition-all group-hover:bg-[#08101f]">
+                                                <i data-lucide="upload-cloud"
+                                                    class="w-6 h-6 mx-auto mb-2 opacity-50 group-hover:opacity-100 group-hover:text-dash-accent transition-all"></i>
+                                                Upload a new subject rendering (PNG/JPG)
+                                            </label>
+                                            <div id="hero-img-preview"
+                                                class="w-full sm:w-24 h-24 rounded-xl bg-white/5 border border-white/10 overflow-hidden shadow-sm hidden">
+                                                <img src="" class="w-full h-full object-cover">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="image_url">
+                                    </div>
+
+                                    <div
+                                        class="flex flex-col sm:flex-row justify-end pt-8 border-t border-dash-border/30 mt-8">
+                                        <button type="submit"
+                                            class="w-full sm:w-auto bg-gradient-to-r from-dash-accent to-blue-600 outline-none text-white px-8 md:px-12 py-4 rounded-xl font-black text-xs uppercase cursor-pointer tracking-[0.2em] shadow-xl shadow-dash-accent/20 hover:shadow-dash-accent/40 hover:-translate-y-1 transition-all flex items-center justify-center group">
+                                            Publish Hero Layout
+                                            <i data-lucide="check-circle"
+                                                class="w-4 h-4 ml-2.5 opacity-80 group-hover:scale-110 transition-transform"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- 2. About Content -->
+                        <div class="section-pane" id="pane-about">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] backdrop-blur-md p-6 border border-white/5 rounded-3xl">
+                                <div>
+                                    <h1 class="text-xl font-black mb-1">About Text Blocks</h1>
+                                    <p class="text-xs text-dash-muted font-bold">Manage descriptive layers sequentially.
+                                    </p>
+                                </div>
+                                <button
+                                    class="bg-dash-accent/10 border border-dash-accent/30 text-dash-accent px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-dash-accent hover:text-white transition-all w-full sm:w-auto add-btn">
+                                    <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Add Block
                                 </button>
+                            </div>
+                            <div class="grid grid-cols-1 gap-6" id="about-list"></div>
+                        </div>
+
+                        <!-- 3. Skills Content (Preview & Link) -->
+                        <div class="section-pane" id="pane-skills">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] backdrop-blur-md p-6 border border-white/5 rounded-3xl">
+                                <div>
+                                    <h3 class="text-xl font-black mb-1">Skills Module Preview</h3>
+                                    <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest"><i
+                                            data-lucide="monitor" class="w-3 h-3 inline mr-1"></i> Live Render Frame</p>
+                                </div>
+                                <a href="skills.html"
+                                    class="flex items-center justify-center gap-3 bg-white/5 text-dash-text border border-white/10 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all w-full sm:w-auto">
+                                    Jump to Editor <i data-lucide="arrow-right-circle" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+
+                            <!-- Dynamic Preview (Mirrors index.html style) -->
+                            <div id="skills-home-preview" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Preview loaded via JS -->
+                            </div>
+                        </div>
+
+                        <!-- 4. Education Content -->
+                        <div class="section-pane" id="pane-education">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] border border-[var(--dash-border)] rounded-[2rem] p-6 lg:p-8 backdrop-blur-xl">
+                                <div>
+                                    <h3 class="text-xl font-black mb-1">Education Timeline</h3>
+                                    <p class="text-xs font-bold text-dash-muted">Inject academic certs mapped to the UI.
+                                    </p>
+                                </div>
+                                <button
+                                    class="bg-dash-accent/10 border border-dash-accent/30 text-dash-accent px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-dash-accent hover:text-white transition-all w-full sm:w-auto add-btn">
+                                    <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Add Entry
+                                </button>
+                            </div>
+
+                            <div class="space-y-4" id="education-list">
+                                <!-- Entries will be loaded here via JS -->
+                                <div
+                                    class="text-dash-muted text-center py-24 bg-[rgba(15,23,42,0.2)] rounded-[2.5rem] border border-dashed border-[var(--dash-border)]">
+                                    <i data-lucide="graduation-cap" class="w-8 h-8 opacity-20 mx-auto mb-3"></i>
+                                    <span class="text-xs font-bold tracking-widest uppercase">No academic paths
+                                        configured.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Experience Content -->
+                        <div class="section-pane" id="pane-experience">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] border border-[var(--dash-border)] rounded-[2rem] p-6 lg:p-8 backdrop-blur-xl">
+                                <div>
+                                    <h3 class="text-xl font-black mb-1">Career Matrix</h3>
+                                    <p class="text-xs font-bold text-dash-muted">Manage active deployments & historical
+                                        roles.</p>
+                                </div>
+                                <button
+                                    class="bg-dash-secondary/10 border border-dash-secondary/30 text-dash-secondary px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-dash-secondary hover:text-white transition-all w-full sm:w-auto add-btn">
+                                    <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Add Role
+                                </button>
+                            </div>
+                            <div class="space-y-4" id="experience-list">
+                                <!-- Loaded via JS -->
+                                <div
+                                    class="text-dash-muted text-center py-24 bg-[rgba(15,23,42,0.2)] rounded-[2.5rem] border border-dashed border-[var(--dash-border)]">
+                                    <i data-lucide="briefcase" class="w-8 h-8 opacity-20 mx-auto mb-3"></i>
+                                    <span class="text-xs font-bold tracking-widest uppercase">No career nodes
+                                        configured.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- More panes as needed -->
+                    </div>
+                </div> <!-- End spacing wrap -->
+
+                <!-- Modals (Moved inside SPA View Content) -->
+                <div id="modal-backdrop"
+                    class="fixed inset-0 z-[999999] hidden items-center justify-center bg-[#020617]/98 backdrop-blur-3xl p-4 transition-all duration-500">
+                    <div class="bg-[#0f172a] w-[320px] h-[500px] rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col overflow-hidden"
+                        id="modal-container">
+                        <!-- Modal Header -->
+                        <div
+                            class="p-6 pb-4 border-b border-white/5 flex justify-between items-start shrink-0 bg-white/5">
+                            <div>
+                                <h2 class="text-sm font-black uppercase tracking-widest text-dash-text"
+                                    id="modal-title">Editor</h2>
+                                <p class="text-[8px] text-dash-muted font-bold uppercase tracking-widest mt-0.5">Adjust
+                                    Portfolio Content</p>
+                            </div>
+                            <button
+                                class="close-modal text-dash-muted hover:text-red-400 transition-colors p-1.5 bg-white/5 rounded-lg border border-white/5 hover:border-red-400/20"><i
+                                    data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                        </div>
+
+                        <!-- Modal Body (Form) -->
+                        <form id="crud-form" class="flex-1 flex flex-col overflow-hidden">
+                            <div id="form-fields" class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-5">
+                                <!-- Dynamic fields injected here -->
+                            </div>
+
+                            <!-- Modal Footer -->
+                            <div class="p-5 border-t border-white/5 bg-black/20 flex items-center gap-3 shrink-0">
+                                <button type="button"
+                                    class="close-modal flex-1 text-dash-muted hover:text-dash-text py-2.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-colors bg-white/5 border border-white/5">Abort</button>
+                                <button type="submit"
+                                    class="flex-1 bg-gradient-to-r from-dash-accent to-blue-600 text-white py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-dash-accent/20 hover:scale-[1.02] active:scale-95 transition-all">Commit</button>
                             </div>
                         </form>
                     </div>
                 </div>
-
-                <!-- 2. About Content -->
-                <div class="section-pane" id="pane-about">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] backdrop-blur-md p-6 border border-white/5 rounded-3xl">
-                        <div>
-                             <h1 class="text-xl font-black mb-1">About Text Blocks</h1>
-                             <p class="text-xs text-dash-muted font-bold">Manage descriptive layers sequentially.</p>
-                        </div>
-                        <button class="bg-dash-accent/10 border border-dash-accent/30 text-dash-accent px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-dash-accent hover:text-white transition-all w-full sm:w-auto add-btn">
-                             <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Add Block
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 gap-6" id="about-list"></div>
-                </div>
-
-                <!-- 3. Skills Content (Preview & Link) -->
-                <div class="section-pane" id="pane-skills">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] backdrop-blur-md p-6 border border-white/5 rounded-3xl">
-                        <div>
-                            <h3 class="text-xl font-black mb-1">Skills Module Preview</h3>
-                            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest"><i data-lucide="monitor" class="w-3 h-3 inline mr-1"></i> Live Render Frame</p>
-                        </div>
-                        <a href="skills.html" class="flex items-center justify-center gap-3 bg-white/5 text-dash-text border border-white/10 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all w-full sm:w-auto">
-                            Jump to Editor <i data-lucide="arrow-right-circle" class="w-4 h-4"></i>
-                        </a>
-                    </div>
-                    
-                    <!-- Dynamic Preview (Mirrors index.html style) -->
-                    <div id="skills-home-preview" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Preview loaded via JS -->
-                    </div>
-                </div>
-
-                <!-- 4. Education Content -->
-                <div class="section-pane" id="pane-education">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] border border-[var(--dash-border)] rounded-[2rem] p-6 lg:p-8 backdrop-blur-xl">
-                        <div>
-                            <h3 class="text-xl font-black mb-1">Education Timeline</h3>
-                            <p class="text-xs font-bold text-dash-muted">Inject academic certs mapped to the UI.</p>
-                        </div>
-                        <button class="bg-dash-accent/10 border border-dash-accent/30 text-dash-accent px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-dash-accent hover:text-white transition-all w-full sm:w-auto add-btn">
-                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Add Entry
-                        </button>
-                    </div>
-                    
-                    <div class="space-y-4" id="education-list">
-                        <!-- Entries will be loaded here via JS -->
-                        <div class="text-dash-muted text-center py-24 bg-[rgba(15,23,42,0.2)] rounded-[2.5rem] border border-dashed border-[var(--dash-border)]">
-                            <i data-lucide="graduation-cap" class="w-8 h-8 opacity-20 mx-auto mb-3"></i>
-                            <span class="text-xs font-bold tracking-widest uppercase">No academic paths configured.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Experience Content -->
-                <div class="section-pane" id="pane-experience">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 bg-[rgba(15,23,42,0.4)] border border-[var(--dash-border)] rounded-[2rem] p-6 lg:p-8 backdrop-blur-xl">
-                        <div>
-                            <h3 class="text-xl font-black mb-1">Career Matrix</h3>
-                            <p class="text-xs font-bold text-dash-muted">Manage active deployments & historical roles.</p>
-                        </div>
-                        <button class="bg-dash-secondary/10 border border-dash-secondary/30 text-dash-secondary px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-dash-secondary hover:text-white transition-all w-full sm:w-auto add-btn">
-                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Add Role
-                        </button>
-                    </div>
-                    <div class="space-y-4" id="experience-list">
-                        <!-- Loaded via JS -->
-                         <div class="text-dash-muted text-center py-24 bg-[rgba(15,23,42,0.2)] rounded-[2.5rem] border border-dashed border-[var(--dash-border)]">
-                            <i data-lucide="briefcase" class="w-8 h-8 opacity-20 mx-auto mb-3"></i>
-                            <span class="text-xs font-bold tracking-widest uppercase">No career nodes configured.</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- More panes as needed -->
-            </div>
-            </div> <!-- End spacing wrap -->
-        </div> <!-- End SPA View Content -->
+            </div> <!-- End SPA View Content -->
         </main>
     </div>
-
-    <!-- Modals -->
-    <div id="modal-backdrop" class="fixed inset-0 bg-dash-bg/90 backdrop-blur-md z-50 hidden items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        <div class="bg-[rgba(15,23,42,0.9)] p-8 sm:p-10 rounded-[2.5rem] w-full max-w-xl border border-[var(--dash-border)] shadow-[0_0_80px_-20px_rgba(56,189,248,0.2)] scale-95 transition-all my-auto" id="modal-container">
-            <div class="flex justify-between items-start mb-8">
-                 <h2 class="text-2xl font-black" id="modal-title">System Entry Editor</h2>
-                 <button class="close-modal text-dash-muted hover:text-red-400 transition-colors p-2 bg-white/5 rounded-xl border border-white/5 hover:border-red-400/20"><i data-lucide="x" class="w-4 h-4"></i></button>
-            </div>
-            <form id="crud-form" class="space-y-6">
-                <!-- Dynamic form fields based on entity -->
-                <div id="form-fields" class="space-y-5"></div>
-                
-                <div class="flex flex-col-reverse sm:flex-row items-center gap-4 justify-end pt-8 border-t border-dash-border">
-                    <button type="button" class="close-modal w-full sm:w-auto text-dash-muted hover:text-dash-text px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors">Abort</button>
-                    <button type="submit" class="w-full sm:w-auto outline-none bg-gradient-to-r from-dash-accent to-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-dash-accent/20 hover:scale-[1.02] active:scale-95 transition-all">Commit Save</button>
-                </div>
-            </form>
-        </div>
     </div>
 
     </div>
     <script src="admin-ui.js"></script>
     <script src="homepage.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Only init if not already inside another layout shell
             if ($('#admin-sidebar-container').is(':empty')) {
                 AdminUI.init('homepage');
@@ -302,4 +407,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>
