@@ -248,24 +248,28 @@ const PORT = process.env.PORT || 5000;
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         `);
 
-        // Seed Projects if missing
-        const [existingProjects] = await db.query('SELECT name FROM projects');
-        const existingNames = existingProjects.map(p => p.name);
-        
-        const projectsData = [
-            ['WhatsApp Web Clone', 'Featured', 'A responsive messaging interface inspired by WhatsApp Web, built to study UI design and real-time communication.', 'React, Message, Realtime', 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&q=80&w=1000', '#', '#'],
-            ['Developer Portfolio System', 'Featured', 'A personal developer portfolio featuring a dynamic CMS, multiple project showcases, and detailed information bars.', 'React, Next.js, Framer Motion', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000', '#', '#'],
-            ['SaveReels Downloader', 'Featured', 'A web tool that allows users to download reels from Instagram. The application extracts the video source and...', 'React, API, Tailwind', 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=1000', '#', '#'],
-            ['Bank Management System', 'Utility', 'A robust console-based application featuring real-time database connectivity, account creation algorithms, and secure transactional tracking.', 'Core Java, JDBC, MySQL', 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800', '#', '#'],
-            ['Ticket Management System', 'Utility', 'An efficient system tailored around advanced collection frameworks to store user and ticket information.', 'Core Java, Data Structures', 'https://images.unsplash.com/photo-1522881451255-f59c4bafb1a5?auto=format&fit=crop&q=80&w=800', '#', '#'],
-            ['Dynamic Weather App', 'Featured', 'A modern web-based interface querying real-time forecasting data dynamically triggered by user input.', 'HTML/CSS, JS, Web APIs', 'https://images.unsplash.com/photo-1592210454359-9043f067919b?auto=format&fit=crop&q=80&w=800', '#', '#'],
-            ['Favicon Fetch API', 'Utility', 'A utility API that retrieves a website\'s favicon from any URL...', 'Node.js, Express, Cheerio', '', '#', '#'],
-            ['SaveLinks — Link Manager', 'Utility', 'A lightweight web application for saving and organizing useful links.', 'React, LocalStorage, Tailwind', '', '#', '#'],
-            ['Food Discovery App UI', 'Design', 'A complete multi-page UI template for a food discovery platform...', 'HTML, CSS, JavaScript', '', '#', '#']
-        ];
+        // =========================================================
+        // ONE-TIME DATABASE FALLBACK SEEDER (NOT STATIC FRONTEND)
+        // =========================================================
+        // This 'projectsData' array only injects placeholder rows into MySQL
+        // strictly if the 'projects' table is completely empty on fresh install.
+        // It ensures your portfolio doesn't look blank out of the box. 
+        // 100% of the live website content is fetched dynamically from the DB.
+        const [existingProjects] = await db.query('SELECT id FROM projects LIMIT 1');
+        if (existingProjects.length === 0) {
+            const projectsData = [
+                ['WhatsApp Web Clone', 'Featured', 'A responsive messaging interface inspired by WhatsApp Web, built to study UI design and real-time communication.', 'React, Message, Realtime', 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&q=80&w=1000', '#', '#'],
+                ['Developer Portfolio System', 'Featured', 'A personal developer portfolio featuring a dynamic CMS, multiple project showcases, and detailed information bars.', 'React, Next.js, Framer Motion', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000', '#', '#'],
+                ['SaveReels Downloader', 'Featured', 'A web tool that allows users to download reels from Instagram. The application extracts the video source and...', 'React, API, Tailwind', 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=1000', '#', '#'],
+                ['Bank Management System', 'Utility', 'A robust console-based application featuring real-time database connectivity, account creation algorithms, and secure transactional tracking.', 'Core Java, JDBC, MySQL', 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800', '#', '#'],
+                ['Ticket Management System', 'Utility', 'An efficient system tailored around advanced collection frameworks to store user and ticket information.', 'Core Java, Data Structures', 'https://images.unsplash.com/photo-1522881451255-f59c4bafb1a5?auto=format&fit=crop&q=80&w=800', '#', '#'],
+                ['Dynamic Weather App', 'Featured', 'A modern web-based interface querying real-time forecasting data dynamically triggered by user input.', 'HTML/CSS, JS, Web APIs', 'https://images.unsplash.com/photo-1592210454359-9043f067919b?auto=format&fit=crop&q=80&w=800', '#', '#'],
+                ['Favicon Fetch API', 'Utility', 'A utility API that retrieves a website\'s favicon from any URL...', 'Node.js, Express, Cheerio', '', '#', '#'],
+                ['SaveLinks — Link Manager', 'Utility', 'A lightweight web application for saving and organizing useful links.', 'React, LocalStorage, Tailwind', '', '#', '#'],
+                ['Food Discovery App UI', 'Design', 'A complete multi-page UI template for a food discovery platform...', 'HTML, CSS, JavaScript', '', '#', '#']
+            ];
 
-        for (const p of projectsData) {
-            if (!existingNames.includes(p[0])) {
+            for (const p of projectsData) {
                 await db.query(`INSERT INTO projects (name, category, short_description, tech_stack, preview_image, live_link, github_link) VALUES (?, ?, ?, ?, ?, ?, ?)`, p);
             }
         }

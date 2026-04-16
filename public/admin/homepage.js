@@ -359,7 +359,15 @@ function initHomePageEditor(forcedEntity = null) {
 
     const openModal = async (id = null, entityOverride = null) => {
         const activeEntity = entityOverride || currentEntity;
-        const modal = $('#modal-backdrop');
+        let modal = $('#modal-backdrop');
+        
+        // Append to body to ensure it breaks out of parent stacking contexts (like transform or overflow)
+        if (modal.parent().prop('tagName') !== 'BODY') {
+            // Clean up any potential orphaned modals from previous SPA navigations
+            $('body > #modal-backdrop').not(modal).remove();
+            modal.appendTo('body');
+        }
+
         const formFields = $('#form-fields');
         formFields.empty();
         

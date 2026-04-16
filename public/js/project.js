@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Smooth Scrolling Integration
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         card.addEventListener('mouseleave', () => {
-             card.style.transform = `perspective(1000px) translateY(0) rotateX(0deg) rotateY(0deg)`;
+            card.style.transform = `perspective(1000px) translateY(0) rotateX(0deg) rotateY(0deg)`;
         });
     });
 
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 projects.forEach((p, index) => {
                     const delay = (index % 3) * 100;
                     const techTags = (p.tech_stack || '').split(',').map(t => `<span class="tech-tag">${t.trim()}</span>`).join('');
-                    
+
                     if (p.category === 'Featured') {
                         if (!featuredGrid) return;
                         const html = `
@@ -192,9 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </p>
 
                                     <!-- Bottom Buttons -->
-                                    <div class="flex flex-row items-center gap-3 mt-auto pt-4 border-t border-[var(--theme-card-border)]/50 flex-shrink-0 w-full">
-                                        <a href="${p.live_link}" target="_blank" rel="noopener noreferrer" class="flex-1 bg-gradient-to-r from-theme-primary to-theme-secondary hover:shadow-[0_0_20px_var(--theme-accent-primary)] hover:-translate-y-1 transition-all duration-300 py-3 px-4 rounded-xl text-white text-[11px] uppercase font-black tracking-wider text-center flex items-center justify-center gap-2">Live Demo <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
-                                        <a href="${p.github_link}" target="_blank" rel="noopener noreferrer" class="bg-slate-100 dark:bg-white/5 hover:bg-[var(--theme-card-border)] transition-colors duration-300 py-3 px-5 rounded-xl text-[var(--theme-text-primary)] hover:text-theme-primary hover:-translate-y-1 text-center flex items-center justify-center border border-[var(--theme-card-border)] max-w-[60px]" title="GitHub Repository"><i data-lucide="github" class="w-4 h-4"></i></a>
+                                    <div class="flex flex-col sm:flex-row items-center gap-3 mt-auto pt-4 border-t border-[var(--theme-card-border)]/50 flex-shrink-0 w-full">
+                                        <a href="${p.live_link}" target="_blank" rel="noopener noreferrer" class="w-full sm:flex-1 bg-gradient-to-r from-theme-primary to-theme-secondary hover:shadow-[0_0_20px_var(--theme-accent-primary)] hover:-translate-y-1 transition-all duration-300 py-3 px-3 rounded-xl text-white text-[11px] uppercase font-black tracking-wider text-center flex items-center justify-center gap-2 whitespace-nowrap">Live Demo <i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                                        <a href="${p.github_link}" target="_blank" rel="noopener noreferrer" class="w-full sm:flex-1 bg-slate-100 dark:bg-white/5 hover:bg-[var(--theme-card-border)] transition-colors duration-300 py-3 px-3 rounded-xl text-[var(--theme-text-primary)] text-[11px] uppercase font-black tracking-wider hover:text-theme-primary hover:-translate-y-1 text-center flex items-center justify-center gap-2 border border-[var(--theme-card-border)] whitespace-nowrap" title="GitHub Repository">Source Code <i data-lucide="github" class="w-3.5 h-3.5"></i></a>
                                     </div>
                                 </div>
                             </article>
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Refresh Icons & AOS
                 if (typeof lucide !== 'undefined') lucide.createIcons();
                 if (typeof AOS !== 'undefined') AOS.refresh();
-                
+
                 // Re-bind card tilt logic
                 bindCardTilt();
             }
