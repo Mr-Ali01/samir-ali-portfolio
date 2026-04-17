@@ -359,13 +359,26 @@ function initHomePageEditor(forcedEntity = null) {
 
     const openModal = async (id = null, entityOverride = null) => {
         const activeEntity = entityOverride || currentEntity;
-        let modal = $('#modal-backdrop');
         
-        // Append to body to ensure it breaks out of parent stacking contexts (like transform or overflow)
-        if (modal.parent().prop('tagName') !== 'BODY') {
-            // Clean up any potential orphaned modals from previous SPA navigations
-            $('body > #modal-backdrop').not(modal).remove();
-            modal.appendTo('body');
+        let modal;
+        let freshModal = $('#admin-view-content #modal-backdrop');
+        
+        if (freshModal.length > 0) {
+            // A fresh modal exists inside the injected SPA content.
+            // This means any existing modal in the body is a zombie from a previous tab.
+            $('body > #modal-backdrop').remove();
+            
+            // Move the fresh modal to the body to escape stacking context constraints
+            freshModal.appendTo('body');
+            modal = freshModal;
+        } else {
+            // Second click on the same page. The modal is already in the body.
+            modal = $('body > #modal-backdrop');
+            
+            if (!modal.length) {
+                console.error("Critical: Modal backdrop is missing from the DOM entirely.");
+                return;
+            }
         }
 
         const formFields = $('#form-fields');
@@ -469,19 +482,25 @@ function initHomePageEditor(forcedEntity = null) {
         // Lock body scroll
         $('body').addClass('overflow-hidden');
 
+        // Show modal with animation
         modal.removeClass('hidden').addClass('flex');
-        setTimeout(() => modal.find('#modal-container').removeClass('scale-95').addClass('scale-100'), 10);
+        // Small delay to allow 'flex' rendering before triggering transitions
+        setTimeout(() => {
+            modal.removeClass('opacity-0');
+            modal.find('#modal-container').removeClass('scale-95').addClass('scale-100');
+        }, 10);
     };
 
     $(document).off('click', '.close-modal').on('click', '.close-modal', closeModal);
     function closeModal() {
         const modal = $('#modal-backdrop');
+        modal.addClass('opacity-0');
         modal.find('#modal-container').removeClass('scale-100').addClass('scale-95');
         
         // Unlock body scroll
         $('body').removeClass('overflow-hidden');
         
-        setTimeout(() => modal.addClass('hidden').removeClass('flex'), 200);
+        setTimeout(() => modal.addClass('hidden').removeClass('flex'), 300);
     }
 
     // 7. Submit CRUD with SweetAlert (Delegated)

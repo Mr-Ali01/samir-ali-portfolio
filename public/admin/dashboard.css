@@ -288,3 +288,33 @@ body {
     from { opacity: 0; transform: translateY(15px); } 
     to { opacity: 1; transform: translateY(0); } 
 }
+
+/* -----------------------------------------
+   GLOBAL BULLETPROOF MODAL OVERLAY
+   Fixes all stacking, dimming, & z-index issues 
+----------------------------------------- */
+#modal-backdrop, 
+#reply-modal-backdrop {
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.7) !important; /* Proper dim overlay */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    z-index: 2147483647 !important; /* Max possible z-index to stay above everything */
+}
+
+/* Ensure no inner content escapes the modal container and scale works */
+#modal-container, 
+#reply-modal-backdrop > div {
+    position: relative !important;
+    z-index: 2147483647 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.1) !important;
+}
+
+/* Force body lock */
+body.overflow-hidden {
+    overflow: hidden !important;
+    height: 100vh !important;
+}

@@ -54,49 +54,50 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Reply Modal (Moved inside SPA content) -->
+                <div id="reply-modal-backdrop" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-[8px] p-4 transition-all duration-300 opacity-0">
+                    <div class="glass-panel w-[320px] h-[500px] rounded-[2.5rem] border border-white/10 flex flex-col overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300">
+                        <!-- Header -->
+                        <div class="p-6 pb-4 border-b border-white/5 flex items-center justify-between bg-white/5 shrink-0">
+                            <div>
+                                <h3 class="text-sm font-black mb-0.5">Reply Studio</h3>
+                                <p id="reply-to-name" class="text-[8px] text-dash-accent font-black uppercase tracking-widest">Target: Loading...</p>
+                            </div>
+                            <button class="icon-btn close-reply-modal p-1.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-all"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                        </div>
+                        
+                        <form id="reply-form" class="flex-1 flex flex-col overflow-hidden">
+                            <input type="hidden" name="id" id="reply-contact-id">
+                            
+                            <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Inquiry Preview</label>
+                                    <div id="original-message-text" class="p-4 bg-white/5 rounded-xl text-xs italic opacity-60 border border-white/5 max-h-32 overflow-y-auto custom-scrollbar leading-relaxed">
+                                        <!-- Text here -->
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Your Response</label>
+                                    <textarea name="reply_message" id="reply-message" rows="6" required class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-xs focus:border-dash-accent transition-all outline-none resize-none placeholder:opacity-30" placeholder="Draft your email response..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="p-5 border-t border-white/5 bg-black/20 flex items-center gap-3 shrink-0">
+                                <button type="button" class="flex-1 py-2.5 rounded-xl border border-white/10 text-white font-black text-[9px] uppercase tracking-widest hover:bg-white/5 close-reply-modal">Abort</button>
+                                <button type="submit" id="send-reply-btn" class="flex-1 bg-dash-accent py-2.5 rounded-xl text-white font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-dash-accent/30 flex items-center justify-center gap-2">
+                                    <span>Dispatch</span>
+                                    <i data-lucide="send" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </main>
-    </div>
-
-    <!-- Reply Modal -->
-    <div id="reply-modal-backdrop" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-xl p-4">
-        <div class="glass-panel w-[320px] h-[500px] rounded-[2.5rem] border border-white/10 flex flex-col overflow-hidden shadow-2xl transform scale-95 transition-transform duration-200">
-            <!-- Header -->
-            <div class="p-6 pb-4 border-b border-white/5 flex items-center justify-between bg-white/5 shrink-0">
-                <div>
-                    <h3 class="text-sm font-black mb-0.5">Reply Studio</h3>
-                    <p id="reply-to-name" class="text-[8px] text-dash-accent font-black uppercase tracking-widest">Target: Loading...</p>
-                </div>
-                <button class="icon-btn close-reply-modal p-1.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-all"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-            </div>
-            
-            <form id="reply-form" class="flex-1 flex flex-col overflow-hidden">
-                <input type="hidden" name="id" id="reply-contact-id">
-                
-                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Inquiry Preview</label>
-                        <div id="original-message-text" class="p-4 bg-white/5 rounded-xl text-xs italic opacity-60 border border-white/5 max-h-32 overflow-y-auto custom-scrollbar leading-relaxed">
-                            <!-- Text here -->
-                        </div>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black uppercase tracking-widest text-dash-muted">Your Response</label>
-                        <textarea name="reply_message" id="reply-message" rows="6" required class="w-full bg-black/40 border border-dash-border rounded-xl p-4 text-xs focus:border-dash-accent transition-all outline-none resize-none placeholder:opacity-30" placeholder="Draft your email response..."></textarea>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="p-5 border-t border-white/5 bg-black/20 flex items-center gap-3 shrink-0">
-                    <button type="button" class="flex-1 py-2.5 rounded-xl border border-white/10 text-white font-black text-[9px] uppercase tracking-widest hover:bg-white/5 close-reply-modal">Abort</button>
-                    <button type="submit" id="send-reply-btn" class="flex-1 bg-dash-accent py-2.5 rounded-xl text-white font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-dash-accent/30 flex items-center justify-center gap-2">
-                        <span>Dispatch</span>
-                        <i data-lucide="send" class="w-3 h-3"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
     </div>
 
     <!-- Scripts -->
@@ -221,16 +222,37 @@
             // Lock background scroll
             $('body').addClass('overflow-hidden');
 
-            $('#reply-modal-backdrop').removeClass('hidden').addClass('flex');
-            setTimeout(() => $('#reply-modal-backdrop > div').addClass('scale-100').removeClass('scale-95'), 10);
+            let replyModal;
+            let freshReplyModal = $('#admin-view-content #reply-modal-backdrop');
+
+            if (freshReplyModal.length > 0) {
+                // SPA just loaded this page, clean up old zombies in the body
+                $('body > #reply-modal-backdrop').remove();
+                freshReplyModal.appendTo('body');
+                replyModal = freshReplyModal;
+            } else {
+                // Secondary clicks: The modal is already living safely in the body
+                replyModal = $('body > #reply-modal-backdrop');
+            }
+
+            replyModal.removeClass('hidden').addClass('flex');
+            setTimeout(() => {
+                replyModal.removeClass('opacity-0').addClass('opacity-100');
+                replyModal.find('> div').addClass('scale-100').removeClass('scale-95');
+            }, 10);
         });
 
         $('.close-reply-modal').click(function() {
             // Unlock background scroll
             $('body').removeClass('overflow-hidden');
 
-            $('#reply-modal-backdrop').addClass('hidden').removeClass('flex');
-            $('#reply-form')[0].reset();
+            $('#reply-modal-backdrop').removeClass('opacity-100').addClass('opacity-0');
+            $('#reply-modal-backdrop > div').removeClass('scale-100').addClass('scale-95');
+
+            setTimeout(() => {
+                $('#reply-modal-backdrop').addClass('hidden').removeClass('flex');
+                $('#reply-form')[0].reset();
+            }, 300);
         });
 
         $('#reply-form').submit(async function(e) {
