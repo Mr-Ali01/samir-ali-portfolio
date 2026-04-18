@@ -265,12 +265,12 @@ function initHomePageEditor(forcedEntity = null) {
                 if (catSkills.length > 0) {
                     const groupHtml = `
                         <div class="category-group mb-12" data-aos="fade-up">
-                            <div class="flex items-center gap-4 mb-8">
-                                <div class="h-px bg-dash-border flex-1 opacity-20"></div>
-                                <h3 class="text-xs font-black uppercase tracking-[0.3em] text-dash-accent bg-dash-bg px-4">${cat}</h3>
-                                <div class="h-px bg-dash-border flex-1 opacity-20"></div>
+                            <div class="flex items-center gap-4 mb-10">
+                                <div class="h-px bg-dash-border flex-1 opacity-40"></div>
+                                <h3 class="text-sm font-black uppercase tracking-[0.25em] text-dash-accent bg-dash-bg px-6 py-2 rounded-full border border-dash-border/50 shadow-sm">${cat}</h3>
+                                <div class="h-px bg-dash-border flex-1 opacity-40"></div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 list-container-inner"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 list-container-inner"></div>
                         </div>
                     `;
                     const $group = $(groupHtml);
@@ -437,6 +437,7 @@ function initHomePageEditor(forcedEntity = null) {
             projects: [
                 { name: 'name', label: 'Project Name', type: 'text' },
                 { name: 'category', label: 'Category', type: 'select', options: ['Featured', 'Utility', 'Design', 'Experiments'] },
+                { name: 'project_label', label: 'Project Label', type: 'select', options: ['Top Rated', 'Website', 'Tools', 'SEO Pages', 'Mobile'] },
                 { name: 'short_description', label: 'Short Description', type: 'textarea' },
                 { name: 'tech_stack', label: 'Tech Stack (comma separated)', type: 'text' },
                 { name: 'preview_image', label: 'Preview Image URL', type: 'text' },

@@ -248,6 +248,15 @@ const PORT = process.env.PORT || 5000;
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         `);
 
+        // --- MIGRATION: Ensure project_label column exists in projects table ---
+        try {
+            await db.query("ALTER TABLE projects ADD COLUMN project_label VARCHAR(100) DEFAULT 'Top Rated'");
+        } catch (e) {
+            if (e.code !== 'ER_DUP_FIELDNAME') {
+                console.warn('Migration add project_label column error:', e.message);
+            }
+        }
+
         // =========================================================
         // ONE-TIME DATABASE FALLBACK SEEDER (NOT STATIC FRONTEND)
         // =========================================================

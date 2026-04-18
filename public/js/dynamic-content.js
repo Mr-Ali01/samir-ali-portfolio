@@ -84,11 +84,11 @@ $(document).ready(function () {
                     // Filter Logic
                     let filtered = [];
                     if (currentFilter === 'all') {
-                        filtered = allProjects.filter(p => !p.category || p.category === 'Featured');
+                        filtered = allProjects.filter(p => !p.project_label || p.project_label === 'Top Rated');
                     } else if (currentFilter === 'seo') {
-                        filtered = allProjects.filter(p => (p.category || '').toLowerCase().includes('seo'));
+                        filtered = allProjects.filter(p => (p.project_label || '').toLowerCase().includes('seo'));
                     } else {
-                        filtered = allProjects.filter(p => (p.category || '').toLowerCase() === currentFilter);
+                        filtered = allProjects.filter(p => (p.project_label || '').toLowerCase() === currentFilter);
                     }
 
                     // Strict Limit: Only show max 3 items
@@ -132,13 +132,13 @@ $(document).ready(function () {
                                     
                                     <!-- Image Section (Top) -->
                                     <div class="relative w-full overflow-hidden group/image flex-shrink-0 bg-slate-100 dark:bg-slate-900 border-b border-[var(--theme-card-border)]" style="height: 220px;">
-                                        <!-- Newly Launched Label -->
+                                        <!-- Dynamic Project Label -->
                                         <div class="absolute top-4 left-4 z-20 bg-gradient-to-r from-theme-primary to-theme-secondary text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2.5 neon-glow">
                                             <div class="relative flex items-center justify-center mr-0.5">
                                                 <div class="w-2 h-2 bg-white rounded-full animate-ping absolute opacity-80"></div>
                                                 <div class="w-1.5 h-1.5 bg-white rounded-full relative z-10"></div> 
                                             </div>
-                                            <span style="padding-left: 5px;">NEWLY LAUNCHED</span>
+                                            <span style="padding-left: 5px;">${p.project_label ? p.project_label.toUpperCase() : 'TOP RATED'}</span>
                                         </div>
                                         
                                         <!-- Scrolling Image Container -->
