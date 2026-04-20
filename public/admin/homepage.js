@@ -405,6 +405,7 @@ function initHomePageEditor(forcedEntity = null) {
                 { name: 'degree', label: 'Degree / Major', type: 'text' },
                 { name: 'institution', label: 'Institution', type: 'text' },
                 { name: 'period', label: 'Time Period (e.g. 2018-2022)', type: 'text' },
+                { name: 'programme_status', label: 'Programme Status', type: 'select', options: ['Certified', 'Completed', 'Pursuing'] },
                 { name: 'description', label: 'Brief Description', type: 'textarea' },
                 { name: 'display_order', label: 'Order Index', type: 'number' }
             ],
@@ -412,6 +413,7 @@ function initHomePageEditor(forcedEntity = null) {
                 { name: 'role', label: 'Job Role / Title', type: 'text' },
                 { name: 'company', label: 'Company Name', type: 'text' },
                 { name: 'period', label: 'Time Period', type: 'text' },
+                { name: 'focus_areas', label: 'Focus Areas (comma-separated)', type: 'text' },
                 { name: 'description', label: 'Responsibilities', type: 'textarea' },
                 { name: 'display_order', label: 'Order Index', type: 'number' }
             ],

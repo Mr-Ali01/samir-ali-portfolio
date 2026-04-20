@@ -109,14 +109,12 @@ $(document).ready(function () {
                                             <i data-lucide="target" class="w-4 h-4 text-theme-secondary"></i> Focus Areas
                                         </h4>
                                         <ul class="space-y-4 mt-auto border-l-2 border-slate-200 dark:border-white/5 pl-4">
+                                            ${(exp.focus_areas ? exp.focus_areas.split(',').filter(f => f.trim()) : ['Application Development', 'UI/UX & Workflow Logic']).map(focus => `
                                             <li class="flex items-start gap-4 text-sm text-slate-600 dark:text-slate-400 relative">
                                                 <div class="w-2.5 h-2.5 rounded-full bg-theme-secondary shrink-0 shadow-[0_0_8px_var(--theme-accent-secondary)] absolute -left-[21px] top-1"></div>
-                                                <span class="font-semibold leading-relaxed">Application Development</span>
+                                                <span class="font-semibold leading-relaxed">${focus.trim()}</span>
                                             </li>
-                                            <li class="flex items-start gap-4 text-sm text-slate-600 dark:text-slate-400 relative">
-                                                <div class="w-2.5 h-2.5 rounded-full bg-theme-secondary shrink-0 shadow-[0_0_8px_var(--theme-accent-secondary)] absolute -left-[21px] top-1"></div>
-                                                <span class="font-semibold leading-relaxed">UI/UX & Workflow Logic</span>
-                                            </li>
+                                            `).join('')}
                                         </ul>
                                     </div>
                                 </div>
@@ -168,16 +166,22 @@ $(document).ready(function () {
                                 <div class="lg:col-span-4 flex w-full items-center justify-center relative z-10 h-full">
                                     <div class="relative bg-slate-50 border border-slate-200 dark:bg-white/[0.02] dark:border-white/5 rounded-2xl p-6 flex flex-col justify-center items-center backdrop-blur-md shadow-inner transition-colors group-hover/card:border-theme-primary/20 w-full h-full text-center">
                                         
-                                        <div class="w-14 h-14 rounded-full ${isBCA ? 'bg-green-500' : 'bg-blue-500'} bg-opacity-10 border ${isBCA ? 'border-green-500/20' : 'border-blue-500/20'} flex items-center justify-center mb-5">
-                                            <i data-lucide="${isBCA ? 'check-circle-2' : 'award'}" class="w-7 h-7 ${isBCA ? 'text-green-500' : 'text-blue-500'} shadow-sm"></i>
-                                        </div>
+                                        ${(() => {
+                                            const status = edu.programme_status || (edu.degree.includes('BCA') ? 'Completed' : 'Certified');
+                                            const isCompleted = status.toLowerCase() === 'completed';
+                                            return `
+                                            <div class="w-14 h-14 rounded-full ${isCompleted ? 'bg-green-500' : 'bg-blue-500'} bg-opacity-10 border ${isCompleted ? 'border-green-500/20' : 'border-blue-500/20'} flex items-center justify-center mb-5">
+                                                <i data-lucide="${isCompleted ? 'check-circle-2' : 'award'}" class="w-7 h-7 ${isCompleted ? 'text-green-500' : 'text-blue-500'} shadow-sm"></i>
+                                            </div>
 
-                                        <span class="block text-[11px] font-bold uppercase tracking-widest mb-1.5 ${isBCA ? 'text-green-500' : 'text-blue-500'} opacity-80">
-                                            Programme Status
-                                        </span>
-                                        <span class="block text-2xl font-black ${isBCA ? 'text-green-500' : 'text-blue-500'} tracking-tight drop-shadow-sm">
-                                            ${isBCA ? 'Completed' : 'Certified'}
-                                        </span>
+                                            <span class="block text-[11px] font-bold uppercase tracking-widest mb-1.5 ${isCompleted ? 'text-green-500' : 'text-blue-500'} opacity-80">
+                                                Programme Status
+                                            </span>
+                                            <span class="block text-2xl font-black ${isCompleted ? 'text-green-500' : 'text-blue-500'} tracking-tight drop-shadow-sm">
+                                                ${status}
+                                            </span>
+                                            `;
+                                        })()}
                                     </div>
                                 </div>
                             </div>
