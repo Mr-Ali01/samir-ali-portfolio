@@ -873,7 +873,7 @@ const requestHandler = async (req, res) => {
             try {
                 // Determine sort column dynamically
                 let orderBy = 'ORDER BY created_at DESC';
-                if (entity === 'hero_section') orderBy = 'ORDER BY updated_at DESC';
+                if (entity === 'hero_section' || entity === 'about_page') orderBy = 'ORDER BY updated_at DESC';
                 else if (['education', 'experience', 'projects'].includes(entity)) orderBy = 'ORDER BY display_order ASC, created_at DESC';
 
                 const [rows] = await db.query(`SELECT * FROM ${entity} ${orderBy}`);

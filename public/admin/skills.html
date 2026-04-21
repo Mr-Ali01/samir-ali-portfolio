@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skills Management - Samir Ali Admin</title>
-    
+
     <!-- Unified Theme Manager (Must be first) -->
     <script src="theme-manager.js"></script>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -33,129 +34,172 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="dashboard.css">
     <style>
-        .section-pane { display: none; }
-        .section-pane.active { display: block; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section-pane {
+            display: none;
+        }
+
+        .section-pane.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
+
 <body class="bg-dash-bg text-dash-text antialiased">
-    <div class="flex relative z-10 min-h-screen">
+    <div class="flex relative z-10 min-h-screen w-full">
         <!-- Shared Sidebar Container (Injected via admin-ui.js) -->
         <div id="admin-sidebar-container"></div>
 
         <!-- Main Content Area -->
-        <main class="flex-1 ml-72 flex flex-col min-h-screen overflow-x-hidden">
+        <main class="flex-1 ml-72 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
             <!-- Shared Header Container (Injected via admin-ui.js) -->
             <div id="admin-header-container" class="sticky top-0 z-40"></div>
 
-            <div id="admin-view-content" class="fade-in">
-            <div class="p-10">
-                <div class="flex items-center justify-between mb-8">
-                    <div>
-                        <h1 class="text-4xl font-black mb-2">Portfolio Assets</h1>
-                        <p class="text-dash-muted text-sm uppercase tracking-widest font-bold">Manage Skills, Education & Certifications</p>
+            <div id="admin-view-content" class="fade-in w-full flex-1 flex flex-col">
+                <div class="p-6 md:p-10 w-full flex-1 flex flex-col">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h1 class="text-4xl font-black mb-2">Portfolio Assets</h1>
+                            <p class="text-dash-muted text-sm uppercase tracking-widest font-bold">Manage Skills,
+                                Education & Certifications</p>
+                        </div>
+                        <button
+                            class="bg-dash-accent text-white px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-lg shadow-dash-accent/20"
+                            onclick="window.location.reload()">
+                            Refresh List
+                        </button>
                     </div>
-                    <button class="bg-dash-accent text-white px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-lg shadow-dash-accent/20" onclick="window.location.reload()">
-                        Refresh List
-                    </button>
-                </div>
 
-                <!-- Sub-tab Navigation -->
-                <div class="flex items-center gap-4 mb-10 overflow-x-auto pb-4 custom-scrollbar">
-                    <button class="tab-btn active px-8 py-4 rounded-2xl bg-white/5 border border-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all whitespace-nowrap" data-tab="skills">
-                        Technical Skills
-                    </button>
-                    <button class="tab-btn px-8 py-4 rounded-2xl bg-white/5 border border-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all whitespace-nowrap" data-tab="education">
-                        Academic Education
-                    </button>
-                    <button class="tab-btn px-8 py-4 rounded-2xl bg-white/5 border border-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all whitespace-nowrap" data-tab="certifications">
-                        Certification
-                    </button>
-                </div>
+                    <!-- Sub-tab Navigation -->
+                    <div class="flex items-center gap-4 mb-10 overflow-x-auto pb-4 custom-scrollbar">
+                        <button
+                            class="tab-btn active px-8 py-4 rounded-2xl bg-white/5 border border-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all whitespace-nowrap"
+                            data-tab="skills">
+                            Technical Skills
+                        </button>
+                        <button
+                            class="tab-btn px-8 py-4 rounded-2xl bg-white/5 border border-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all whitespace-nowrap"
+                            data-tab="education">
+                            Academic Education
+                        </button>
+                        <button
+                            class="tab-btn px-8 py-4 rounded-2xl bg-white/5 border border-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all whitespace-nowrap"
+                            data-tab="certifications">
+                            Certification
+                        </button>
+                    </div>
 
-                <div id="tab-panes">
-                    <!-- Technical Skills Pane -->
-                    <div id="pane-skills" class="section-pane active">
-                         <div class="glass-panel p-10 rounded-[2.5rem] border border-dash-border">
-                            <div class="flex items-center justify-between mb-10">
-                                <div>
-                                    <h2 class="text-2xl font-black mb-1">Technical Stack</h2>
-                                    <p class="text-dash-muted text-xs uppercase tracking-widest font-black">Grouped by Category</p>
+                    <div id="tab-panes">
+                        <!-- Technical Skills Pane -->
+                        <div id="pane-skills" class="section-pane active">
+                            <div class="glass-panel p-10 rounded-[2.5rem] border border-dash-border">
+                                <div class="flex items-center justify-between mb-10">
+                                    <div>
+                                        <h2 class="text-2xl font-black mb-1">Technical Stack</h2>
+                                        <p class="text-dash-muted text-xs uppercase tracking-widest font-black">Grouped
+                                            by Category</p>
+                                    </div>
+                                    <button
+                                        class="add-btn bg-gradient-to-r from-dash-accent to-dash-secondary px-8 py-3 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-dash-accent/20">
+                                        Add New Skill
+                                    </button>
                                 </div>
-                                <button class="add-btn bg-gradient-to-r from-dash-accent to-dash-secondary px-8 py-3 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-dash-accent/20">
-                                    Add New Skill
-                                </button>
-                            </div>
 
-                            <div id="skills-list">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 list-container">
+                                <div id="skills-list">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 list-container">
+                                        <!-- Dynamic Items -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Education Pane -->
+                        <div id="pane-education" class="section-pane">
+                            <div class="glass-panel p-10 rounded-[2.5rem] border border-dash-border">
+                                <div class="flex items-center justify-between mb-10">
+                                    <div>
+                                        <h2 class="text-2xl font-black mb-1">Academic Education</h2>
+                                        <p class="text-dash-muted text-xs uppercase tracking-widest font-black">
+                                            Educational Background</p>
+                                    </div>
+                                    <button
+                                        class="add-btn bg-gradient-to-r from-dash-accent to-dash-secondary px-8 py-3 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-dash-accent/20">
+                                        Add New Entry
+                                    </button>
+                                </div>
+
+                                <div id="education-list" class="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
+                                    <!-- Dynamic Items -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Certifications Pane -->
+                        <div id="pane-certifications" class="section-pane">
+                            <div class="glass-panel p-10 rounded-[2.5rem] border border-dash-border">
+                                <div class="flex items-center justify-between mb-10">
+                                    <div>
+                                        <h2 class="text-2xl font-black mb-1">Professional Certifications</h2>
+                                        <p class="text-dash-muted text-xs uppercase tracking-widest font-black">
+                                            Credentials & Achievements</p>
+                                    </div>
+                                    <button
+                                        class="add-btn bg-gradient-to-r from-dash-accent to-dash-secondary px-8 py-3 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-dash-accent/20">
+                                        Add New Certificate
+                                    </button>
+                                </div>
+
+                                <div id="certifications-list" class="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
                                     <!-- Dynamic Items -->
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Academic Education Pane -->
-                    <div id="pane-education" class="section-pane">
-                         <div class="glass-panel p-10 rounded-[2.5rem] border border-dash-border">
-                            <div class="flex items-center justify-between mb-10">
+                    <div id="modal-backdrop"
+                        class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-[8px] p-4 transition-all duration-300 opacity-0">
+                        <div class="bg-[#0f172a] w-[320px] h-[500px] rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col overflow-hidden scale-95 transition-all duration-300"
+                            id="modal-container">
+                            <div
+                                class="p-6 pb-4 border-b border-white/5 flex items-center justify-between bg-white/5 shrink-0">
                                 <div>
-                                    <h2 class="text-2xl font-black mb-1">Academic Education</h2>
-                                    <p class="text-dash-muted text-xs uppercase tracking-widest font-black">Educational Background</p>
+                                    <h3 id="modal-title" class="text-sm font-black mb-0.5">Editor</h3>
+                                    <p id="modal-subtitle"
+                                        class="text-[8px] text-dash-muted font-black uppercase tracking-widest">Global
+                                        Entry System</p>
                                 </div>
-                                <button class="add-btn bg-gradient-to-r from-dash-accent to-dash-secondary px-8 py-3 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-dash-accent/20">
-                                    Add New Entry
-                                </button>
+                                <button
+                                    class="icon-btn close-modal p-1.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-all"><i
+                                        data-lucide="x" class="w-3.5 h-3.5"></i></button>
                             </div>
-
-                            <div id="education-list" class="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
-                                <!-- Dynamic Items -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Certifications Pane -->
-                    <div id="pane-certifications" class="section-pane">
-                         <div class="glass-panel p-10 rounded-[2.5rem] border border-dash-border">
-                            <div class="flex items-center justify-between mb-10">
-                                <div>
-                                    <h2 class="text-2xl font-black mb-1">Professional Certifications</h2>
-                                    <p class="text-dash-muted text-xs uppercase tracking-widest font-black">Credentials & Achievements</p>
+                            <form id="crud-form" class="flex-1 flex flex-col min-h-0 overflow-hidden">
+                                <input type="hidden" name="id">
+                                <div id="form-fields"
+                                    class="flex-1 overflow-y-auto min-h-0 custom-scrollbar p-6 space-y-4">
+                                    <!-- Dynamic Fields -->
                                 </div>
-                                <button class="add-btn bg-gradient-to-r from-dash-accent to-dash-secondary px-8 py-3 rounded-2xl text-white font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-dash-accent/20">
-                                    Add New Certificate
-                                </button>
-                            </div>
-
-                            <div id="certifications-list" class="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
-                                <!-- Dynamic Items -->
-                            </div>
+                                <div class="p-5 border-t border-white/5 bg-black/20 flex items-center gap-3 shrink-0">
+                                    <button type="button"
+                                        class="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-white font-black text-[9px] uppercase tracking-widest hover:bg-white/5 close-modal">Abort</button>
+                                    <button type="submit"
+                                        class="flex-1 bg-dash-accent px-4 py-2.5 rounded-xl text-white font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all">Commit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-            <div id="modal-backdrop" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-[8px] p-4 transition-all duration-300 opacity-0">
-                <div class="bg-[#0f172a] w-[320px] h-[500px] rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col overflow-hidden scale-95 transition-all duration-300" id="modal-container">
-                    <div class="p-6 pb-4 border-b border-white/5 flex items-center justify-between bg-white/5 shrink-0">
-                        <div>
-                            <h3 id="modal-title" class="text-sm font-black mb-0.5">Editor</h3>
-                            <p id="modal-subtitle" class="text-[8px] text-dash-muted font-black uppercase tracking-widest">Global Entry System</p>
-                        </div>
-                        <button class="icon-btn close-modal p-1.5 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-all"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-                    </div>
-                    <form id="crud-form" class="flex-1 flex flex-col overflow-hidden">
-                        <input type="hidden" name="id">
-                        <div id="form-fields" class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-4">
-                            <!-- Dynamic Fields -->
-                        </div>
-                        <div class="p-5 border-t border-white/5 bg-black/20 flex items-center gap-3 shrink-0">
-                            <button type="button" class="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-white font-black text-[9px] uppercase tracking-widest hover:bg-white/5 close-modal">Abort</button>
-                            <button type="submit" class="flex-1 bg-dash-accent px-4 py-2.5 rounded-xl text-white font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all">Commit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            </div> 
             </div> <!-- End Admin view content -->
         </main>
     </div>
@@ -166,14 +210,15 @@
     <script src="admin-ui.js"></script>
     <script src="homepage.js"></script>
     <script>
-        $(document).ready(function() {
-            // Self-init if not already in a shell
+        const initSkillsPage = async () => {
             if ($('#admin-sidebar-container').is(':empty')) {
                 AdminUI.init('skills');
             } else {
                 if (typeof lucide !== 'undefined') lucide.createIcons();
             }
-        });
+        };
+        initSkillsPage();
     </script>
 </body>
+
 </html>

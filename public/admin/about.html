@@ -39,38 +39,43 @@
     </style>
 </head>
 <body class="bg-dash-bg text-dash-text antialiased">
-    <div class="flex relative z-10 min-h-screen">
+    <div class="flex relative z-10 min-h-screen w-full">
         <!-- Shared Sidebar Container (Injected via admin-ui.js) -->
         <div id="admin-sidebar-container"></div>
 
         <!-- Main Content Area -->
-        <main class="flex-1 ml-72 flex flex-col min-h-screen overflow-x-hidden">
+        <main class="flex-1 ml-72 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
             <!-- Shared Header Container (Injected via admin-ui.js) -->
             <div id="admin-header-container" class="sticky top-0 z-40"></div>
 
-            <div id="admin-view-content" class="fade-in">
-            <div class="p-10">
+            <div id="admin-view-content" class="fade-in w-full flex-1 flex flex-col">
+                <div class="p-6 md:p-10 w-full flex-1 flex flex-col">
                 <div class="flex items-center justify-between mb-12">
                     <div>
                         <h1 class="text-4xl font-black mb-2">About Page Management</h1>
                         <p class="text-dash-muted">Control your professional identity and biography.</p>
                     </div>
-                    <button class="bg-dash-accent text-white px-6 py-3 rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-lg shadow-dash-accent/20">
-                        Publish Changes
-                    </button>
+                    <div class="flex items-center gap-4">
+                        <div id="data-status" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] font-black uppercase tracking-widest">
+                            <div class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></div> Initializing
+                        </div>
+                        <button id="top-publish-btn" class="bg-dash-accent text-white px-6 py-3 rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-lg shadow-dash-accent/20">
+                            Publish Changes
+                        </button>
+                    </div>
                 </div>
 
-                <div id="tab-panes">
+                <div id="tab-panes" class="w-full flex-1">
                     <!-- About Content Pane -->
-                    <div id="pane-about" class="section-pane active">
-                        <form id="form-about_page">
+                    <div id="pane-about" class="section-pane active w-full">
+                        <form id="form-about_page" class="w-full">
                             <!-- Hidden ID Field -->
                             <input type="hidden" name="id" id="about-id">
                             
-                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+                            <div class="flex flex-col lg:flex-row gap-8 lg:gap-11 w-full items-start">
                                 
                                 <!-- LEFT COLUMN: Form Inputs -->
-                                <div class="lg:col-span-7 space-y-8">
+                                <div class="w-full lg:w-[60%] space-y-8 min-w-0">
                                     
                                     <!-- A. Basic Info Section -->
                                     <div class="glass-panel p-8 rounded-[2.5rem] border border-dash-border space-y-6 relative overflow-hidden group hover:border-dash-accent/30 transition-all">
@@ -139,7 +144,7 @@
                                 </div>
 
                                 <!-- RIGHT COLUMN: Live Preview Panel -->
-                                <div class="lg:col-span-5 relative mt-8 lg:mt-0">
+                                <div class="w-full lg:w-[40%] relative mt-12 lg:mt-0">
                                     <div class="sticky top-28 glass-panel p-1 rounded-[3rem] border border-dash-border shadow-2xl overflow-hidden pointer-events-none group">
                                         <!-- Ambient Glow -->
                                         <div class="absolute -top-40 -right-40 w-80 h-80 bg-dash-accent/10 rounded-full blur-[80px] pointer-events-none group-hover:scale-110 transition-transform duration-1000"></div>
@@ -171,7 +176,7 @@
                                                 <!-- Text Preview -->
                                                 <div class="text-center space-y-5">
                                                     <!-- Badge -->
-                                                    <div class="inline-flex items-center justify-center space-x-2 px-5 py-2 rounded-full bg-dash-accent/10 border border-dash-accent/20 backdrop-blur-sm mx-auto shadow-[0_0_15px_rgba(56,189,248,0.1)] transition-all overflow-hidden" id="preview-badge-container">
+                                                    <div class="inline-flex items-center justify-center space-x-2 px-5 py-2 rounded-full bg-dash-accent/10 border border-dash-accent/20 backdrop-blur-sm mx-auto shadow-[0_0_15px_rgba(56,189,248,0.15)] transition-all overflow-hidden" id="preview-badge-container">
                                                         <span class="text-dash-accent text-[10px] font-black tracking-widest uppercase truncate max-w-[200px]" id="preview-badge">ROCKET WHO AM I</span>
                                                     </div>
                                                     
@@ -194,163 +199,142 @@
                         </form>
                     </div>
                 </div>
-            </div>
+
+                <!-- Page Specific Scripts INSIDE the SPA View Content Container -->
+                <script>
+                    (function() {
+                        const initAbout = async () => {
+                            console.log("[About] Initializing page logic...");
+                            
+                            // Re-init lucide icons for the injected fragment
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                            
+                            const aboutForm = $('#form-about_page');
+                            const aboutImgUrl = $('#about-img-url');
+                            const aboutPreview = $('#about-img-preview');
+                            const status = $('#data-status');
+
+                            const updatePreview = (url) => {
+                                if (url) {
+                                    $('#preview-img').attr('src', url).removeClass('hidden');
+                                    aboutPreview.find('.placeholder').addClass('hidden');
+                                } else {
+                                    $('#preview-img').addClass('hidden');
+                                    aboutPreview.find('.placeholder').removeClass('hidden');
+                                }
+                            };
+
+                            const loadAboutData = async () => {
+                                status.html('<div class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div> Fetching Data...');
+                                try {
+                                    const apiUrl = `${window.location.origin}/api/v1/manage/about_page?t=${Date.now()}`;
+                                    const res = await fetch(apiUrl);
+                                    const data = await res.json();
+                                    
+                                    if (data.success && data.data && data.data.length > 0) {
+                                        const about = data.data[0];
+                                        console.log("[About] Data loaded:", about);
+
+                                        $('#about-id').val(about.id);
+                                        $('#input-title').val(about.title || '');
+                                        $('#input-badge').val(about.badge_text || '');
+                                        $('#input-desc').val(about.description || '');
+                                        $('#about-img-url').val(about.image_url || '');
+                                        
+                                        if (about.image_url) updatePreview(about.image_url);
+                                        
+                                        // Trigger input events to update the preview panel
+                                        $('#input-title').trigger('input');
+                                        $('#input-badge').trigger('input');
+                                        $('#input-desc').trigger('input');
+
+                                        status.html('<div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> Sync Active').removeClass('bg-orange-500/10 text-orange-400').addClass('bg-emerald-500/10 text-emerald-400');
+                                    } else {
+                                        status.html('<div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> Table Empty');
+                                    }
+                                } catch (e) {
+                                    console.error("[About] Fetch failed:", e);
+                                    status.html('<div class="w-1.5 h-1.5 rounded-full bg-red-500"></div> Load Error').addClass('text-red-400');
+                                }
+                            };
+
+                            // Listeners
+                            $('#input-title').on('input', function() { $('#preview-title').text($(this).val() || 'About Me'); });
+                            $('#input-badge').on('input', function() {
+                                const val = $(this).val();
+                                $('#preview-badge').text(val || 'ROCKET WHO AM I');
+                                $('#preview-badge-container').toggleClass('hidden', !val).toggleClass('inline-flex', !!val);
+                            });
+                            $('#input-desc').on('input', function() { 
+                                $('#preview-desc').text($(this).val() || 'Your biography preview will dynamically appear here...'); 
+                            });
+                            aboutImgUrl.on('input', function() { updatePreview($(this).val()); });
+
+                            // Upload
+                            $('#about-upload').on('change', async function() {
+                                const file = this.files[0];
+                                if (!file) return;
+                                const label = $('#upload-label-text');
+                                label.text('Uploading...');
+                                try {
+                                    const res = await fetch('/api/v1/upload', {
+                                        method: 'POST',
+                                        headers: { 'x-file-name': file.name },
+                                        body: await file.arrayBuffer()
+                                    });
+                                    const result = await res.json();
+                                    if (result.success) {
+                                        aboutImgUrl.val(result.url).trigger('input');
+                                        label.text('Done!');
+                                        setTimeout(() => label.text('Select Image...'), 2000);
+                                    }
+                                } catch (e) { label.text('Error!'); }
+                            });
+
+                            // Submit
+                            aboutForm.on('submit', async function(e) {
+                                e.preventDefault();
+                                const formData = {};
+                                $(this).serializeArray().forEach(i => formData[i.name] = i.value);
+                                const isUpdate = !!formData.id;
+                                try {
+                                    const res = await fetch('/api/v1/manage/about_page', {
+                                        method: isUpdate ? 'PUT' : 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify(formData)
+                                    });
+                                    const result = await res.json();
+                                    if (result.success) {
+                                        Swal.fire({ icon: 'success', title: 'Changes Saved', toast: true, position: 'top-end', timer: 2000, showConfirmButton: false });
+                                        if (!isUpdate) loadAboutData();
+                                    }
+                                } catch (e) { Swal.fire('Error', 'Save failed', 'error'); }
+                            });
+
+                            $('#top-publish-btn').on('click', () => aboutForm.submit());
+
+                            // Execute load
+                            await loadAboutData();
+                        };
+
+                        // Run init
+                        if ($('#admin-sidebar-container').is(':empty')) {
+                            // Direct direct load (non-SPA)
+                            AdminUI.init('about');
+                            initAbout();
+                        } else {
+                            // SPA Injection load
+                            setTimeout(initAbout, 50);
+                        }
+                    })();
+                </script>
+                </div>
             </div>
         </main>
     </div>
 
-    <!-- Scripts -->
+    <!-- Outer Scripts (Not used in SPA injection path) -->
     <script src="admin-ui.js"></script>
     <script src="homepage.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Self-init if not already in a shell
-            if ($('#admin-sidebar-container').is(':empty')) {
-                AdminUI.init('about');
-            } else {
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-            }
-            
-            const aboutForm = $('#form-about_page');
-            const aboutImgUrl = $('#about-img-url');
-            const aboutPreview = $('#about-img-preview');
-            
-            // 1. Data Loader
-            const loadAboutData = async () => {
-                try {
-                    const res = await fetch('/api/v1/manage/about_page');
-                    const data = await res.json();
-                    if (data.success && data.data.length > 0) {
-                        const about = data.data[0];
-                        $('#about-id').val(about.id);
-                        aboutForm.find('[name="title"]').val(about.title);
-                        aboutForm.find('[name="badge_text"]').val(about.badge_text);
-                        aboutForm.find('[name="description"]').val(about.description);
-                        aboutForm.find('[name="image_url"]').val(about.image_url);
-                        
-                        if (about.image_url) {
-                            updatePreview(about.image_url);
-                        }
-                        
-                        // Fire input events initially to hydrate the preview layer immediately
-                        $('#input-title').trigger('input');
-                        $('#input-badge').trigger('input');
-                        $('#input-desc').trigger('input');
-                    }
-                } catch (e) {
-                    console.error('About data load failed');
-                }
-            };
-
-            const updatePreview = (url) => {
-                if (url) {
-                    aboutPreview.find('img').attr('src', url).removeClass('hidden');
-                    aboutPreview.find('.placeholder').addClass('hidden');
-                } else {
-                    aboutPreview.find('img').addClass('hidden');
-                    aboutPreview.find('.placeholder').removeClass('hidden');
-                }
-            };
-
-            // Sync URL input with preview
-            $('#input-title').on('input', function() {
-                $('#preview-title').text($(this).val() || 'About Me');
-            });
-            $('#input-badge').on('input', function() {
-                const val = $(this).val();
-                $('#preview-badge').text(val || '🚀 WHO AM I?');
-                if (val) {
-                    $('#preview-badge-container').removeClass('hidden').addClass('inline-flex');
-                } else {
-                    $('#preview-badge-container').addClass('hidden').removeClass('inline-flex');
-                }
-            });
-            $('#input-desc').on('input', function() {
-                $('#preview-desc').text($(this).val() || 'Your biography preview will dynamically appear here as you type in the editor...');
-            });
-            
-            aboutImgUrl.on('input', function() {
-                updatePreview($(this).val());
-            });
-
-            // 2. Image Upload
-            $('#about-upload').on('change', async function() {
-                const file = this.files[0];
-                if (!file) return;
-
-                const label = $('#upload-label-text');
-                const origText = label.text();
-                label.text('Uploading...');
-
-                try {
-                    const res = await fetch('/api/v1/upload', {
-                        method: 'POST',
-                        headers: { 'x-file-name': file.name },
-                        body: await file.arrayBuffer()
-                    });
-                    const result = await res.json();
-                    if (result.success) {
-                        aboutImgUrl.val(result.url);
-                        updatePreview(result.url);
-                        label.text('Uploaded!');
-                        setTimeout(() => label.text(origText), 2000);
-                    }
-                } catch (e) {
-                    label.text('Failed!');
-                    setTimeout(() => label.text(origText), 2000);
-                }
-            });
-
-            // 3. Form Submit
-            aboutForm.on('submit', async function(e) {
-                e.preventDefault();
-                const formData = {};
-                $(this).serializeArray().forEach(i => formData[i.name] = i.value);
-                
-                const isUpdate = !!formData.id;
-                const method = isUpdate ? 'PUT' : 'POST';
-
-                try {
-                    const response = await fetch('/api/v1/manage/about_page', {
-                        method: method,
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    const resData = await response.json();
-                    if (resData.success) {
-                        $('#btn-text').text('Published Successfully!');
-                        $('#publish-btn i').attr('data-lucide', 'check-circle-2').addClass('text-emerald-400');
-                        lucide.createIcons();
-                        
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Profile Updated',
-                            text: 'Your about page changes are now live.',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            background: '#0f172a',
-                            color: '#fff'
-                        });
-                        if (!isUpdate) loadAboutData(); // Fetch ID for future updates
-                        
-                        setTimeout(() => {
-                            $('#btn-text').text('Publish About Section');
-                            $('#publish-btn i').attr('data-lucide', 'check-circle').removeClass('text-emerald-400');
-                            lucide.createIcons();
-                        }, 3000);
-                    }
-                } catch (e) {
-                    $('#btn-text').text('Error Publishing');
-                    Swal.fire({ icon: 'error', title: 'Save Failed', text: 'Communication error with server.' });
-                    setTimeout(() => $('#btn-text').text('Publish About Section'), 3000);
-                }
-            });
-
-            loadAboutData();
-            lucide.createIcons();
-        });
-    </script>
 </body>
 </html>

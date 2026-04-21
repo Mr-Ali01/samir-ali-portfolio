@@ -44,7 +44,7 @@ const AdminUI = {
                 <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-dash-secondary/10 rounded-full blur-[120px]"></div>
             </div>
 
-            <aside class="w-72 bg-dash-sidebar/60 backdrop-blur-3xl border-r border-dash-border fixed h-full flex flex-col p-6 overflow-y-auto custom-scrollbar z-50">
+            <aside class="w-72 bg-dash-sidebar/60 backdrop-blur-3xl border-r border-dash-border fixed left-0 top-0 h-full flex flex-col p-6 overflow-y-auto custom-scrollbar z-50">
                 <div class="flex items-center gap-3 mb-10">
                     <div class="w-10 h-10 bg-gradient-to-br from-dash-accent to-dash-secondary rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-dash-accentGlow">S</div>
                     <span class="text-xl font-bold tracking-tight">Samir Ali</span>

@@ -32,14 +32,14 @@
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body class="bg-dash-bg text-dash-text antialiased">
-    <div class="flex relative z-10 min-h-screen">
+    <div class="flex relative z-10 min-h-screen w-full">
         <div id="admin-sidebar-container"></div>
 
-        <main class="flex-1 ml-72 flex flex-col min-h-screen overflow-x-hidden">
+        <main class="flex-1 ml-72 min-w-0 flex flex-col min-h-screen overflow-x-hidden">
             <div id="admin-header-container" class="sticky top-0 z-40"></div>
 
-            <div id="admin-view-content" class="fade-in">
-                <div class="p-10">
+            <div id="admin-view-content" class="fade-in w-full flex-1 flex flex-col">
+                <div class="p-6 md:p-10 w-full flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-10">
                         <div>
                             <h1 class="text-4xl font-black mb-2 uppercase tracking-tighter">Inquiries & Messages</h1>

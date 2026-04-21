@@ -442,7 +442,7 @@ function initHomePageEditor(forcedEntity = null) {
                 { name: 'project_label', label: 'Project Label', type: 'select', options: ['Top Rated', 'Website', 'Tools', 'SEO Pages', 'Mobile'] },
                 { name: 'short_description', label: 'Short Description', type: 'textarea' },
                 { name: 'tech_stack', label: 'Tech Stack (comma separated)', type: 'text' },
-                { name: 'preview_image', label: 'Preview Image URL', type: 'text' },
+                { name: 'preview_image', label: 'Project Image', type: 'image-upload' },
                 { name: 'live_link', label: 'Live Demo Link', type: 'text' },
                 { name: 'github_link', label: 'Source Code Link', type: 'text' },
                 { name: 'display_order', label: 'Order Index', type: 'number' }
@@ -466,6 +466,29 @@ function initHomePageEditor(forcedEntity = null) {
                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50"><i data-lucide="chevron-down" class="w-4 h-4"></i></div>
                     </div>
                 `;
+            } else if (f.type === 'image-upload') {
+                fieldHtml = `
+                    <div class="space-y-4">
+                        <div id="modal-image-preview-container" class="w-full aspect-video rounded-2xl bg-black/40 border border-white/10 overflow-hidden relative group ${val ? '' : 'hidden'}">
+                            <img src="${val}" id="modal-image-preview" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="text-[10px] font-black uppercase tracking-tighter text-white">Preview Mode</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="relative group">
+                                <input type="file" id="modal-image-file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/*">
+                                <div class="w-full p-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center gap-3 group-hover:border-dash-accent transition-all">
+                                    <i data-lucide="upload-cloud" class="w-4 h-4 text-dash-muted group-hover:text-dash-accent"></i>
+                                    <span class="text-[10px] font-black uppercase tracking-widest text-dash-muted group-hover:text-dash-accent" id="modal-upload-status">Upload File</span>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <input type="text" name="${f.name}" id="modal-image-url" value="${val}" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-dash-accent transition-all outline-none placeholder:text-white/20" placeholder="...or paste URL">
+                            </div>
+                        </div>
+                    </div>
+                `;
             } else {
                 fieldHtml = `<input type="${f.type}" name="${f.name}" value="${val}" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-dash-accent transition-all outline-none placeholder:text-white/20" placeholder="Enter ${f.label.toLowerCase()}...">`;
             }
@@ -478,6 +501,8 @@ function initHomePageEditor(forcedEntity = null) {
             `;
             formFields.append(html);
         });
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
 
         if (id) formFields.append(`<input type="hidden" name="id" value="${id}">`);
         formFields.append(`<input type="hidden" id="active-modal-entity" value="${activeEntity}">`);
@@ -597,6 +622,51 @@ function initHomePageEditor(forcedEntity = null) {
             } catch (error) {
                 Swal.fire({ title: 'Error', text: 'Deletion encountered a server fault.', icon: 'error', background: '#0f172a', color: '#fff' });
             }
+        }
+    });
+
+    // 9. Generic Image Upload for Modals
+    $(document).off('change', '#modal-image-file').on('change', '#modal-image-file', async function() {
+        const file = this.files[0];
+        if (!file) return;
+
+        const status = $('#modal-upload-status');
+        const preview = $('#modal-image-preview');
+        const previewContainer = $('#modal-image-preview-container');
+        const urlInput = $('#modal-image-url');
+
+        status.text('Uploading...');
+
+        try {
+            const res = await fetch('/api/v1/upload', {
+                method: 'POST',
+                headers: { 'x-file-name': file.name },
+                body: await file.arrayBuffer()
+            });
+            const result = await res.json();
+            if (result.success) {
+                urlInput.val(result.url);
+                preview.attr('src', result.url);
+                previewContainer.removeClass('hidden');
+                status.text('Complete!');
+                setTimeout(() => status.text('Change Image'), 2000);
+            }
+        } catch (error) {
+            status.text('Failed!');
+            setTimeout(() => status.text('Upload File'), 2000);
+        }
+    });
+
+    $(document).off('input', '#modal-image-url').on('input', '#modal-image-url', function() {
+        const val = $(this).val();
+        const preview = $('#modal-image-preview');
+        const previewContainer = $('#modal-image-preview-container');
+        
+        if (val) {
+            preview.attr('src', val);
+            previewContainer.removeClass('hidden');
+        } else {
+            previewContainer.addClass('hidden');
         }
     });
 
